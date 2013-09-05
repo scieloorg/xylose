@@ -198,7 +198,7 @@ class Document(object):
                 if 'r' in author:
                     authordict['role'] = author['r']
                 if '1' in author:
-                    authordict['xref'] = author['1']
+                    authordict['xref'] = author['1'].split(' ')
 
                 authors.append(authordict)
 
