@@ -153,6 +153,9 @@ class Document(object):
                     if l != self.original_language:
                         trans_titles.setdefault(l, title['_'])
 
+        if len(trans_titles) == 0:
+            return None
+
         return trans_titles
 
     @property
@@ -179,6 +182,9 @@ class Document(object):
                     if l != self.original_language:
                         trans_abstracts.setdefault(l, abstract['a'])
 
+        if len(trans_abstracts) == 0:
+            return None
+
         return trans_abstracts
 
     @ property
@@ -201,6 +207,9 @@ class Document(object):
                     authordict['xref'] = author['1'].split(' ')
 
                 authors.append(authordict)
+
+        if len(authors) == 0:
+            return None
 
         return authors
 
@@ -225,6 +234,9 @@ class Document(object):
                             affdict['email'] = aff['e']
 
                         affiliations.append(affdict)
+
+        if len(affiliations) == 0:
+            return None
 
         return affiliations
 
@@ -287,6 +299,9 @@ class Document(object):
                         l = 'undefined'
                     group = keywords.setdefault(l, [])
                     group.append(keyword['k'])
+
+        if len(keywords) == 0:
+            return None
 
         return keywords
 
