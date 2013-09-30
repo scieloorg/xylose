@@ -1,0 +1,2214 @@
+{
+    "sent_doaj": "True",
+    "code": "S2179-975X2011000300002",
+    "article_title_md5": [
+        "0720b071c3eb7d436060c75409675153",
+        "4e23781ec1220fef8ca3b144ac0a005d"
+    ],
+    "title": {
+        "v35": [
+            {
+                "_": "ONLIN"
+            }
+        ],
+        "v6": [
+            {
+                "_": "c"
+            }
+        ],
+        "v10": [
+            {
+                "_": "br1.1"
+            }
+        ],
+        "v441": [
+            {
+                "_": "Biological Sciences"
+            }
+        ],
+        "v150": [
+            {
+                "_": "Acta Limnol. Bras."
+            }
+        ],
+        "v151": [
+            {
+                "_": "Acta Limnol. Bras."
+            }
+        ],
+        "v930": [
+            {
+                "_": "ALB"
+            }
+        ],
+        "v302": [
+            {
+                "_": "1"
+            }
+        ],
+        "v440": [
+            {
+                "_": "ECOLOGIA"
+            },
+            {
+                "_": "ECOLOGIA DE ECOSSISTEMAS"
+            }
+        ],
+        "v935": [
+            {
+                "_": "2179-975X"
+            }
+        ],
+        "v950": [
+            {
+                "_": "EMS"
+            }
+        ],
+        "v951": [
+            {
+                "_": "EMS"
+            }
+        ],
+        "v480": [
+            {
+                "_": "Associa\u00e7\u00e3o Brasileira de Limnologia"
+            }
+        ],
+        "v400": [
+            {
+                "_": "2179-975X"
+            }
+        ],
+        "v350": [
+            {
+                "_": "en"
+            },
+            {
+                "_": "pt"
+            }
+        ],
+        "v540": [
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by-nc/3.0/80x15.png\" /></a> Todo el contenido de esta revista, excepto d\u00f3nde est\u00e1 identificado, est&#225; bajo una <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\">Licencia Creative Commons</a>",
+                "_": "",
+                "l": "es"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by-nc/3.0/80x15.png\" /></a> Todo o conte\u00fado deste peri\u00f3dico, exceto onde est&#225 identificado, est&#225; licenciado sob uma <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\">Licen&#231;a Creative Commons</a>",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by-nc/3.0/80x15.png\" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/3.0/\">Creative Commons Attribution License</a>",
+                "_": "",
+                "l": "en"
+            }
+        ],
+        "v117": [
+            {
+                "_": "other"
+            }
+        ],
+        "v310": [
+            {
+                "_": "BR"
+            }
+        ],
+        "v330": [
+            {
+                "_": "CT"
+            }
+        ],
+        "v85": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v691": [
+            {
+                "_": "100000000000000000000000"
+            }
+        ],
+        "v690": [
+            {
+                "_": "www.scielo.br"
+            }
+        ],
+        "v854": [
+            {
+                "_": "LIMNOLOGY"
+            }
+        ],
+        "v20": [
+            {
+                "_": "083639-7"
+            }
+        ],
+        "v490": [
+            {
+                "_": "Rio Claro"
+            }
+        ],
+        "v69": [
+            {
+                "_": "http://www.ablimno.org.br"
+            }
+        ],
+        "v68": [
+            {
+                "_": "alb"
+            }
+        ],
+        "v67": [
+            {
+                "_": "na"
+            }
+        ],
+        "v66": [
+            {
+                "_": "art"
+            }
+        ],
+        "v64": [
+            {
+                "_": "actalb@rc.unesp.br"
+            }
+        ],
+        "v63": [
+            {
+                "_": "Av. 24 A, 1515"
+            },
+            {
+                "_": "13506-900 Rio Claro-SP/Brasil"
+            },
+            {
+                "_": "Tel.:(55 19)3526 9107"
+            }
+        ],
+        "v62": [
+            {
+                "_": "Associa\u00e7\u00e3o Brasileira de Limnologia"
+            }
+        ],
+        "v450": [
+            {
+                "_": "ASFA - Aquatic Sciences and Fisheries Abstracts"
+            }
+        ],
+        "v140": [
+            {
+                "_": "Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno"
+            },
+            {
+                "_": "Conselho Nacional de Desenvolvimento Cient\u00edfico e Tecnol\u00f3gico - CNPq"
+            }
+        ],
+        "v380": [
+            {
+                "_": "Q"
+            }
+        ],
+        "v901": [
+            {
+                "l": "es",
+                "_": "El Acta Limnologica Brasiliensia es la revista oficial de la Asociaci\u00f3n Brasile\u00f1a de Limnolog\u00eda (ABLimno) cuyo obetivo es publicar trabajos originales en Limnolog\u00eda, incluyendo los aspectos f\u00edsicos, qu\u00edmicos y biol\u00f3gicos de la Ciencia Ecolog\u00eda de Aguas Continentales."
+            },
+            {
+                "l": "pt",
+                "_": "A Acta Limnologica Brasiliensia \u00e9 uma revista cient\u00edfica publicada pela Associa\u00e7\u00e3o Brasileira de Limnologia (ABLimno) que publica artigos originais que contribuem para o desenvolvimento cient\u00edfico da Limnologia."
+            },
+            {
+                "l": "en",
+                "_": "Acta Limnologica Brasiliensia is a journal published by the Associa\u00e7\u00e3o Brasileira de Limnologia (Brazilian Association of Limnology) that publishes original articles in Limnology comprises physical, chemical and biological aspects of fresh water ecosystems."
+            }
+        ],
+        "v943": [
+            {
+                "_": "20130104"
+            }
+        ],
+        "v942": [
+            {
+                "_": "20110325"
+            }
+        ],
+        "v941": [
+            {
+                "_": "20120824"
+            }
+        ],
+        "v940": [
+            {
+                "_": "20110325"
+            }
+        ],
+        "v320": [
+            {
+                "_": "SP"
+            }
+        ],
+        "v340": [
+            {
+                "_": "B"
+            }
+        ],
+        "v541": [
+            {
+                "_": "BY-NC"
+            }
+        ],
+        "v100": [
+            {
+                "_": "Acta Limnologica Brasiliensia"
+            }
+        ],
+        "v50": [
+            {
+                "_": "C"
+            }
+        ],
+        "v51": [
+            {
+                "a": "20110400",
+                "b": "C",
+                "_": ""
+            }
+        ],
+        "v360": [
+            {
+                "_": "en"
+            },
+            {
+                "_": "pt"
+            }
+        ],
+        "v301": [
+            {
+                "_": "1986"
+            }
+        ],
+        "v303": [
+            {
+                "_": "1"
+            }
+        ],
+        "v5": [
+            {
+                "_": "S"
+            }
+        ]
+    },
+    "applicable": "True",
+    "publication_year": "2011",
+    "code_title": [
+        "2179-975X"
+    ],
+    "citations": [
+        {
+            "v18": [
+                {
+                    "l": "en",
+                    "_": "Field guide to the freshwater fishes of Australia"
+                }
+            ],
+            "v66": [
+                {
+                    "_": "Perth"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20020000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2002"
+                }
+            ],
+            "v16": [
+                {
+                    "s": "ALLEN",
+                    "r": "ND",
+                    "_": "",
+                    "n": "GR."
+                },
+                {
+                    "s": "MIDGLEY",
+                    "r": "ND",
+                    "_": "",
+                    "n": "SH."
+                },
+                {
+                    "s": "ALLEN",
+                    "r": "ND",
+                    "_": "",
+                    "n": "M."
+                }
+            ],
+            "v62": [
+                {
+                    "_": "Western Australian Museum"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200001"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Biological invasions"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "8"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "pt",
+                    "_": "Global documentation of fish introductions: the growing crisis and recommendations for action"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20060000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2006"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "3-11"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200002"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "2"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1007/s10530-005-0231-3"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "CASAL",
+                    "r": "ND",
+                    "_": "",
+                    "n": "CMV."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "International Journal for Parasitology"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "28"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "0020-7519"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Concurrent invaders: four exotic species of Monogenea now established on exotic freshwater fishes in Australia"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "DOVE",
+                    "r": "ND",
+                    "_": "",
+                    "n": "ADM."
+                },
+                {
+                    "s": "ERNST",
+                    "r": "ND",
+                    "_": "",
+                    "n": "I."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "1998"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "1755-1764"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "International journal for parasitology"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200003"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "3"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1016/S0020-7519(98)00134-9"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "19980000"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Biological invasions"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "8"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Popularity and propagule pressure: determinants of introduction and establishment of aquarium fish"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20060000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2006"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "377&#8209;382"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200004"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "4"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1007/s10530-004-2310-2"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "DUGGAN",
+                    "r": "ND",
+                    "_": "",
+                    "n": "IC."
+                },
+                {
+                    "s": "RIXON",
+                    "r": "ND",
+                    "_": "",
+                    "n": "CAM."
+                },
+                {
+                    "s": "MACISAAC",
+                    "r": "ND",
+                    "_": "",
+                    "n": "HJ."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Biological Invasions"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "10"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "On the establishment and range expansion of oriental weatherfish (Misgurnus anguillicaudatus) in NE Iberian Peninsula"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20080000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2008"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "1327-1331"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200005"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "5"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1007/s10530-007-9207-9"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "FRANCH",
+                    "r": "ND",
+                    "_": "",
+                    "n": "N."
+                },
+                {
+                    "s": "CLAVERO",
+                    "r": "ND",
+                    "_": "",
+                    "n": "M."
+                },
+                {
+                    "s": "GARRIDO",
+                    "r": "ND",
+                    "_": "",
+                    "n": "M."
+                },
+                {
+                    "s": "GAYA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "N."
+                },
+                {
+                    "s": "LOPEZ",
+                    "r": "ND",
+                    "_": "",
+                    "n": "V."
+                },
+                {
+                    "s": "POU-ROVIRA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "Q."
+                },
+                {
+                    "s": "QUERAL",
+                    "r": "ND",
+                    "_": "",
+                    "n": "JM."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Journal of Fish Biology"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "66"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "0022-1112"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "The fisrt record of Misgurnus anguillicaudatus in Germany"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "FREYHOF",
+                    "r": "ND",
+                    "_": "",
+                    "n": "J."
+                },
+                {
+                    "s": "KORTE",
+                    "r": "ND",
+                    "_": "",
+                    "n": "E."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2005"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "568-571"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "JOURNAL OF FISH BIOLOGY"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200006"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "6"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1111/j.0022-1112.2005.00606.x"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20050000"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Environmental Biology of Fishes"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "81"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Influence of modern irrigation, drainage system and water management on spawning migration of mud loach, Misgurnus anguillicaudatus C"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20080000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2008"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "185-194"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200007"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "7"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1007/s10641-007-9188-7"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "FUJIMOTO",
+                    "r": "ND",
+                    "_": "",
+                    "n": "Y."
+                },
+                {
+                    "s": "OUCHI",
+                    "r": "ND",
+                    "_": "",
+                    "n": "Y."
+                },
+                {
+                    "s": "HAKUBA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "T."
+                },
+                {
+                    "s": "CHIBA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "H."
+                },
+                {
+                    "s": "IWATA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "M."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Comparative Biochemistry and Physiology"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "2"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "0010-406X"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Is there a compromise between nutrient uptake and gas exchange in the gut of Misgurnus anguillicaudatus, an intestinal air-breathing fish?"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "GON\u00c7ALVES",
+                    "r": "ND",
+                    "_": "",
+                    "n": "AF."
+                },
+                {
+                    "s": "CASTRO",
+                    "r": "ND",
+                    "_": "",
+                    "n": "LFC."
+                },
+                {
+                    "s": "PEREIRA-WILSON",
+                    "r": "ND",
+                    "_": "",
+                    "n": "C."
+                },
+                {
+                    "s": "COIMBRA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "J."
+                },
+                {
+                    "s": "WILSON",
+                    "r": "ND",
+                    "_": "",
+                    "n": "JM."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2007"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "45-355"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "Comparative Biochemistry and Physiology"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v61": [
+                {
+                    "_": "part D"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200008"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "8"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20070000"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Arquivos de Ci\u00eancias Veterin\u00e1rias e Zoologia UNIPAR"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "7"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "pt",
+                    "_": "Contribui\u00e7\u00e3o ao conhecimento da ictiofauna da bacia do alto rio Igua\u00e7u, Paran\u00e1, Brasil"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20040000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2004"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "23-36"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200009"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "9"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "INGENITO",
+                    "r": "ND",
+                    "_": "",
+                    "n": "LFS."
+                },
+                {
+                    "s": "DUBOC",
+                    "r": "ND",
+                    "_": "",
+                    "n": "LF."
+                },
+                {
+                    "s": "ABILHOA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "V."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Ichthyological Exploration of Freshwaters"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "9"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Fishes of the Nam Theun and Xe Bangfai basins, Laos, with diagnoses of twenty-two new species (Teleostei: Cyprinidae, Balitoridae, Cobitidae, Coiidae and Odontobutidae)"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "19980000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "1998"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "1-128"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200010"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "10"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "KOTTELAT",
+                    "r": "ND",
+                    "_": "",
+                    "n": "M."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Biota Neotropica"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "10"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "3"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "1676-0603"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "pt",
+                    "_": "Primeiro registro e aspectos ecol\u00f3gicos de Hoplerythrinus unitaeniatus (Agassiz, 1829) (Characiformes, Erythrinidae) como esp\u00e9cie introduzida na Bacia do Rio dos Sinos, RS, Brasil"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "LEAL",
+                    "r": "ND",
+                    "_": "",
+                    "n": "ME."
+                },
+                {
+                    "s": "KLEIN",
+                    "r": "ND",
+                    "_": "",
+                    "n": "GF."
+                },
+                {
+                    "s": "SCHULZ",
+                    "r": "ND",
+                    "_": "",
+                    "n": "UH."
+                },
+                {
+                    "s": "LEHMANN",
+                    "r": "ND",
+                    "_": "",
+                    "n": "PA."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2010"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "Biota Neotropica"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200011"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "11"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://www.biotaneotropica.org.br/v10n3/pt/abstract?article+bn00710032010"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20100000"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Biota Neotropica"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "11"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "1a"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "1676-0603"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Checklist of fresh water fishes from S\u00e3o Paulo State, Brazil"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "OYAKAWA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "OT."
+                },
+                {
+                    "s": "MENEZES",
+                    "r": "ND",
+                    "_": "",
+                    "n": "NA."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2011"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "Biota Neotropica"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200012"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "12"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://www.biotaneotropica.org.br/v11n1a/en/abstract?inventory+bn0021101a2011"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20110000"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Aquaculture Research"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "37"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Growth performance, morphometric traits and gonad development of induced reciprocal diploid and triploid hybrids between the mud loach (Misgurnus mizolepis Gunther) and cyprinid loach (Misgurnus anguillicaudatus Cantor)"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20060000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2006"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "1246-1253"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200013"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "13"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v237": [
+                {
+                    "_": "http://dx.doi.org/10.1111/j.1365-2109.2006.01556.x"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "PARK",
+                    "r": "ND",
+                    "_": "",
+                    "n": "IS."
+                },
+                {
+                    "s": "NAM",
+                    "r": "ND",
+                    "_": "",
+                    "n": "YK."
+                },
+                {
+                    "s": "KIM",
+                    "r": "ND",
+                    "_": "",
+                    "n": "DS."
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Brazilian Journal of Biology"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "69"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "3"
+                }
+            ],
+            "v35": [
+                {
+                    "_": "1519-6984"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "Population biology of Trichomycterus sp. (Siluriformes, Trichomycteridae) in Passa Cinco stream, Corumbata\u00ed River sub-basin, S\u00e3o Paulo State, southeastern Brazil"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "RONDINELI",
+                    "r": "ND",
+                    "_": "",
+                    "n": "GR."
+                },
+                {
+                    "s": "CARMASSI",
+                    "r": "ND",
+                    "_": "",
+                    "n": "AL."
+                },
+                {
+                    "s": "BRAGA",
+                    "r": "ND",
+                    "_": "",
+                    "n": "FMS."
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2009"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "925-934"
+                }
+            ],
+            "v801": [
+                {
+                    "_": "Brazilian Journal of Biology"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v61": [
+                {
+                    "_": "PMid:19802454"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200014"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "14"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20090000"
+                }
+            ]
+        },
+        {
+            "v18": [
+                {
+                    "l": "en",
+                    "_": "Atlas Biota"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20110000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2011"
+                }
+            ],
+            "v17": [
+                {
+                    "_": "Sistema de Informa\u00e7\u00e3o Ambiental do Biota - SINBIOTA"
+                }
+            ],
+            "v62": [
+                {
+                    "_": "Biota, Fapesp"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200015"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "15"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Northwest Science"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "75"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "1"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "en",
+                    "_": "An Oriental weatherfish (Misgurnus anguillicaudatus) population estabilished in Washington State"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20010000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2001"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "72-76"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200016"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "16"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "TABOR",
+                    "r": "ND",
+                    "_": "",
+                    "n": "RA."
+                },
+                {
+                    "s": "WARNER",
+                    "r": "ND",
+                    "_": "",
+                    "n": "E."
+                },
+                {
+                    "s": "HAGER",
+                    "r": "ND",
+                    "_": "",
+                    "n": "S."
+                }
+            ]
+        },
+        {
+            "v18": [
+                {
+                    "l": "pt",
+                    "_": "Biologia da reprodu\u00e7\u00e3o de peixes tele\u00f3steos: teoria e pr\u00e1tica"
+                }
+            ],
+            "v66": [
+                {
+                    "_": "Maring\u00e1"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "19960000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "1996"
+                }
+            ],
+            "v16": [
+                {
+                    "s": "VAZZOLER",
+                    "r": "ND",
+                    "_": "",
+                    "n": "AEAM."
+                }
+            ],
+            "v62": [
+                {
+                    "_": "EdUEM"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "169"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200017"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "17"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ]
+        },
+        {
+            "v30": [
+                {
+                    "_": "Neotropical Biology and Conservation"
+                }
+            ],
+            "v31": [
+                {
+                    "_": "4"
+                }
+            ],
+            "v32": [
+                {
+                    "_": "2"
+                }
+            ],
+            "v12": [
+                {
+                    "l": "pt",
+                    "_": "Introdu\u00e7\u00e3o de peixes em ecossistemas continentais brasileiros: revis\u00e3o, coment\u00e1rios e sugest\u00f5es de a\u00e7\u00f5es contra o inimigo quase invis\u00edvel"
+                }
+            ],
+            "v65": [
+                {
+                    "_": "20090000"
+                }
+            ],
+            "v64": [
+                {
+                    "_": "2009"
+                }
+            ],
+            "v14": [
+                {
+                    "_": "111-122"
+                }
+            ],
+            "v3": [
+                {
+                    "_": "alb_aop_230302.htm"
+                }
+            ],
+            "v880": [
+                {
+                    "_": "S2179-975X201100030000200018"
+                }
+            ],
+            "v701": [
+                {
+                    "_": "18"
+                }
+            ],
+            "v865": [
+                {
+                    "_": "20110900"
+                }
+            ],
+            "v702": [
+                {
+                    "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+                }
+            ],
+            "v10": [
+                {
+                    "s": "VITULE",
+                    "r": "ND",
+                    "_": "",
+                    "n": "JRS."
+                }
+            ]
+        }
+    ],
+    "normalized": {
+        "article": {
+            "v70": {
+                "_": [
+                    true,
+                    true,
+                    true,
+                    true
+                ]
+            }
+        }
+    },
+    "sent_wos": "True",
+    "article": {
+        "doi": "10.1590/S2179-975X2012005000004",
+        "v30": [
+            {
+                "_": "Acta Limnol. Bras."
+            }
+        ],
+        "v31": [
+            {
+                "_": "23"
+            }
+        ],
+        "v32": [
+            {
+                "_": "3"
+            }
+        ],
+        "v35": [
+            {
+                "_": "2179-975X"
+            }
+        ],
+        "v38": [
+            {
+                "_": "ILUS"
+            },
+            {
+                "_": "TAB"
+            }
+        ],
+        "v10": [
+            {
+                "1": "A01",
+                "s": "Gomes",
+                "r": "ND",
+                "_": "",
+                "n": "Caio Isola Dallevo do Amaral"
+            },
+            {
+                "1": "A02",
+                "s": "Peressin",
+                "r": "ND",
+                "_": "",
+                "n": "Alexandre"
+            },
+            {
+                "1": "A03",
+                "s": "Cetra",
+                "r": "ND",
+                "_": "",
+                "n": "Mauricio"
+            },
+            {
+                "1": "A04",
+                "s": "Barrella",
+                "r": "ND",
+                "_": "",
+                "n": "Walter"
+            }
+        ],
+        "v70": [
+            {
+                "c": "Sorocaba",
+                "e": "caioisola@yahoo.com.br",
+                "i": "A01",
+                "1": "Departamento de Ci\u00eancias Biol\u00f3gicas",
+                "p": "BRAZIL",
+                "s": "SP",
+                "z": "18052-780",
+                "_": "UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                "c": "Sorocaba",
+                "e": "alex_peressin@yahoo.com.br",
+                "i": "A02",
+                "1": "Programa de P\u00f3s-Gradua\u00e7\u00e3o em Diversidade Biol\u00f3gica e Conserva\u00e7\u00e3o",
+                "p": "BRAZIL",
+                "s": "SP",
+                "z": "18052-780",
+                "_": "UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                "c": "Sorocaba",
+                "e": "mcetra@ufscar.br",
+                "i": "A03",
+                "1": "Departamento de Ci\u00eancias Ambientais",
+                "p": "BRAZIL",
+                "s": "SP",
+                "z": "18052-780",
+                "_": "UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                "c": "Sorocaba",
+                "e": "vbarrella@pucsp.br",
+                "i": "A04",
+                "1": "Laborat\u00f3rio de Ecossistemas Aqu\u00e1ticos",
+                "p": "BRAZIL",
+                "s": "SP",
+                "_": "PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO"
+            }
+        ],
+        "v71": [
+            {
+                "_": "oa"
+            }
+        ],
+        "v14": [
+            {
+                "l": "232",
+                "_": "",
+                "f": "229"
+            }
+        ],
+        "v882": [
+            {
+                "v": "23",
+                "_": "",
+                "n": "3"
+            }
+        ],
+        "v880": [
+            {
+                "_": "S2179-975X2011000300002"
+            }
+        ],
+        "v881": [
+            {
+                "_": "S2179-975X2012005000004"
+            }
+        ],
+        "v158": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v999": [
+            {
+                "_": "../bases-work/alb/alb"
+            }
+        ],
+        "v114": [
+            {
+                "_": "20111214"
+            }
+        ],
+        "v117": [
+            {
+                "_": "iso690"
+            }
+        ],
+        "v111": [
+            {
+                "_": "06 July 2011"
+            }
+        ],
+        "v112": [
+            {
+                "_": "20110706"
+            }
+        ],
+        "v113": [
+            {
+                "_": "14 December 2011"
+            }
+        ],
+        "v40": [
+            {
+                "_": "en"
+            }
+        ],
+        "v42": [
+            {
+                "_": "1"
+            }
+        ],
+        "v85": [
+            {
+                "i": "1",
+                "d": "nd",
+                "_": ""
+            },
+            {
+                "i": "1",
+                "k": "Oriental weatherfish",
+                "t": "m",
+                "_": "",
+                "l": "en"
+            },
+            {
+                "i": "1",
+                "k": "exotic species",
+                "t": "m",
+                "_": "",
+                "l": "en"
+            },
+            {
+                "i": "1",
+                "k": "sexual maturity",
+                "t": "m",
+                "_": "",
+                "l": "en"
+            },
+            {
+                "i": "1",
+                "k": "diet overlap",
+                "t": "m",
+                "_": "",
+                "l": "en"
+            },
+            {
+                "i": "1",
+                "k": "S\u00e3o Paulo State",
+                "t": "m",
+                "_": "",
+                "l": "en"
+            },
+            {
+                "i": "2",
+                "d": "nd",
+                "_": ""
+            },
+            {
+                "i": "2",
+                "k": "Dojo",
+                "t": "m",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "i": "2",
+                "k": "esp\u00e9cies ex\u00f3ticas",
+                "t": "m",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "i": "2",
+                "k": "maturidade sexual",
+                "t": "m",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "i": "2",
+                "k": "sobreposi\u00e7\u00e3o de dieta",
+                "t": "m",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "i": "2",
+                "k": "Estado de S\u00e3o Paulo",
+                "t": "m",
+                "_": "",
+                "l": "pt"
+            }
+        ],
+        "v83": [
+            {
+                "a": "AIM: This work aimed to describe a first record of Misgurnus anguilicaudatus, Cantor 1842 in S\u00e3o Paulo state, as well as your potential impacts on native populations. METHODS: The specimen was caught by eletro-fishing device, in Itaguapeva river, Ribeira do Iguape river basin, Ibiuna (SP), Brazil. Later, it was fixed in 10% formalin and taken to laboratory for species identification, morphometric data evaluation, diet analysis and stage of gondal maturity. RESULTS: The individual was an adult female, without parasites and with gonads in maturity stage B, which indicates vascularized ovaries and presence of oocytes in vitellogenesis process. The dietary analysis showed that 95.3% of the stomach was occupied by insect larvae. CONCLUSIONS: The diet analysis may suggest food overlap and consequent competition for food with native species of the genera Trichomycterus e Characidium, which consume essentially the same items. Still, the great morphological similarity with native species, especially Siluriformes, could generate competition for shelters. Additionally, the stage of gonadal maturity and a recorded ability of the species on establish invasive populations in different environments raise concerns about the possibility of Misgurnus anguillicaudatus reproduction on the studied site.",
+                "l": "en",
+                "_": ""
+            },
+            {
+                "a": "OBJETIVO: Este trabalho objetivou descrever o primeiro registro de Misgurnus anguillicaudatus, Cantor 1842 no estado de S\u00e3o Paulo, bem como seus potenciais impactos em popula\u00e7\u00f5es nativas. M\u00c9TODOS: O exemplar foi capturado com equipamento de pesca el\u00e9trica, no Rio Itaguapeva, bacia hidrogr\u00e1fica do Rio Ribeira de Iguape, no Munic\u00edpio de Ib\u00eduna (SP), Brasil. Posteriormente, foi fixado em formalina 10% e levado ao laborat\u00f3rio, para identifica\u00e7\u00e3o da esp\u00e9cie, coleta de dados morfom\u00e9tricos, avalia\u00e7\u00e3o do est\u00e1dio de maturidade gonadal (Vazzoler, 1996) e an\u00e1lise do conte\u00fado estomacal. RESULTADOS: O indiv\u00edduo capturado era uma f\u00eamea adulta, sem parasitas e com g\u00f4nadas em est\u00e1dio de maturidade B, que indica ov\u00e1rios j\u00e1 vascularizados e presen\u00e7a de ov\u00f3citos em processo de vitelog\u00eanese. A an\u00e1lise da dieta revelou que 95,3% do est\u00f4mago era ocupado por larvas de insetos. CONCLUS\u00d5ES: A composi\u00e7\u00e3o da dieta pode sugerir sobreposi\u00e7\u00e3o alimentar e conseq\u00fcente competi\u00e7\u00e3o por alimento com esp\u00e9cies nativas dos g\u00eaneros Trichomycterus e Characidium, que consomem essencialmente os mesmo itens. Ainda, a grande semelhan\u00e7a morfol\u00f3gica com esp\u00e9cies nativas, principalmente Siluriformes, poderia gerar disputa por abrigos. Adicionalmente, o est\u00e1dio de maturidade gonadal e a j\u00e1 registrada capacidade da esp\u00e9cie de estabelecer popula\u00e7\u00f5es invasoras em diversos ambientes geram preocupa\u00e7\u00f5es quanto \u00e0 possibilidade de reprodu\u00e7\u00e3o da esp\u00e9cie no local.",
+                "l": "pt",
+                "_": ""
+            }
+        ],
+        "v65": [
+            {
+                "_": "20110900"
+            }
+        ],
+        "v4": [
+            {
+                "_": "v23n3"
+            }
+        ],
+        "v60": [
+            {
+                "_": "2009/53056-8"
+            }
+        ],
+        "v709": [
+            {
+                "_": "article"
+            }
+        ],
+        "v49": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v2": [
+            {
+                "_": "S2179-975X(11)02300302"
+            }
+        ],
+        "v3": [
+            {
+                "_": "alb_aop_230302.htm"
+            }
+        ],
+        "v121": [
+            {
+                "_": "02"
+            }
+        ],
+        "v120": [
+            {
+                "_": "4.0"
+            }
+        ],
+        "v701": [
+            {
+                "_": "1"
+            }
+        ],
+        "v700": [
+            {
+                "_": "2"
+            }
+        ],
+        "v702": [
+            {
+                "_": "V:\\scielo\\serial\\alb\\v23n3\\markup\\alb_aop_230302.htm"
+            }
+        ],
+        "v705": [
+            {
+                "_": "S"
+            }
+        ],
+        "v708": [
+            {
+                "_": "1"
+            }
+        ],
+        "v706": [
+            {
+                "_": "h"
+            }
+        ],
+        "v91": [
+            {
+                "_": "20120419"
+            }
+        ],
+        "v1": [
+            {
+                "_": "br1.1"
+            }
+        ],
+        "v72": [
+            {
+                "_": "18"
+            }
+        ],
+        "v223": [
+            {
+                "_": "20120216"
+            }
+        ],
+        "v936": [
+            {
+                "i": "2179-975X",
+                "y": "2011",
+                "_": "",
+                "o": "3"
+            }
+        ],
+        "v12": [
+            {
+                "l": "en",
+                "_": "First adult record of Misgurnus anguillicaudatus, Cantor 1842 from Ribeira de Iguape River Basin, Brazil"
+            },
+            {
+                "l": "pt",
+                "_": "Primeiro registro de um indiv\u00edduo adulto de Misgurnus anguillicaudatus, Cantor 1842 do rio Ribeira de Iguape, Brasil"
+            }
+        ],
+        "v58": [
+            {
+                "_": "FAPESP"
+            }
+        ]
+    },
+    "code_issue": "S2179-975X20110003",
+    "validated_scielo": "True",
+    "validated_wos": "True"
+}

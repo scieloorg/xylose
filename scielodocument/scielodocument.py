@@ -3,7 +3,7 @@
 import choices
 
 
-class Document(object):
+class Article(object):
 
     def __init__(self, data):
         self.data = data
@@ -32,7 +32,6 @@ class Document(object):
                     if self.data['title']['v935'][0] != self.data['title']['v400'][0]:
                         self.print_issn = self.data['title']['v400'][0]['_']
 
-    @property
     def original_language(self, format='iso 639-b'):
         """
         Retrive the article original original language
@@ -61,11 +60,18 @@ class Document(object):
 
         pub_date = [self.data['article']['v65'][0]['_'][0:4]]
 
-        if self.data['article']['v65'][0]['_'][6:8] != '00':
+        months = [i+1 for i in range(12)]
+        days = [i+1 for i in range(31)]
+
+        month = int(self.data['article']['v65'][0]['_'][4:6])
+        day = int(self.data['article']['v65'][0]['_'][6:8])
+
+        if month in months:
+            pub_date.append(self.data['article']['v65'][0]['_'][4:6])
+
+        if day in days:
             pub_date.append(self.data['article']['v65'][0]['_'][6:8])
 
-        if self.data['article']['v65'][0]['_'][4:6] != '00':
-            pub_date.append(self.data['article']['v65'][0]['_'][4:6])
 
         return "-".join(pub_date)
 
@@ -136,7 +142,7 @@ class Document(object):
             for title in self.data['article']['v12']:
                 if 'l' in title:
                     if title['l'] in choices.ISO639_2: 
-                        if choices.ISO639_2[title['l']] == self.original_language:
+                        if choices.ISO639_2[title['l']] == self.original_language():
                             return title['_']
 
     @property
@@ -165,7 +171,7 @@ class Document(object):
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
                     if abstract['l'] in choices.ISO639_2:
-                        if choices.ISO639_2[abstract['l']] == self.original_language:
+                        if choices.ISO639_2[abstract['l']] == self.original_language():
                             return abstract['a']
 
     @property
@@ -317,3 +323,29 @@ class Document(object):
                 return self.print_issn
             else:
                 return self.electronic_issn
+
+    @property
+    def citations(self):
+
+        if 'citations' in self.data:
+            return Citations(self.data['citations'])
+
+        return None
+
+
+class Citations(object):
+
+    def __init__(self, data):
+        pass
+
+
+class Document(object):
+
+    def __init__(self, data):
+        self._article = Article(data)
+        self._citations = None
+        self._title = None
+
+    @property
+    def article(self):
+        return self._article
