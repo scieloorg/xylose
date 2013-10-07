@@ -58,8 +58,8 @@ class Article(object):
 
         pub_date = [self.data['article']['v65'][0]['_'][0:4]]
 
-        months = [i+1 for i in range(12)]
-        days = [i+1 for i in range(31)]
+        months = range(1,13)
+        days = range(1,31)
 
         month = int(self.data['article']['v65'][0]['_'][4:6])
         day = int(self.data['article']['v65'][0]['_'][6:8])
