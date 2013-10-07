@@ -143,19 +143,22 @@ class Article(object):
                         if choices.ISO639_2[title['l']] == self.original_language():
                             return title['_']
 
-    @property
-    def translated_titles(self):
+    def translated_titles(self, format='iso 639-b'):
 
         trans_titles = {}
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    if title['l'] in choices.ISO639_2:
-                        l = choices.ISO639_2[title['l']]
+                    language = title['l']
+                    if format == 'iso 639-b':
+                        if language in choices.ISO639_2:
+                            l = choices.ISO639_2[language]
+                        else:
+                            l = 'undefined'
+                        if l != self.original_language:
+                            trans_titles.setdefault(l, title['_'])
                     else:
-                        l = 'undefined'
-                    if l != self.original_language:
-                        trans_titles.setdefault(l, title['_'])
+                        trans_titles.setdefault(language, title['_'])
 
         if len(trans_titles) == 0:
             return None
@@ -172,19 +175,22 @@ class Article(object):
                         if choices.ISO639_2[abstract['l']] == self.original_language():
                             return abstract['a']
 
-    @property
-    def translated_abstracts(self):
+    def translated_abstracts(self, format='iso 639-b'):
 
         trans_abstracts = {}
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    if abstract['l'] in choices.ISO639_2:
-                        l = choices.ISO639_2[abstract['l']]
+                    language = abstract['l']
+                    if format == 'iso 639-b':
+                        if language in choices.ISO639_2:
+                            l = choices.ISO639_2[language]
+                        else:
+                            l = 'undefined'
+                        if l != self.original_language:
+                            trans_abstracts.setdefault(l, abstract['a'])
                     else:
-                        l = 'undefined'
-                    if l != self.original_language:
-                        trans_abstracts.setdefault(l, abstract['a'])
+                        trans_abstracts.setdefault(language, abstract['a'])
 
         if len(trans_abstracts) == 0:
             return None

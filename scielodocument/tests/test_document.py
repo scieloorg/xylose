@@ -364,10 +364,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_title, None)
 
-    @unittest.skip("must be tested")
-    def test_translated_titles(self):
-        pass
-
     def test_without_original_abstract(self):
         article = self.document.article
 
@@ -415,9 +411,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_abstract, None)
 
-    @unittest.skip("must be tested")
-    def test_translated_abstracts(self):
-        pass
 
     def test_without_authors(self):
         article = self.document.article
@@ -755,5 +748,99 @@ class ArticleTests(unittest.TestCase):
         article.data['citations']
 
         self.assertTrue(article.citations, Citations)
+
+    def test_translated_titles_without_v12(self):
+        article = self.document.article        
+
+        del(article.data['article']['v12'])
+
+        self.assertEqual(article.translated_titles(), None)
+
+    def test_translated_titles_iso639b(self):
+        article = self.document.article
+
+        article.data['article']['v12'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"_": u"Article Title"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"_": u"Título do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'por': u'Título do Artigo', u'eng': u'Article Title'}
+
+        self.assertEqual(article.translated_titles(format='iso 639-b'), expected)
+
+    def test_translated_titles(self):
+        article = self.document.article
+
+        article.data['article']['v12'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"_": u"Article Title"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"_": u"Título do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'pt': u'Título do Artigo', u'en': u'Article Title'}
+
+        self.assertEqual(article.translated_titles(format='xxx'), expected)
+
+
+    def test_translated_abstracts_without_v83(self):
+        article = self.document.article        
+
+        del(article.data['article']['v83'])
+
+        self.assertEqual(article.translated_abstracts(), None)
+
+    def test_translated_abtracts_iso639b(self):
+        article = self.document.article
+
+        article.data['article']['v83'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"a": u"Article Abstract"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"a": u"Resumo do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'por': u'Resumo do Artigo', u'eng': u'Article Abstract'}
+
+        self.assertEqual(article.translated_abstracts(format='iso 639-b'), expected)
+
+    def test_translated_abstracts(self):
+        article = self.document.article
+
+        article.data['article']['v83'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"a": u"Article Abstract"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"a": u"Resumo do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'pt': u'Resumo do Artigo', u'en': u'Article Abstract'}
+
+        self.assertEqual(article.translated_abstracts(format='xxx'), expected)
+
+
+
+
+
+
+
 
 
