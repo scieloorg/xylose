@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from scielodocument.scielodocument import Document, Article, Citations
+from xylose.scielodocument import Document, Article, Citations
 
 
 class DocumentTests(unittest.TestCase):
