@@ -678,7 +678,7 @@ class ArticleTests(unittest.TestCase):
 
         del(article.data['article']['v85'])
 
-        self.assertEqual(article.keywords, None)
+        self.assertEqual(article.keywords(format='iso 639-b'), None)
 
     def test_keywords_without_subfield_k(self):
         article = self.document.article
@@ -690,7 +690,7 @@ class ArticleTests(unittest.TestCase):
                                             u"l": u"en"
                                           }]
 
-        self.assertEqual(article.keywords, None)
+        self.assertEqual(article.keywords(format='iso 639-b'), None)
 
     def test_keywords_without_subfield_l(self):
         article = self.document.article
@@ -702,7 +702,7 @@ class ArticleTests(unittest.TestCase):
                                             u"k": u"keyword"
                                           }]
 
-        self.assertEqual(article.keywords, None)
+        self.assertEqual(article.keywords(format='iso 639-b'), None)
 
     def test_keywords_with_undefined_language(self):
         article = self.document.article
@@ -716,7 +716,7 @@ class ArticleTests(unittest.TestCase):
                                           }]
 
         expected  = {u'undefined': [u'keyword']}
-        self.assertEqual(article.keywords, expected)
+        self.assertEqual(article.keywords(format='iso 639-b'), expected)
 
     def test_keywords(self):
         article = self.document.article
@@ -733,7 +733,31 @@ class ArticleTests(unittest.TestCase):
                              u'S\xe3o Paulo State']
                         }
 
-        self.assertEqual(article.keywords, expected)
+        self.assertEqual(article.keywords(format='iso 639-b'), expected)
+
+    def test_keywords_iso639b(self):
+        article = self.document.article
+
+        article.data['article']['v85'] = [
+                                            {
+                                                "i": "1",
+                                                "k": "keyword",
+                                                "t": "m",
+                                                "_": "",
+                                                "l": "en"
+                                            },
+                                            {
+                                                "i": "1",
+                                                "k": "palavra-chave",
+                                                "t": "m",
+                                                "_": "",
+                                                "l": "pt"
+                                            },
+                                         ]
+
+        expected = {u'pt': [u'palavra-chave'], u'en': [u'keyword']}
+
+        self.assertEqual(article.keywords(format='xxx'), expected)
 
     def test_without_citations(self):
         article = self.document.article
@@ -835,8 +859,6 @@ class ArticleTests(unittest.TestCase):
         expected = {u'pt': u'Resumo do Artigo', u'en': u'Article Abstract'}
 
         self.assertEqual(article.translated_abstracts(format='xxx'), expected)
-
-
 
 
 

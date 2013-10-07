@@ -151,10 +151,7 @@ class Article(object):
                 if 'l' in title:
                     language = title['l']
                     if format == 'iso 639-b':
-                        if language in choices.ISO639_2:
-                            l = choices.ISO639_2[language]
-                        else:
-                            l = 'undefined'
+                        l = choices.ISO639_2.get(language, 'undefined')
                         if l != self.original_language:
                             trans_titles.setdefault(l, title['_'])
                     else:
@@ -183,10 +180,7 @@ class Article(object):
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
                     language = abstract['l']
                     if format == 'iso 639-b':
-                        if language in choices.ISO639_2:
-                            l = choices.ISO639_2[language]
-                        else:
-                            l = 'undefined'
+                        l = choices.ISO639_2.get(language, 'undefined')
                         if l != self.original_language:
                             trans_abstracts.setdefault(l, abstract['a'])
                     else:
@@ -294,19 +288,20 @@ class Article(object):
             return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(self.scielo_domain,
                                                                             self.publisher_id[1:10])
 
-    @property
-    def keywords(self):
+    def keywords(self, format='iso 639-b'):
 
         keywords = {}
         if 'v85' in self.data['article']:
             for keyword in self.data['article']['v85']:
                 if 'k' in keyword and 'l' in keyword:
-                    if keyword['l'] in choices.ISO639_2:
-                        l = choices.ISO639_2[keyword['l']]
+                    language = keyword['l']
+                    if format == 'iso 639-b':
+                        l = choices.ISO639_2.get(language, 'undefined')
+                        group = keywords.setdefault(l, [])
+                        group.append(keyword['k'])
                     else:
-                        l = 'undefined'
-                    group = keywords.setdefault(l, [])
-                    group.append(keyword['k'])
+                        group = keywords.setdefault(language, [])
+                        group.append(keyword['k'])
 
         if len(keywords) == 0:
             return None
