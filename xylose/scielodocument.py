@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-import choices
+from . import choices
 
 
 class Article(object):
