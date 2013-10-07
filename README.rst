@@ -1,3 +1,6 @@
+.. image:: https://secure.travis-ci.org/scieloorg/xylose.png?branch=master
+`See Build details <http://travis-ci.org/#!/scieloorg/xylose>`_
+
 ======
 Xylose
 ======
