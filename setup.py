@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import scielodocument
 try:
     from setuptools import setup
 except ImportError:
@@ -8,7 +7,7 @@ except ImportError:
 
 setup(
     name="scielodocument",
-    version='.'.join(scielodocument.__version__),
+    version='0.1',
     description="Utility to load article documents from the xmlwos API.",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",

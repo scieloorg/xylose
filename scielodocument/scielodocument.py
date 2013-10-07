@@ -12,24 +12,22 @@ class Article(object):
         self._load_issn()
 
     def _load_issn(self):
-
         # ISSN and Other Complex Stuffs from the old version
         if not 'v935' in self.data['title']:  # Old fashion ISSN persistance style
-            if self.data['title']['v35'][0] == "PRINT":
-                self.print_issn = self.data['title']['v400'][0]['_']
-            else:
-                self.electronic_issn = self.data['title']['v400'][0]['_']
-
-        else:  # New ISSN persistance style
-
             if 'v35' in self.data['title']:
-                if self.data['title']['v35'][0] == "PRINT":
+                if self.data['title']['v35'][0]['_'] == "PRINT":
+                    self.print_issn = self.data['title']['v400'][0]['_']
+                else:
+                    self.electronic_issn = self.data['title']['v400'][0]['_']
+        else:  # New ISSN persistance style
+            if 'v35' in self.data['title']:
+                if self.data['title']['v35'][0]['_'] == "PRINT":
                     self.print_issn = self.data['title']['v935'][0]['_']
-                    if self.data['title']['v935'][0] != self.data['title']['v400'][0]:
+                    if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
                         self.electronic_issn = self.data['title']['v400'][0]['_']
                 else:
                     self.electronic_issn = self.data['title']['v935'][0]['_']
-                    if self.data['title']['v935'][0] != self.data['title']['v400'][0]:
+                    if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
                         self.print_issn = self.data['title']['v400'][0]['_']
 
     def original_language(self, format='iso 639-b'):
@@ -246,15 +244,13 @@ class Article(object):
 
         return affiliations
 
-    @property
-    def original_title_language(self):
+    def original_title_language(self, format='iso 639-b'):
 
-        return self.original_language
+        return self.original_language(format=format)
+    
+    def original_abstract_language(self, format='iso 639-b'):
 
-    @property
-    def original_abstract_language(self):
-
-        return self.original_language
+        return self.original_language(format=format)
 
     @property
     def scielo_domain(self):
@@ -311,7 +307,7 @@ class Article(object):
 
         return keywords
 
-    def issn(self, priority='electronic'):
+    def any_issn(self, priority=u'electronic'):
 
         if priority == 'electronic':
             if self.electronic_issn:
@@ -329,8 +325,6 @@ class Article(object):
 
         if 'citations' in self.data:
             return Citations(self.data['citations'])
-
-        return None
 
 
 class Citations(object):
