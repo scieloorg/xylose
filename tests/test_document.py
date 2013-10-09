@@ -4,7 +4,39 @@ import unittest
 import json
 import os
 from xylose.scielodocument import Document, Article, Citations
+from xylose import tools
 
+class ToolsTests(unittest.TestCase):
+
+    def test_get_language_without_iso_format(self):
+
+        language = tools.get_language(None, u'xx')
+
+        self.assertEqual(language, u'xx')
+
+    def test_get_language_iso639_1_defined(self):
+
+        language = tools.get_language(u'iso 639-1', u'pt')
+
+        self.assertEqual(language, u'pt')
+
+    def test_get_language_iso639_1_undefined(self):
+
+        language = tools.get_language(u'iso 639-1', u'xx')
+
+        self.assertEqual(language, u'#undefined xx#')
+
+    def test_get_language_iso639_2_defined(self):
+
+        language = tools.get_language(u'iso 639-2', u'pt')
+
+        self.assertEqual(language, u'por')
+
+    def test_get_language_iso639_2_undefined(self):
+
+        language = tools.get_language(u'iso 639-2', u'xx')
+
+        self.assertEqual(language, u'#undefined xx#')
 
 class DocumentTests(unittest.TestCase):
 
@@ -146,22 +178,22 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(article.any_issn(priority='print'), u'3333-3333')
 
 
-    def test_original_language_iso639b(self):
+    def test_original_language_iso639_2(self):
         article = self.document.article
         
-        self.assertEqual(article.original_language(), u'eng')
+        self.assertEqual(article.original_language(iso_format='iso 639-2'), u'eng')
 
-    def test_original_language_invalid_iso639b(self):
+    def test_original_language_invalid_iso639_2(self):
         article = self.document.article
         
         article.data['article']['v40'][0]['_'] = u'XXX'
 
-        self.assertEqual(article.original_language(), None)
+        self.assertEqual(article.original_language(iso_format='iso 639-2'), u'#undefined XXX#')
 
     def test_original_language_original(self):
         article = self.document.article
         
-        self.assertEqual(article.original_language(format='orig'), u'en')
+        self.assertEqual(article.original_language(iso_format=None), u'en')
 
     def test_publisher_name(self):
         article = self.document.article
@@ -321,7 +353,7 @@ class ArticleTests(unittest.TestCase):
         article = self.document.article
 
         del(article.data['article']['v12'])
-        self.assertEqual(article.original_title, None)
+        self.assertEqual(article.original_title(iso_format=None), None)
 
     def test_original_title_without_language_defined(self):
         article = self.document.article
@@ -329,7 +361,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v12'])
 
         article.data['article']['v12'] = [{u'_': u'article title 1'}, {u'_': u'article title 2'}]
-        self.assertEqual(article.original_title, None)
+        self.assertEqual(article.original_title(iso_format=None), None)
 
     def test_original_title_with_just_one_language_defined(self):
         article = self.document.article
@@ -340,7 +372,7 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'en'}, 
                                           {u'_': u'article title 2'}]
 
-        self.assertEqual(article.original_title, u'article title 1')
+        self.assertEqual(article.original_title(iso_format=None), u'article title 1')
 
     def test_original_title_with_language_defined(self):
         article = self.document.article
@@ -351,7 +383,7 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'}, 
                                           {u'_': u'article title 2', u'l': u'en'}]
 
-        self.assertEqual(article.original_title, u'article title 2')
+        self.assertEqual(article.original_title(iso_format=None), u'article title 2')
 
     def test_original_title_with_language_defined_but_different_of_the_article_original_language(self):
         article = self.document.article
@@ -362,13 +394,13 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'}, 
                                           {u'_': u'article title 2', u'l': u'fr'}]
 
-        self.assertEqual(article.original_title, None)
+        self.assertEqual(article.original_title(iso_format=None), None)
 
     def test_without_original_abstract(self):
         article = self.document.article
 
         del(article.data['article']['v83'])
-        self.assertEqual(article.original_abstract, None)
+        self.assertEqual(article.original_abstract(iso_format=None), None)
 
     def test_original_abstract_without_language_defined(self):
         article = self.document.article
@@ -376,7 +408,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v83'])
 
         article.data['article']['v83'] = [{u'a': u'article abstract 1'}, {u'a': u'abstract title 2'}]
-        self.assertEqual(article.original_abstract, None)
+        self.assertEqual(article.original_abstract(iso_format=None), None)
 
     def test_original_abstract_with_just_one_language_defined(self):
         article = self.document.article
@@ -387,7 +419,7 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'en'}, 
                                           {u'a': u'article abstract 2'}]
 
-        self.assertEqual(article.original_abstract, u'article abstract 1')
+        self.assertEqual(article.original_abstract(iso_format=None), u'article abstract 1')
 
     def test_original_abstract_with_language_defined(self):
         article = self.document.article
@@ -398,7 +430,7 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'}, 
                                           {u'a': u'article abstract 2', u'l': u'en'}]
 
-        self.assertEqual(article.original_abstract, u'article abstract 2')
+        self.assertEqual(article.original_abstract(iso_format=None), u'article abstract 2')
 
     def test_original_abstract_with_language_defined_but_different_of_the_article_original_language(self):
         article = self.document.article
@@ -409,7 +441,7 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'}, 
                                           {u'a': u'article abstract 2', u'l': u'fr'}]
 
-        self.assertEqual(article.original_abstract, None)
+        self.assertEqual(article.original_abstract(iso_format=None), None)
 
 
     def test_without_authors(self):
@@ -557,26 +589,6 @@ class ArticleTests(unittest.TestCase):
         
         self.assertEqual(article.affiliations, expected)
 
-    def test_original_title_language_iso639b(self):
-        article = self.document.article
-
-        self.assertEqual(article.original_title_language(), u'eng')
-
-    def test_original_abstract_language_iso639b(self):
-        article = self.document.article
-
-        self.assertEqual(article.original_abstract_language(), u'eng')
-
-    def test_original_title_language_not_iso639b(self):
-        article = self.document.article
-        
-        self.assertEqual(article.original_title_language(format='orig'), u'en')
-
-    def test_original_abstract_language_not_iso639b(self):
-        article = self.document.article
-        
-        self.assertEqual(article.original_abstract_language(format='orig'), u'en')
-
     def test_without_scielo_domain(self):
         article = self.document.article
 
@@ -678,7 +690,7 @@ class ArticleTests(unittest.TestCase):
 
         del(article.data['article']['v85'])
 
-        self.assertEqual(article.keywords(format='iso 639-b'), None)
+        self.assertEqual(article.keywords(iso_format='iso 639-2'), None)
 
     def test_keywords_without_subfield_k(self):
         article = self.document.article
@@ -690,7 +702,7 @@ class ArticleTests(unittest.TestCase):
                                             u"l": u"en"
                                           }]
 
-        self.assertEqual(article.keywords(format='iso 639-b'), None)
+        self.assertEqual(article.keywords(iso_format='iso 639-2'), None)
 
     def test_keywords_without_subfield_l(self):
         article = self.document.article
@@ -702,7 +714,7 @@ class ArticleTests(unittest.TestCase):
                                             u"k": u"keyword"
                                           }]
 
-        self.assertEqual(article.keywords(format='iso 639-b'), None)
+        self.assertEqual(article.keywords(iso_format='iso 639-2'), None)
 
     def test_keywords_with_undefined_language(self):
         article = self.document.article
@@ -715,8 +727,8 @@ class ArticleTests(unittest.TestCase):
                                             u"l": u"xx"
                                           }]
 
-        expected  = {u'undefined': [u'keyword']}
-        self.assertEqual(article.keywords(format='iso 639-b'), expected)
+        expected  = {u'#undefined xx#': [u'keyword']}
+        self.assertEqual(article.keywords(iso_format='iso 639-2'), expected)
 
     def test_keywords(self):
         article = self.document.article
@@ -733,9 +745,9 @@ class ArticleTests(unittest.TestCase):
                              u'S\xe3o Paulo State']
                         }
 
-        self.assertEqual(article.keywords(format='iso 639-b'), expected)
+        self.assertEqual(article.keywords(iso_format='iso 639-2'), expected)
 
-    def test_keywords_iso639b(self):
+    def test_keywords_iso639_2(self):
         article = self.document.article
 
         article.data['article']['v85'] = [
@@ -757,7 +769,7 @@ class ArticleTests(unittest.TestCase):
 
         expected = {u'pt': [u'palavra-chave'], u'en': [u'keyword']}
 
-        self.assertEqual(article.keywords(format='xxx'), expected)
+        self.assertEqual(article.keywords(iso_format=None), expected)
 
     def test_without_citations(self):
         article = self.document.article
@@ -780,7 +792,7 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.translated_titles(), None)
 
-    def test_translated_titles_iso639b(self):
+    def test_translated_titles_iso639_2(self):
         article = self.document.article
 
         article.data['article']['v12'] = [
@@ -794,9 +806,9 @@ class ArticleTests(unittest.TestCase):
                                             }
                                          ]
 
-        expected = {u'por': u'Título do Artigo', u'eng': u'Article Title'}
+        expected = {u'por': u'Título do Artigo'}
 
-        self.assertEqual(article.translated_titles(format='iso 639-b'), expected)
+        self.assertEqual(article.translated_titles(iso_format='iso 639-2'), expected)
 
     def test_translated_titles(self):
         article = self.document.article
@@ -812,9 +824,9 @@ class ArticleTests(unittest.TestCase):
                                             }
                                          ]
 
-        expected = {u'pt': u'Título do Artigo', u'en': u'Article Title'}
+        expected = {u'pt': u'Título do Artigo'}
 
-        self.assertEqual(article.translated_titles(format='xxx'), expected)
+        self.assertEqual(article.translated_titles(iso_format=None), expected)
 
 
     def test_translated_abstracts_without_v83(self):
@@ -822,9 +834,9 @@ class ArticleTests(unittest.TestCase):
 
         del(article.data['article']['v83'])
 
-        self.assertEqual(article.translated_abstracts(), None)
+        self.assertEqual(article.translated_abstracts(iso_format=None), None)
 
-    def test_translated_abtracts_iso639b(self):
+    def test_translated_abtracts_iso639_2(self):
         article = self.document.article
 
         article.data['article']['v83'] = [
@@ -838,9 +850,9 @@ class ArticleTests(unittest.TestCase):
                                             }
                                          ]
 
-        expected = {u'por': u'Resumo do Artigo', u'eng': u'Article Abstract'}
+        expected = {u'por': u'Resumo do Artigo'}
 
-        self.assertEqual(article.translated_abstracts(format='iso 639-b'), expected)
+        self.assertEqual(article.translated_abstracts(iso_format='iso 639-2'), expected)
 
     def test_translated_abstracts(self):
         article = self.document.article
@@ -856,9 +868,9 @@ class ArticleTests(unittest.TestCase):
                                             }
                                          ]
 
-        expected = {u'pt': u'Resumo do Artigo', u'en': u'Article Abstract'}
+        expected = {u'pt': u'Resumo do Artigo'}
 
-        self.assertEqual(article.translated_abstracts(format='xxx'), expected)
+        self.assertEqual(article.translated_abstracts(iso_format=None), expected)
 
 
 
