@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citations
+from xylose.scielodocument import Article, Citation
 from xylose import tools
 
 class ToolsTests(unittest.TestCase):
@@ -764,13 +764,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.citations, None)
 
-    def test_citations(self):
-        article = self.article
-
-        article.data['citations']
-
-        self.assertTrue(article.citations, Citations)
-
     def test_translated_titles_without_v12(self):
         article = self.article        
 
@@ -857,6 +850,78 @@ class ArticleTests(unittest.TestCase):
         expected = {u'pt': u'Resumo do Artigo'}
 
         self.assertEqual(article.translated_abstracts(iso_format=None), expected)
+
+    @unittest.skip
+    def test_citations(self):
+        article = self.article
+
+        article.data['citations']
+
+        #self.assertTrue(article.citations, Citations)
+
+
+class CitationTest(unittest.TestCase):
+
+    def setUp(self):
+        path = os.path.dirname(os.path.realpath(__file__))
+        self.json_citation = json.loads(open('%s/fixtures/sample_citation.json' % path).read())
+        self.citation = Citation(self.json_citation)
+
+    def test_index_number(self):
+        citation = self.citation
+
+        self.assertEqual(citation.index_number, 1)
+
+    def test_without_index_number(self):
+        citation = self.citation
+
+        self.assertEqual(citation.index_number, None)
+
+    def test_publication_type_article(self):
+        citation = self.citation
+
+        del(citation['v18'])
+        citation['v12'][0]['_'] = u'it is an article title'
+
+        self.assertEqual(citation.publication_type, u'article')
+
+
+    def test_publication_type_book(self):
+        citation = self.citation
+
+        citation['v18'][0]['_'] = u'it is a book title'
+
+        self.assertEqual(citation.publication_type, u'book')
+
+    def test_publication_type_conference(self):
+        citation = self.citation
+
+        del(citation['v18'])
+        citation['v53'][0]['_'] = u'it is a conference title'
+
+        self.assertEqual(citation.publication_type, u'conference')
+
+    def test_publication_type_thesis(self):
+        citation = self.citation
+
+        del(citation['v18'])
+        citation['v45'][0]['_'] = u'it is a thesis title'
+
+        self.assertEqual(citation.publication_type, u'thesis')
+
+    def test_publication_type_undefined(self):
+        citation = self.citation
+
+        del(citation['v18'])
+
+        self.assertEqual(citation.publication_type, u'undefined')
+
+    def test_source_title_journal(self):
+        citation = self.citation
+
+        del(citation['v18'])
+
+        self.assertEqual(citation.publication_type, u'undefined')
 
 
 

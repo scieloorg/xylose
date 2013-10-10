@@ -48,9 +48,9 @@ class Article(object):
         Retrive the article original original language
         """
 
-        format = self._iso_format if not iso_format else iso_format
+        fmt = self._iso_format if not iso_format else iso_format
 
-        return tools.get_language(self.data['article']['v40'][0]['_'], format)
+        return tools.get_language(self.data['article']['v40'][0]['_'], fmt)
 
     @property
     def publisher_name(self):
@@ -146,25 +146,25 @@ class Article(object):
 
     def original_title(self, iso_format=None):
 
-        format = iso_format or self._iso_format
+        fmt = iso_format or self._iso_format
 
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    language = tools.get_language(title['l'], format)
-                    if language == self.original_language(iso_format=format):
+                    language = tools.get_language(title['l'], fmt)
+                    if language == self.original_language(iso_format=fmt):
                         return title['_']
 
     def translated_titles(self, iso_format=None):
 
-        format = iso_format or self._iso_format
+        fmt = iso_format or self._iso_format
 
         trans_titles = {}
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    language = tools.get_language(title['l'], format)
-                    if language != self.original_language(iso_format=format):
+                    language = tools.get_language(title['l'], fmt)
+                    if language != self.original_language(iso_format=fmt):
                         trans_titles.setdefault(language, title['_'])
 
         if len(trans_titles) == 0:
@@ -175,25 +175,25 @@ class Article(object):
 
     def original_abstract(self, iso_format=None):
 
-        format = iso_format or self._iso_format
+        fmt = iso_format or self._iso_format
 
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    language = tools.get_language(abstract['l'], format)
-                    if language == self.original_language(iso_format=format):
+                    language = tools.get_language(abstract['l'], fmt)
+                    if language == self.original_language(iso_format=fmt):
                         return abstract['a']
 
     def translated_abstracts(self, iso_format=None):
 
-        format = iso_format or self._iso_format
+        fmt = iso_format or self._iso_format
 
         trans_abstracts = {}
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    language = tools.get_language(abstract['l'], format)
-                    if language != self.original_language(iso_format=format):
+                    language = tools.get_language(abstract['l'], fmt)
+                    if language != self.original_language(iso_format=fmt):
                         trans_abstracts.setdefault(language, abstract['a'])
 
         if len(trans_abstracts) == 0:
@@ -292,13 +292,13 @@ class Article(object):
 
     def keywords(self, iso_format='iso 639-2'):
 
-        format = iso_format or self._iso_format
+        fmt = iso_format or self._iso_format
 
         keywords = {}
         if 'v85' in self.data['article']:
             for keyword in self.data['article']['v85']:
                 if 'k' in keyword and 'l' in keyword:
-                    language = tools.get_language(keyword['l'], format)
+                    language = tools.get_language(keyword['l'], fmt)
                     group = keywords.setdefault(language, [])
                     group.append(keyword['k'])
 
@@ -323,12 +323,19 @@ class Article(object):
     @property
     def citations(self):
 
+        citations = []
         if 'citations' in self.data:
-            return Citations(self.data['citations'])
+            for citation in self.data['citations']:
+                citations.append(Citation(citation))
+
+        if len(citations) > 0:
+            return citations
 
 
-class Citations(object):
+class Citation(object):
 
     def __init__(self, data):
         pass
+
+
 
