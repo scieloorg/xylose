@@ -15,14 +15,14 @@ class Article(object):
         ['iso 639-2', 'iso 639-1', None]
         """
 
-        if iso_format in allowed_formats:
-            self._iso_format = iso_format
-            self.data = data
-            self.print_issn = None
-            self.electronic_issn = None
-            self._load_issn()
-        else:
+        if not iso_format in allowed_formats:
             raise ValueError('Language format not allowed ({0})'.format(iso_format))
+
+        self._iso_format = iso_format
+        self.data = data
+        self.print_issn = None
+        self.electronic_issn = None
+        self._load_issn()            
 
     def _load_issn(self):
         # ISSN and Other Complex Stuffs from the old version
@@ -50,7 +50,7 @@ class Article(object):
 
         format = self._iso_format if not iso_format else iso_format
 
-        return tools.get_language(format, self.data['article']['v40'][0]['_'])
+        return tools.get_language(self.data['article']['v40'][0]['_'], format)
 
     @property
     def publisher_name(self):
@@ -146,24 +146,24 @@ class Article(object):
 
     def original_title(self, iso_format=None):
 
-        format = self._iso_format if not iso_format else iso_format
+        format = iso_format or self._iso_format
 
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    language = tools.get_language(format, title['l'])
+                    language = tools.get_language(title['l'], format)
                     if language == self.original_language(iso_format=format):
                         return title['_']
 
     def translated_titles(self, iso_format=None):
 
-        format = self._iso_format if not iso_format else iso_format
+        format = iso_format or self._iso_format
 
         trans_titles = {}
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    language = tools.get_language(format, title['l'])
+                    language = tools.get_language(title['l'], format)
                     if language != self.original_language(iso_format=format):
                         trans_titles.setdefault(language, title['_'])
 
@@ -175,24 +175,24 @@ class Article(object):
 
     def original_abstract(self, iso_format=None):
 
-        format = self._iso_format if not iso_format else iso_format
+        format = iso_format or self._iso_format
 
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    language = tools.get_language(format, abstract['l'])
+                    language = tools.get_language(abstract['l'], format)
                     if language == self.original_language(iso_format=format):
                         return abstract['a']
 
     def translated_abstracts(self, iso_format=None):
 
-        format = self._iso_format if not iso_format else iso_format
+        format = iso_format or self._iso_format
 
         trans_abstracts = {}
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    language = tools.get_language(format, abstract['l'])
+                    language = tools.get_language(abstract['l'], format)
                     if language != self.original_language(iso_format=format):
                         trans_abstracts.setdefault(language, abstract['a'])
 
@@ -292,13 +292,13 @@ class Article(object):
 
     def keywords(self, iso_format='iso 639-2'):
 
-        format = self._iso_format if not iso_format else iso_format
+        format = iso_format or self._iso_format
 
         keywords = {}
         if 'v85' in self.data['article']:
             for keyword in self.data['article']['v85']:
                 if 'k' in keyword and 'l' in keyword:
-                    language = tools.get_language(format, keyword['l'])
+                    language = tools.get_language(keyword['l'], format)
                     group = keywords.setdefault(language, [])
                     group.append(keyword['k'])
 

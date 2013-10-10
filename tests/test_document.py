@@ -10,31 +10,31 @@ class ToolsTests(unittest.TestCase):
 
     def test_get_language_without_iso_format(self):
 
-        language = tools.get_language(None, u'xx')
+        language = tools.get_language(u'xx', None)
 
         self.assertEqual(language, u'xx')
 
     def test_get_language_iso639_1_defined(self):
 
-        language = tools.get_language(u'iso 639-1', u'pt')
+        language = tools.get_language( u'pt', u'iso 639-1')
 
         self.assertEqual(language, u'pt')
 
     def test_get_language_iso639_1_undefined(self):
 
-        language = tools.get_language(u'iso 639-1', u'xx')
+        language = tools.get_language( u'xx', u'iso 639-1')
 
         self.assertEqual(language, u'#undefined xx#')
 
     def test_get_language_iso639_2_defined(self):
 
-        language = tools.get_language(u'iso 639-2', u'pt')
+        language = tools.get_language( u'pt', u'iso 639-2')
 
         self.assertEqual(language, u'por')
 
     def test_get_language_iso639_2_undefined(self):
 
-        language = tools.get_language(u'iso 639-2', u'xx')
+        language = tools.get_language( u'xx', u'iso 639-2')
 
         self.assertEqual(language, u'#undefined xx#')
 

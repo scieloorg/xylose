@@ -1,6 +1,6 @@
 from . import choices
 
-def get_language(iso_format, language):
+def get_language(language, iso_format):
     if iso_format == u'iso 639-1':
         if language in choices.ISO639_1:
             return language
