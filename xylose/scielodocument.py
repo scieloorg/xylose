@@ -332,23 +332,3 @@ class Citations(object):
     def __init__(self, data):
         pass
 
-
-class Document(object):
-
-    def __init__(self, data, iso_format=None):
-        """
-        Keyword arguments:
-        iso_format -- the language iso format for methods that retrieve content identified by language.
-        """
-
-        if iso_format in allowed_formats:
-            self._article = Article(data, iso_format=iso_format)
-            self._citations = None
-            self._title = None
-        else:
-            raise ValueError('Language format not allowed ({0})'.format(iso_format))
-
-
-    @property
-    def article(self):
-        return self._article
