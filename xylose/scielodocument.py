@@ -1,15 +1,28 @@
 # encoding: utf-8
-
 from . import choices
+from . import tools
 
+allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
 class Article(object):
 
-    def __init__(self, data):
+    def __init__(self, data, iso_format=None):
+        """
+        Create an Aricle object given a isis2json type 3 SciELO document.
+
+        Keyword arguments:
+        iso_format -- the language iso format for methods that retrieve content identified by language.
+        ['iso 639-2', 'iso 639-1', None]
+        """
+
+        if not iso_format in allowed_formats:
+            raise ValueError('Language format not allowed ({0})'.format(iso_format))
+
+        self._iso_format = iso_format
         self.data = data
         self.print_issn = None
         self.electronic_issn = None
-        self._load_issn()
+        self._load_issn()            
 
     def _load_issn(self):
         # ISSN and Other Complex Stuffs from the old version
@@ -30,16 +43,14 @@ class Article(object):
                     if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
                         self.print_issn = self.data['title']['v400'][0]['_']
 
-    def original_language(self, format='iso 639-b'):
+    def original_language(self, iso_format=None):
         """
         Retrive the article original original language
         """
 
-        if format == 'iso 639-b':
-            if self.data['article']['v40'][0]['_'] in choices.ISO639_2:
-                return choices.ISO639_2[self.data['article']['v40'][0]['_']]
-        else:
-            return self.data['article']['v40'][0]['_']
+        format = self._iso_format if not iso_format else iso_format
+
+        return tools.get_language(self.data['article']['v40'][0]['_'], format)
 
     @property
     def publisher_name(self):
@@ -133,28 +144,27 @@ class Article(object):
 
         return choices.article_types['nd']
 
-    @property
-    def original_title(self):
+    def original_title(self, iso_format=None):
+
+        format = iso_format or self._iso_format
 
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    if title['l'] in choices.ISO639_2: 
-                        if choices.ISO639_2[title['l']] == self.original_language():
-                            return title['_']
+                    language = tools.get_language(title['l'], format)
+                    if language == self.original_language(iso_format=format):
+                        return title['_']
 
-    def translated_titles(self, format='iso 639-b'):
+    def translated_titles(self, iso_format=None):
+
+        format = iso_format or self._iso_format
 
         trans_titles = {}
         if 'v12' in self.data['article']:
             for title in self.data['article']['v12']:
                 if 'l' in title:
-                    language = title['l']
-                    if format == 'iso 639-b':
-                        l = choices.ISO639_2.get(language, 'undefined')
-                        if l != self.original_language:
-                            trans_titles.setdefault(l, title['_'])
-                    else:
+                    language = tools.get_language(title['l'], format)
+                    if language != self.original_language(iso_format=format):
                         trans_titles.setdefault(language, title['_'])
 
         if len(trans_titles) == 0:
@@ -162,28 +172,28 @@ class Article(object):
 
         return trans_titles
 
-    @property
-    def original_abstract(self):
+
+    def original_abstract(self, iso_format=None):
+
+        format = iso_format or self._iso_format
 
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    if abstract['l'] in choices.ISO639_2:
-                        if choices.ISO639_2[abstract['l']] == self.original_language():
-                            return abstract['a']
+                    language = tools.get_language(abstract['l'], format)
+                    if language == self.original_language(iso_format=format):
+                        return abstract['a']
 
-    def translated_abstracts(self, format='iso 639-b'):
+    def translated_abstracts(self, iso_format=None):
+
+        format = iso_format or self._iso_format
 
         trans_abstracts = {}
         if 'v83' in self.data['article']:
             for abstract in self.data['article']['v83']:
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
-                    language = abstract['l']
-                    if format == 'iso 639-b':
-                        l = choices.ISO639_2.get(language, 'undefined')
-                        if l != self.original_language:
-                            trans_abstracts.setdefault(l, abstract['a'])
-                    else:
+                    language = tools.get_language(abstract['l'], format)
+                    if language != self.original_language(iso_format=format):
                         trans_abstracts.setdefault(language, abstract['a'])
 
         if len(trans_abstracts) == 0:
@@ -244,14 +254,6 @@ class Article(object):
 
         return affiliations
 
-    def original_title_language(self, format='iso 639-b'):
-
-        return self.original_language(format=format)
-    
-    def original_abstract_language(self, format='iso 639-b'):
-
-        return self.original_language(format=format)
-
     @property
     def scielo_domain(self):
 
@@ -288,20 +290,17 @@ class Article(object):
             return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(self.scielo_domain,
                                                                             self.publisher_id[1:10])
 
-    def keywords(self, format='iso 639-b'):
+    def keywords(self, iso_format='iso 639-2'):
+
+        format = iso_format or self._iso_format
 
         keywords = {}
         if 'v85' in self.data['article']:
             for keyword in self.data['article']['v85']:
                 if 'k' in keyword and 'l' in keyword:
-                    language = keyword['l']
-                    if format == 'iso 639-b':
-                        l = choices.ISO639_2.get(language, 'undefined')
-                        group = keywords.setdefault(l, [])
-                        group.append(keyword['k'])
-                    else:
-                        group = keywords.setdefault(language, [])
-                        group.append(keyword['k'])
+                    language = tools.get_language(keyword['l'], format)
+                    group = keywords.setdefault(language, [])
+                    group.append(keyword['k'])
 
         if len(keywords) == 0:
             return None
@@ -333,14 +332,3 @@ class Citations(object):
     def __init__(self, data):
         pass
 
-
-class Document(object):
-
-    def __init__(self, data):
-        self._article = Article(data)
-        self._citations = None
-        self._title = None
-
-    @property
-    def article(self):
-        return self._article
