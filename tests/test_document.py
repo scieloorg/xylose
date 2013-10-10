@@ -875,13 +875,15 @@ class CitationTest(unittest.TestCase):
     def test_without_index_number(self):
         citation = self.citation
 
+        del(citation.data['v701'])
+
         self.assertEqual(citation.index_number, None)
 
     def test_publication_type_article(self):
-        citation = self.citation
+        del(self.json_citation['v18'])
+        self.json_citation['v12'] = [{u'_': u'it is the article title'}]
 
-        del(citation['v18'])
-        citation['v12'][0]['_'] = u'it is an article title'
+        citation = Citation(self.json_citation)
 
         self.assertEqual(citation.publication_type, u'article')
 
@@ -889,43 +891,74 @@ class CitationTest(unittest.TestCase):
     def test_publication_type_book(self):
         citation = self.citation
 
-        citation['v18'][0]['_'] = u'it is a book title'
+        citation.data['v18'] = [{u'_': u'it is the book title'}]
 
         self.assertEqual(citation.publication_type, u'book')
 
     def test_publication_type_conference(self):
-        citation = self.citation
+        del(self.json_citation['v18'])
+        self.json_citation['v53'] = [{u'_': u'it is the conference title'}]
 
-        del(citation['v18'])
-        citation['v53'][0]['_'] = u'it is a conference title'
+        citation = Citation(self.json_citation)
 
         self.assertEqual(citation.publication_type, u'conference')
 
     def test_publication_type_thesis(self):
-        citation = self.citation
+        del(self.json_citation['v18'])
+        self.json_citation['v45'] = [{u'_': u'it is the thesis title'}]
 
-        del(citation['v18'])
-        citation['v45'][0]['_'] = u'it is a thesis title'
+        citation = Citation(self.json_citation)
 
         self.assertEqual(citation.publication_type, u'thesis')
 
     def test_publication_type_undefined(self):
-        citation = self.citation
+        del(self.json_citation['v18'])
 
-        del(citation['v18'])
-
-        self.assertEqual(citation.publication_type, u'undefined')
-
-    def test_source_title_journal(self):
-        citation = self.citation
-
-        del(citation['v18'])
+        citation = Citation(self.json_citation)
 
         self.assertEqual(citation.publication_type, u'undefined')
 
+    def test_source_journal(self):
+        citation = self.citation
 
+        del(citation.data['v18'])
+        citation.data['v30'] = [{u'_': u'it is the journal title'}]
+        citation.data['v12'] = [{u'_': u'it is the article title'}]
 
+        self.assertEqual(citation.source, u'It is the journal title')
 
+    def test_source_journal_without_journal_title(self):
+        citation = self.citation
+
+        del(citation.data['v18'])
+        del(citation.data['v30'])
+        citation.data['v12'] = [{u'_': u'it is the article title'}]
+
+        self.assertEqual(citation.source, None)
+
+    def test_source_book_title(self):
+        citation = self.citation
+
+        citation.data['v18'] = [{u'_': u'it is the book title'}]
+        citation.data['v12'] = [{u'_': u'it is the book chapter'}]
+
+        self.assertEqual(citation.source, u'it is the book title')
+
+    def test_book_chapter(self):
+        citation = self.citation
+
+        citation.data['v18'] = [{u'_': u'it is the book title'}]
+        citation.data['v12'] = [{u'_': u'it is the book chapter'}]
+
+        self.assertEqual(citation.chapter_title, u'it is the book chapter')
+
+    def test_book_without_chapter(self):
+        citation = self.citation
+
+        del(citation.data['v12'])
+        citation.data['v18'] = [{u'_': u'it is the book title'}]
+
+        self.assertEqual(citation.chapter_title, None)
 
 
 

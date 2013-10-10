@@ -335,7 +335,25 @@ class Article(object):
 class Citation(object):
 
     def __init__(self, data):
-        pass
+        self.data = data
+        self.publication_type = self._publication_type()
 
+    def _publication_type(self):
 
+        if 'v18' in self.data:
+            return u'book'
+        elif 'v12' in self.data:
+            return u'article'
+        elif 'v53' in self.data:
+            return u'conference'
+        elif 'v45' in self.data:
+            return u'thesis'
+        else:
+            return u'undefined'
+
+    @property
+    def index_number(self):
+
+        if 'v701' in self.data:
+            return int(self.data['v701'][0]['_'])
 
