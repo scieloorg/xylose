@@ -309,7 +309,7 @@ class Article(object):
 
     def any_issn(self, priority=u'electronic'):
 
-        if priority == 'electronic':
+        if priority == u'electronic':
             if self.electronic_issn:
                 return self.electronic_issn
             else:
@@ -342,7 +342,7 @@ class Citation(object):
 
         if 'v18' in self.data:
             return u'book'
-        elif 'v12' in self.data:
+        elif 'v12' in self.data and 'v30' in self.data:
             return u'article'
         elif 'v53' in self.data:
             return u'conference'
@@ -356,4 +356,51 @@ class Citation(object):
 
         if 'v701' in self.data:
             return int(self.data['v701'][0]['_'])
+
+    @property
+    def source(self):
+        """
+        This method retrieves the citation source title. Ex:
+        Journal: Journal of Microbiology
+        Book: Alice's Adventures in Wonderland
+        """
+        if self.publication_type == u'article' and 'v30' in self.data:
+            return self.data['v30'][0]['_']
+
+        if self.publication_type == u'book' and 'v18' in self.data:
+            return self.data['v18'][0]['_']
+
+    @property
+    def chapter_title(self):
+        """
+        If it is a book citation, this method retrieves a chapter title, if it exists.
+        """
+        if self.publication_type == u'book' and 'v12' in self.data:
+            return self.data['v12'][0]['_']
+
+    @property
+    def article_title(self):
+        """
+        If it is an article citation, this method retrieves the article title, if it exists.
+        """
+        if self.publication_type == u'article' and 'v12' in self.data:
+            return self.data['v12'][0]['_']
+
+    @property
+    def thesis_title(self):
+        """
+        If it is a thesis citation, this method retrieves the thesis title, if it exists.
+        """
+
+        if self.publication_type == u'thesis' and 'v45' in self.data:
+            return self.data['v45'][0]['_']
+
+    @property
+    def conference_title(self):
+        """
+        If it is a conference citation, this method retrieves the conference title, if it exists.
+        """
+
+        if self.publication_type == u'conference' and 'v53' in self.data:
+            return self.data['v53'][0]['_']
 

@@ -880,90 +880,139 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.index_number, None)
 
     def test_publication_type_article(self):
-        del(self.json_citation['v18'])
-        self.json_citation['v12'] = [{u'_': u'it is the article title'}]
+        json_citation = {}
 
-        citation = Citation(self.json_citation)
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.publication_type, u'article')
 
 
     def test_publication_type_book(self):
-        citation = self.citation
+        json_citation = {}
 
-        citation.data['v18'] = [{u'_': u'it is the book title'}]
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.publication_type, u'book')
 
     def test_publication_type_conference(self):
-        del(self.json_citation['v18'])
-        self.json_citation['v53'] = [{u'_': u'it is the conference title'}]
+        json_citation = {}
 
-        citation = Citation(self.json_citation)
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.publication_type, u'conference')
 
     def test_publication_type_thesis(self):
-        del(self.json_citation['v18'])
-        self.json_citation['v45'] = [{u'_': u'it is the thesis title'}]
+        json_citation = {}
 
-        citation = Citation(self.json_citation)
+        json_citation['v45'] = [{u'_': u'It is the thesis title'}]
+
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.publication_type, u'thesis')
 
     def test_publication_type_undefined(self):
-        del(self.json_citation['v18'])
+        json_citation = {}
 
-        citation = Citation(self.json_citation)
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.publication_type, u'undefined')
 
-    @unittest.skip
     def test_source_journal(self):
-        citation = self.citation
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
 
-        del(citation.data['v18'])
-        citation.data['v30'] = [{u'_': u'it is the journal title'}]
-        citation.data['v12'] = [{u'_': u'it is the article title'}]
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.source, u'It is the journal title')
 
-    @unittest.skip
     def test_source_journal_without_journal_title(self):
-        citation = self.citation
+        json_citation = {}
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
 
-        del(citation.data['v18'])
-        del(citation.data['v30'])
-        citation.data['v12'] = [{u'_': u'it is the article title'}]
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.source, None)
 
-    @unittest.skip
     def test_source_book_title(self):
-        citation = self.citation
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the book chapter'}]
 
-        citation.data['v18'] = [{u'_': u'it is the book title'}]
-        citation.data['v12'] = [{u'_': u'it is the book chapter'}]
+        citation = Citation(json_citation)
 
-        self.assertEqual(citation.source, u'it is the book title')
+        self.assertEqual(citation.source, u'It is the book title')
 
-    @unittest.skip
-    def test_book_chapter(self):
-        citation = self.citation
+    def test_article_title(self):
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article chapter'}]
 
-        citation.data['v18'] = [{u'_': u'it is the book title'}]
-        citation.data['v12'] = [{u'_': u'it is the book chapter'}]
+        citation = Citation(json_citation)
 
-        self.assertEqual(citation.chapter_title, u'it is the book chapter')
+        self.assertEqual(citation.article_title, u'It is the article chapter')
 
-    @unittest.skip
-    def test_book_without_chapter(self):
-        citation = self.citation
+    def test_article_without_title(self):
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
 
-        del(citation.data['v12'])
-        citation.data['v18'] = [{u'_': u'it is the book title'}]
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.article_title, None)
+
+    def test_book_chapter_title(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the book chapter'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.chapter_title, u'It is the book chapter')
+
+    def test_book_without_chapter_title(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+
+        citation = Citation(json_citation)
 
         self.assertEqual(citation.chapter_title, None)
 
+    def test_thesis_title(self):
+        json_citation = {}
+        json_citation['v45'] = [{u'_': u'It is the thesis title'}]
 
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.thesis_title, u'It is the thesis title')
+
+    @unittest.skip
+    def test_thesis_without_title(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.thesis_title, None)
+
+    def test_conference_title(self):
+        json_citation = {}
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_title, u'It is the conference title')
+
+    @unittest.skip
+    def test_conference_without_title(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_title, None)
 
