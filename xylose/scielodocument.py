@@ -351,6 +351,8 @@ class Citation(object):
             return u'conference'
         elif 'v45' in self.data:
             return u'thesis'
+        elif 'v37' in self.data:
+            return u'link'
         else:
             return u'undefined'
 
@@ -409,4 +411,45 @@ class Citation(object):
 
         if self.publication_type == u'conference' and 'v53' in self.data:
             return self.data['v53'][0]['_']
+
+    @property
+    def link_title(self):
+        """
+        If it is a link citation, this method retrieves the link title, if it exists.
+        """
+
+        if self.publication_type == u'link' and 'v12' in self.data:
+            return self.data['v12'][0]['_']
+
+    @property
+    def conference_date(self):
+        """
+        If it is a conference citation, this method retrieves the conference date, if it exists.
+        The conference date is presented like it is in the citation.
+        """
+
+        if self.publication_type == u'conference' and 'v54' in self.data:
+            return self.data['v54'][0]['_']
+
+    @property
+    def conference_sponsor(self):
+        """
+        If it is a conference citation, this method retrieves the conference sponsor, if it exists.
+        The conference sponsor is presented like it is in the citation.
+        """
+
+        if self.publication_type == u'conference' and 'v52' in self.data:
+            return self.data['v52'][0]['_']
+
+    @property
+    def link(self):
+        """
+        This metod retrieves a link, if it is available.
+        """
+
+        if 'v37' in self.data:
+            return self.data['v37'][0]['_']
+
+
+
 

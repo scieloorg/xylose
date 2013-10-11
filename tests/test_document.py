@@ -917,6 +917,16 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.publication_type, u'thesis')
 
+    def test_publication_type_link(self):
+        json_citation = {}
+
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v12'] = [{u'_': u'It is the link title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.publication_type, u'link')
+
     def test_publication_type_undefined(self):
         json_citation = {}
 
@@ -992,7 +1002,6 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.thesis_title, u'It is the thesis title')
 
-    @unittest.skip
     def test_thesis_without_title(self):
         json_citation = {}
 
@@ -1008,7 +1017,6 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.conference_title, u'It is the conference title')
 
-    @unittest.skip
     def test_conference_without_title(self):
         json_citation = {}
 
@@ -1016,3 +1024,69 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.conference_title, None)
 
+    def test_link_title(self):
+        json_citation = {}
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v12'] = [{u'_': u'It is the link title'}]
+
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.link_title, u'It is the link title')
+
+    def test_link_without_title(self):
+        json_citation = {}
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.link_title, None)
+
+    def test_conference_date(self):
+        json_citation = {}
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+        json_citation['v54'] = [{u'_': u'2008'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_date, u'2008')
+
+    def test_conference_without_date(self):
+        json_citation = {}
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_date, None)
+
+    def test_conference_sponsor(self):
+        json_citation = {}
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+        json_citation['v52'] = [{u'_': u'It is the conference sponsor'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_sponsor, u'It is the conference sponsor')
+
+    def test_conference_without_sponsor(self):
+        json_citation = {}
+        json_citation['v52'] = [{u'_': u'It is the conference sponsor'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.conference_sponsor, None)
+
+    def test_link(self):
+        json_citation = {}
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.link, u'http://www.scielo.br')
+
+    def test_without_link(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.link, None)
