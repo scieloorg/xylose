@@ -66,23 +66,8 @@ class Article(object):
 
     @property
     def publication_date(self):
-
-        pub_date = [self.data['article']['v65'][0]['_'][0:4]]
-
-        months = range(1,13)
-        days = range(1,31)
-
-        month = int(self.data['article']['v65'][0]['_'][4:6])
-        day = int(self.data['article']['v65'][0]['_'][6:8])
-
-        if month in months:
-            pub_date.append(self.data['article']['v65'][0]['_'][4:6])
-
-        if day in days:
-            pub_date.append(self.data['article']['v65'][0]['_'][6:8])
-
-
-        return "-".join(pub_date)
+        
+        return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
     def volume(self):
@@ -444,7 +429,7 @@ class Citation(object):
     @property
     def link(self):
         """
-        This metod retrieves a link, if it is available.
+        This metod retrieves a link, if it is exists.
         """
 
         if 'v37' in self.data:

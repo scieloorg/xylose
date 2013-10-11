@@ -38,6 +38,51 @@ class ToolsTests(unittest.TestCase):
 
         self.assertEqual(language, u'#undefined xx#')
 
+    def test_get_publication_date_year_month_day(self):
+
+        date = tools.get_publication_date('20120102')
+        self.assertEqual(date, '2012-01-02')
+
+    def test_get_publication_date_year_month(self):
+
+        date = tools.get_publication_date('20120100')
+        self.assertEqual(date, '2012-01')
+
+    def test_get_publication_date_year(self):
+
+        date = tools.get_publication_date('20120000')
+        self.assertEqual(date, '2012')
+
+    def test_get_publication_date_year_day(self):
+
+        date = tools.get_publication_date('20120001')
+        self.assertEqual(date, '2012')
+
+    def test_get_publication_date_wrong_day(self):
+
+        date = tools.get_publication_date('201201')
+        self.assertEqual(date, '2012-01')
+
+    def test_get_publication_date_wrong_day_month(self):
+
+        date = tools.get_publication_date('2012')
+        self.assertEqual(date, '2012')
+
+    def test_get_publication_date_wrong_day_not_int(self):
+
+        date = tools.get_publication_date('201201xx')
+        self.assertEqual(date, '2012-01')
+
+    def test_get_publication_date_wrong_day_month_not_int(self):
+
+        date = tools.get_publication_date('2012xxxx')
+        self.assertEqual(date, '2012')
+
+    def test_get_publication_date_wrong_month_not_int(self):
+
+        date = tools.get_publication_date('2012xx01')
+        self.assertEqual(date, '2012')
+
 class ArticleTests(unittest.TestCase):
 
     def setUp(self):
@@ -203,17 +248,11 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v100'])
         self.assertEqual(article.journal_title, None)
 
-    def test_publication_date_just_year(self):
+    def test_publication_date(self):
         article = self.article
         
         article.data['article']['v65'] = [{u'_': u'20120102'}]
         self.assertEqual(article.publication_date, '2012-01-02')
-
-        article.data['article']['v65'] = [{u'_': u'20120100'}]
-        self.assertEqual(article.publication_date, '2012-01')
-
-        article.data['article']['v65'] = [{u'_': u'20120000'}]
-        self.assertEqual(article.publication_date, '2012')
 
     def test_without_publication_date(self):
         article = self.article
