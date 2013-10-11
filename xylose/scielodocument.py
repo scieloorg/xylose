@@ -45,7 +45,7 @@ class Article(object):
 
     def original_language(self, iso_format=None):
         """
-        Retrive the article original original language
+        This method retrieves the original language of the given article.
         """
 
         fmt = self._iso_format if not iso_format else iso_format
@@ -339,6 +339,9 @@ class Citation(object):
         self.publication_type = self._publication_type()
 
     def _publication_type(self):
+        """
+        This method retrieves the publication type of the citation.
+        """
 
         if 'v18' in self.data:
             return u'book'
@@ -353,7 +356,10 @@ class Citation(object):
 
     @property
     def index_number(self):
-
+        """
+        This method retrieves the index number of the citation. The 
+        index number represents the original number given in the article.
+        """
         if 'v701' in self.data:
             return int(self.data['v701'][0]['_'])
 
