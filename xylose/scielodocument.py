@@ -25,6 +25,11 @@ class Article(object):
         self._load_issn()            
 
     def _load_issn(self):
+        """
+        This method creates an object level attributes (print_issn and/or electronic issn),
+        according to the given metadata.
+        This method deal with the legacy datamodel fields (935, 400, 35) where:
+        """
         # ISSN and Other Complex Stuffs from the old version
         if not 'v935' in self.data['title']:  # Old fashion ISSN persistance style
             if 'v35' in self.data['title']:
@@ -46,6 +51,7 @@ class Article(object):
     def original_language(self, iso_format=None):
         """
         This method retrieves the original language of the given article.
+        This method deals with the legacy fields (40).
         """
 
         fmt = self._iso_format if not iso_format else iso_format
@@ -54,72 +60,186 @@ class Article(object):
 
     @property
     def publisher_name(self):
-
+        """
+        This method retrieves the publisher name of the given article, if it exists.
+        This method deals with the legacy fields (480).
+        """
         if 'v480' in self.data['title']:
             return self.data['title']['v480'][0]['_']
 
     @property
     def journal_title(self):
-
+        """
+        This method retrieves the journal_title of the given article, if it exists.
+        This method deals with the legacy fields (100).
+        """
         if 'v100' in self.data['title']:
             return self.data['title']['v100'][0]['_']
 
     @property
     def publication_date(self):
+        """
+        This method retrieves the publication date of the given article, if it exists.
+        This method deals with the legacy fields (65).
+        """
         
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
-    def volume(self):
+    def publication_country(self):
+        """
+        This method retrieves the publication country of the given article, if it exists.
+        This method deals with the legacy fields (67).
+        """
+        if 'v67' in self.data['article']:
+            return self.data['article']['v67'][0]['_']
 
+    @property
+    def publication_city(self):
+        """
+        This method retrieves the publication city of the given article, if it exists.
+        This method deals with the legacy fields (66).
+        """
+        if 'v66' in self.data['article']:
+            return self.data['article']['v66'][0]['_']
+
+    @property
+    def publication_state(self):
+        """
+        This method retrieves the publication state of the given article, if it exists.
+        This method deals with the legacy fields (66).
+        """
+        if 'v66' in self.data['article']:
+            if 'e' in self.data['article']['v66'][0]:
+                return self.data['article']['v66'][0]['e']
+
+    @property
+    def contract(self):
+        """
+        This method retrieves the contract of the given article, if it exists.
+        This method deals with the legacy fields (60).
+        """
+        if 'v60' in self.data['article']:
+            return self.data['article']['v60'][0]['_']
+
+    @property
+    def project_name(self):
+        """
+        This method retrieves the project name of the given article, if it exists.
+        This method deals with the legacy fields (59).
+        """
+        if 'v59' in self.data['article']:
+            return self.data['article']['v59'][0]['_']
+
+    @property
+    def project_sponsor(self):
+        """
+        This method retrieves the project sponsor of the given article, if it exists.
+        This method deals with the legacy fields (58).
+        """
+        sponsors = []
+        if 'v58' in self.data['article']:
+            for sponsor in self.data['article']['v58']:
+                authordict = {}
+                if '_' in sponsor:
+                    authordict['orgname'] = sponsor['_']
+                if 'd' in sponsor:
+                    authordict['orgdiv'] = sponsor['d']
+
+                sponsors.append(authordict)
+
+        if len(sponsors) == 0:
+            return None
+
+        return sponsors
+
+    @property
+    def volume(self):
+        """
+        This method retrieves the issue volume of the given article, if it exists.
+        This method deals with the legacy fields (31).
+        """
         if 'v31' in self.data['article']:
             return self.data['article']['v31'][0]['_']
 
     @property
     def issue(self):
-
+        """
+        This method retrieves the issue number of the given article, if it exists.
+        This method deals with the legacy fields (32).
+        """
         if 'v32' in self.data['article']:
             return self.data['article']['v32'][0]['_']
 
     @property
     def supplement_volume(self):
-
+        """
+        This method retrieves the supplement of volume of the given article, if it exists.
+        This method deals with the legacy fields (131).
+        """
         if 'v131' in self.data['article']:
             return self.data['article']['v131'][0]['_']
 
     @property
     def supplement_issue(self):
-
+        """
+        This method retrieves the supplement number of the given article, if it exists.
+        This method deals with the legacy fields (132).
+        """
         if 'v132' in self.data['article']:
             return self.data['article']['v132'][0]['_']
 
     @property
     def start_page(self):
-
+        """
+        This method retrieves the star page of the given article, if it exists.
+        This method deals with the legacy fields (14).
+        """
         if 'v14' in self.data['article']:
             if 'f' in self.data['article']['v14'][0]:
                 return self.data['article']['v14'][0]['f']
 
     @property
     def end_page(self):
-
+        """
+        This method retrieves the end page of the given article, if it exists.
+        This method deals with the legacy fields (14).
+        """
         if 'v14' in self.data['article']:
             if 'l' in self.data['article']['v14'][0]:
                 return self.data['article']['v14'][0]['l']
 
     @property
     def doi(self):
-
+        """
+        This method retrieves the DOI of the given article, if it exists.
+        """
         if 'doi' in self.data['article']:
             return self.data['article']['doi']
 
     @property
     def publisher_id(self):
+        """
+        This method retrieves the publisher id of the given article, if it exists.
+        This method deals with the legacy fields (880).
+        """
         return self.data['article']['v880'][0]['_']
 
     @property
-    def document_type(self):
+    def journal_abbreviated_title(self):
+        """
+        This method retrieves the journal abbreviated title of the given article, if it exists.
+        This method deals with the legacy fields (30).
+        """
+        if 'v30' in self.data['article']:
+            return self.data['article']['v30'][0]['_']
 
+    @property
+    def document_type(self):
+        """
+        This method retrieves the document type of the given article, if it exists.
+        This method deals with the legacy fields (71).
+        """
         if 'v71' in self.data['article']:
             article_type_code = self.data['article']['v71'][0]['_']
             if article_type_code in choices.article_types:
@@ -130,6 +250,11 @@ class Article(object):
         return choices.article_types['nd']
 
     def original_title(self, iso_format=None):
+        """
+        This method retrieves just the title related with the original language 
+        of the given article, if it exists.
+        This method deals with the legacy fields (12).
+        """
 
         fmt = iso_format or self._iso_format
 
@@ -141,6 +266,10 @@ class Article(object):
                         return title['_']
 
     def translated_titles(self, iso_format=None):
+        """
+        This method retrieves just the translated titles of the given article, if it exists.
+        This method deals with the legacy fields (12).
+        """
 
         fmt = iso_format or self._iso_format
 
@@ -159,7 +288,11 @@ class Article(object):
 
 
     def original_abstract(self, iso_format=None):
-
+        """
+        This method retrieves just the abstract related with the original language 
+        of the given article, if it exists.
+        This method deals with the legacy fields (83).
+        """
         fmt = iso_format or self._iso_format
 
         if 'v83' in self.data['article']:
@@ -170,7 +303,10 @@ class Article(object):
                         return abstract['a']
 
     def translated_abstracts(self, iso_format=None):
-
+        """
+        This method retrieves just the trasnlated abstracts of the given article, if it exists.
+        This method deals with the legacy fields (83).
+        """
         fmt = iso_format or self._iso_format
 
         trans_abstracts = {}
@@ -188,6 +324,10 @@ class Article(object):
 
     @ property
     def authors(self):
+        """
+        This method retrieves the analytics authors of the given article, if it exists.
+        This method deals with the legacy fields (10).
+        """
         authors = []
         if 'v10' in self.data['article']:
             for author in self.data['article']['v10']:
@@ -213,7 +353,34 @@ class Article(object):
         return authors
 
     @property
+    def corporative_authors(self):
+        """
+        This method retrieves the organizational authors of the given article, if it exists.
+        This method deals with the legacy fields (11).
+        """
+        authors = []
+        if 'v11' in self.data['article']:
+            for author in self.data['article']['v11']:
+                authordict = {}
+
+                if '_' in author:
+                    authordict['orgname'] = author['_']
+                if 'd' in author:
+                    authordict['orgdiv'] = author['d']
+
+                authors.append(authordict)
+
+        if len(authors) == 0:
+            return None
+
+        return authors
+
+    @property
     def affiliations(self):
+        """
+        This method retrieves the authors affiliations of the given article, if it exists.
+        This method deals with the legacy fields (70).
+        """
         affiliations = []
         if 'v70' in self.data['article']:
             for aff in self.data['article']['v70']:
@@ -241,7 +408,10 @@ class Article(object):
 
     @property
     def scielo_domain(self):
-
+        """
+        This method retrieves the collection domains of the given article, if it exists.
+        This method deals with the legacy fields (69, 690).
+        """
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
         elif 'v69' in self.data['article']:
@@ -249,34 +419,45 @@ class Article(object):
 
     @property
     def pdf_url(self):
-
+        """
+        This method retrieves the pdf url of the given article.
+        """
         if self.scielo_domain:
             return "http://{0}/scielo.php?script=sci_pdf&pid={1}".format(self.scielo_domain,
                                                                          self.publisher_id)
 
     @property
     def html_url(self):
-
+        """
+        This method retrieves the html url of the given article.
+        """
         if self.scielo_domain:
             return "http://{0}/scielo.php?script=sci_arttext&pid={1}".format(self.scielo_domain,
                                                                              self.publisher_id)
 
     @property
     def issue_url(self):
-
+        """
+        This method retrieves the issue url of the given article.
+        """
         if self.scielo_domain:
             return "http://{0}/scielo.php?script=sci_issuetoc&pid={1}".format(self.scielo_domain,
                                                                               self.publisher_id[0:18])
 
     @property
     def journal_url(self):
-
+        """
+        This method retrieves the journal url of the given article.
+        """
         if self.scielo_domain:
             return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(self.scielo_domain,
                                                                             self.publisher_id[1:10])
 
     def keywords(self, iso_format='iso 639-2'):
-
+        """
+        This method retrieves the keywords of the given article, if it exists.
+        This method deals with the legacy fields (85).
+        """
         fmt = iso_format or self._iso_format
 
         keywords = {}
@@ -293,7 +474,9 @@ class Article(object):
         return keywords
 
     def any_issn(self, priority=u'electronic'):
-
+        """
+        This method retrieves the issn of the given article, acoording to the given priority.
+        """
         if priority == u'electronic':
             if self.electronic_issn:
                 return self.electronic_issn
@@ -307,7 +490,9 @@ class Article(object):
 
     @property
     def citations(self):
-
+        """
+        This method retrieves a list with all the citation objects of the given article.
+        """
         citations = []
         if 'citations' in self.data:
             for citation in self.data['citations']:
@@ -518,7 +703,7 @@ class Citation(object):
     @property
     def sponsor(self):
         """
-        This method retrieves the sponsor in the given citation, if it exists.
+        This method retrieves the sponsors in the given citation, if it exists.
         """ 
         sponsors = []
         if 'v58' in self.data:
@@ -531,7 +716,7 @@ class Citation(object):
     @property
     def editor(self):
         """
-        This method retrieves the editor in the given citation, if it exists.
+        This method retrieves the editors in the given citation, if it exists.
         """ 
 
         editors = []
@@ -545,7 +730,7 @@ class Citation(object):
     @property
     def thesis_institution(self):
         """
-        This method retrieves the thesis institution in the given citation, if it exists.
+        This method retrieves the thesis institutions in the given citation, if it exists.
         """
 
         institutions = []

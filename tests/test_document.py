@@ -94,6 +94,17 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_journal_abbreviated_title(self):
+        self.fulldoc['article']['v30'] = [{u'_': u'It is the journal title'}]
+        
+        article = Article(self.fulldoc)        
+
+        self.assertEqual(article.journal_abbreviated_title, u'It is the journal title')
+
+    def test_without_journal_abbreviated_title(self):
+        del(self.fulldoc['article']['v30'])
+        self.assertEqual(self.article.journal_abbreviated_title, None)
+
     def test_load_issn_with_v935_without_v35(self):
         del(self.fulldoc['title']['v35'])
         self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
@@ -260,6 +271,74 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v65'])
         with self.assertRaises(KeyError):
             article.publication_date
+
+    def test_publication_country(self):
+        self.fulldoc['article']['v67'] = [{u'_': u'Brazil'}]
+        
+        article = Article(self.fulldoc)        
+
+        self.assertEqual(article.publication_country, u'Brazil')
+
+    def test_without_publication_country(self):
+        self.assertEqual(self.article.publication_country, None)
+
+    def test_publication_city(self):
+        self.fulldoc['article']['v66'] = [{u'_': u'São Paulo'}]
+        
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.publication_city, u'São Paulo')
+
+    def test_without_publication_city(self):
+        self.assertEqual(self.article.publication_city, None)
+
+    def test_publication_state(self):
+        self.fulldoc['article']['v66'] = [{u'e': u'SP'}]
+        
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.publication_state, u'SP')
+
+    def test_without_publication_state(self):
+        self.assertEqual(self.article.publication_state, None)
+
+    def test_publication_contract(self):
+        self.fulldoc['article']['v60'] = [{u'_': u'2009/53056-8'}]
+        
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.contract, u'2009/53056-8')
+
+    def test_without_publication_contract(self):
+        del(self.fulldoc['article']['v60'])
+        self.assertEqual(self.article.contract, None)
+
+    def test_project_name(self):
+        self.fulldoc['article']['v59'] = [{u'_': u'Projeto ABCD'}]
+        
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.project_name, u'Projeto ABCD')
+
+    def test_without_project_name(self):
+        self.assertEqual(self.article.project_name, None)
+
+    def test_project_sponsors(self):
+        self.fulldoc['article']['v58'] = [{u'_': u'Sponsor name', u'd': u'divisão 1'},
+                                          {u'_': u'Sponsor name'},
+                                          {u'd': u'divisão 1'}]
+        
+        article = Article(self.fulldoc)
+
+        expected = [{u'orgname': u'Sponsor name', u'orgdiv': u'divisão 1'},
+                    {u'orgname': u'Sponsor name'},
+                    {u'orgdiv': u'divisão 1'}]
+
+        self.assertEqual(article.project_sponsor, expected)
+
+    def test_without_project_sponsor(self):
+        del(self.fulldoc['article']['v58'])
+        self.assertEqual(self.article.project_sponsor, None)
 
     def test_volume(self):
         article = self.article
@@ -468,6 +547,25 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_abstract(iso_format=None), None)
 
+
+    def test_without_corporative_authors(self):
+        article = self.article
+
+        self.assertEqual(article.corporative_authors, None)
+
+    def test_corporative_authors(self):
+        article = self.article
+
+        article.data['article']['v11'] = [{u'_': u'Orgname 1', u'd': u'divisão 1'},
+                                          {u'_': u'Orgname 2'},
+                                          {u'd': u'divisão 1'}]
+
+        expected = [{u'orgname': u'Orgname 1',
+                     u'orgdiv': u'divisão 1'},
+                    {u'orgname': u'Orgname 2'},
+                    {u'orgdiv': u'divisão 1'}]
+
+        self.assertEqual(article.corporative_authors, expected)
 
     def test_without_authors(self):
         article = self.article
