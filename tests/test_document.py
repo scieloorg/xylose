@@ -1129,3 +1129,297 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.link, None)
+
+    def test_date(self):
+        json_citation = {}
+        json_citation['v65'] = [{u'_': u'2012'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.date, u'2012')
+
+    def test_without_date(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.date, None)
+
+    def test_book_edition(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v63'] = [{u'_': u'ed. 1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.edition, u'ed. 1')
+
+    def test_conference_edition(self):
+        json_citation = {}
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+        json_citation['v63'] = [{u'_': u'ed. 1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.edition, u'ed. 1')
+
+    def test_invalid_edition(self):
+        json_citation = {}
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v63'] = [{u'_': u'ed. 1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.edition, None)
+
+    def test_without_edition(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.edition, None)
+
+    def test_issn(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v35'] = [{u'_': u'1234-1234'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issn, u'1234-1234')
+
+    def test_issn_but_not_an_article(self):
+        json_citation = {}
+
+        json_citation['v35'] = [{u'_': u'1234-1234'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issn, None)
+
+    def test_isbn(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v69'] = [{u'_': u'12341234'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.isbn, u'12341234')
+
+    def test_isbn_but_not_a_book(self):
+        json_citation = {}
+
+        json_citation['v69'] = [{u'_': u'12341234'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.isbn, None)
+
+    def test_book_volume(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v31'] = [{u'_': u'1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.volume, u'1')
+
+    def test_journal_volume(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v31'] = [{u'_': u'1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.volume, u'1')
+
+    def test_without_volume(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.volume, None)
+
+    def test_with_volume_but_not_a_journal_article_neither_a_book(self):
+        json_citation = {}
+
+        json_citation['v31'] = [{u'_': u'1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.volume, None)
+
+    def test_journal_issue(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v32'] = [{u'_': u'1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue, u'1')
+
+    def test_without_issue(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue, None)
+
+    def test_issue_title(self):
+        json_citation = {}
+
+        json_citation['v33'] = [{u'_': u'It is the issue title'}]
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue_title, u'It is the issue title')
+
+    def test_without_issue_title(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue_title, None)
+
+    def test_issue_part(self):
+        json_citation = {}
+
+        json_citation['v34'] = [{u'_': u'It is the issue part'}]
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue_part, u'It is the issue part')
+
+    def test_without_issue_part(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.issue_title, None)
+
+    def test_doi(self):
+        json_citation = {}
+
+        json_citation['v237'] = [{u'_': u'DOI_NUMBER'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.doi, u'DOI_NUMBER')
+
+    def test_without_doi(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.doi, None)
+
+    def test_institutions_all_fields(self):
+        json_citation = {}
+
+        json_citation['v11'] = [{u'_': u'Institution 11'}]
+        json_citation['v17'] = [{u'_': u'Institution 17'}]
+        json_citation['v29'] = [{u'_': u'Institution 29'}]
+        json_citation['v50'] = [{u'_': u'Institution 50'}]
+        json_citation['v58'] = [{u'_': u'Institution 58'}]
+
+        expected = [u'Institution 11',
+                    u'Institution 17',
+                    u'Institution 29',
+                    u'Institution 50',
+                    u'Institution 58']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_institutions_v11(self):
+        json_citation = {}
+
+        json_citation['v11'] = [{u'_': u'Institution 11'}]
+
+        expected = [u'Institution 11']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_institutions_v17(self):
+        json_citation = {}
+
+        json_citation['v17'] = [{u'_': u'Institution 17'}]
+
+        expected = [u'Institution 17']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_institutions_v29(self):
+        json_citation = {}
+
+        json_citation['v29'] = [{u'_': u'Institution 29'}]
+
+        expected = [u'Institution 29']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_institutions_v50(self):
+        json_citation = {}
+
+        json_citation['v50'] = [{u'_': u'Institution 50'}]
+
+        expected = [u'Institution 50']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_institutions_v58(self):
+        json_citation = {}
+
+        json_citation['v58'] = [{u'_': u'Institution 58'}]
+
+        expected = [u'Institution 58']
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, expected)
+
+    def test_without_institutions(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.institutions, None)
+
+
+
+

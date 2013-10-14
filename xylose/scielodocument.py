@@ -429,11 +429,128 @@ class Citation(object):
     @property
     def link(self):
         """
-        This metod retrieves a link, if it is exists.
+        This method retrieves a link, if it is exists.
         """
 
         if 'v37' in self.data:
             return self.data['v37'][0]['_']
+
+    @property
+    def date(self):
+        """
+        This method retrieves the citation date, if it is exists.
+        """
+
+        if 'v65' in self.data:
+            return self.data['v65'][0]['_']
+
+    @property
+    def edition(self):
+        """
+        This method retrieves the edition, if it is exists. The citation must be
+        a conference or book citation.
+        """
+
+        if self.publication_type in [u'conference', u'book']:
+            if 'v63' in self.data:
+                return self.data['v63'][0]['_']
+
+    @property
+    def first_page(self):
+        pass
+
+    @property
+    def last_page(self):
+        pass
+
+    @property
+    def institutions(self):
+
+        citations = []
+        if 'v11' in self.data:
+            citations.append(self.data['v11'][0]['_'])
+        if 'v17' in self.data:
+            citations.append(self.data['v17'][0]['_'])
+        if 'v29' in self.data:
+            citations.append(self.data['v29'][0]['_'])
+        if 'v50' in self.data:
+            citations.append(self.data['v50'][0]['_'])
+        if 'v58' in self.data:
+            citations.append(self.data['v58'][0]['_'])
+
+        if len(citations) > 0:
+            return citations
+
+    @property
+    def issn(self):
+        """
+        This method retrieves the journal issn, if it is exists. The citation must be
+        an article citation.
+        """
+
+        if self.publication_type == u'article' and 'v35' in self.data:
+            return self.data['v35'][0]['_']
+
+    @property
+    def isbn(self):
+        """
+        This method retrieves the book isbn, if it is exists. The citation must be
+        a book citation.
+        """
+
+        if self.publication_type == u'book' and 'v69' in self.data:
+            return self.data['v69'][0]['_']
+
+    @property
+    def volume(self):
+        """
+        This method retrieves the book our journal volume number, if it exists. The citation must be
+        a book our an article citation.
+        """
+
+        if self.publication_type in [u'article', u'book']:
+            if 'v31' in self.data:
+                return self.data['v31'][0]['_']
+
+    @property
+    def issue(self):
+        """
+        This method retrieves the journal issue number, if it exists. The citation must be
+        an article citation.
+        """
+
+        if self.publication_type in u'article' and 'v32' in self.data:
+            return self.data['v32'][0]['_']
+
+    @property
+    def issue_title(self):
+        """
+        This method retrieves the issue title, if it exists. The citation must be
+        an article citation.
+        """
+
+        if self.publication_type in u'article' and 'v33' in self.data:
+            return self.data['v33'][0]['_']
+
+    @property
+    def issue_part(self):
+        """
+        This method retrieves the issue part, if it exists. The citation must be
+        an article citation.
+        """
+
+        if self.publication_type in u'article' and 'v34' in self.data:
+            return self.data['v34'][0]['_']
+
+    @property
+    def doi(self):
+        """
+        This method retrieves the citation DOI number, if it exists.
+        """
+
+        if 'v237' in self.data:
+            return self.data['v237'][0]['_']
+
 
 
 
