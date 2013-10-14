@@ -465,21 +465,96 @@ class Citation(object):
 
     @property
     def institutions(self):
+        """
+        This method retrieves the institutions in the given citation without care about
+        the citation type (article, book, thesis, conference, etc).
+        """ 
 
-        citations = []
+        institutions = []
         if 'v11' in self.data:
-            citations.append(self.data['v11'][0]['_'])
+            institutions.append(self.data['v11'][0]['_'])
         if 'v17' in self.data:
-            citations.append(self.data['v17'][0]['_'])
+            institutions.append(self.data['v17'][0]['_'])
         if 'v29' in self.data:
-            citations.append(self.data['v29'][0]['_'])
+            institutions.append(self.data['v29'][0]['_'])
         if 'v50' in self.data:
-            citations.append(self.data['v50'][0]['_'])
+            institutions.append(self.data['v50'][0]['_'])
         if 'v58' in self.data:
-            citations.append(self.data['v58'][0]['_'])
+            institutions.append(self.data['v58'][0]['_'])
 
-        if len(citations) > 0:
-            return citations
+        if len(institutions) > 0:
+            return institutions
+
+    @property
+    def analytic_institution(self):
+        """
+        This method retrieves the institutions in the given citation. The citation must be 
+        an article or book citation, if it exists.
+        """ 
+        institutions = []
+        if self.publication_type in [u'article', u'book'] and 'v11' in self.data:
+            if 'v11' in self.data:
+                for institution in self.data['v11']:
+                    institutions.append(self.data['v11'][0]['_'])
+
+        if len(institutions) > 0:
+            return institutions
+
+    @property
+    def monographic_institution(self):        
+        """
+        This method retrieves the institutions in the given citation. The citation must be 
+        a book citation, if it exists.
+        """ 
+        institutions = []
+        if self.publication_type == u'book' and 'v17' in self.data:
+            if 'v17' in self.data:
+                for institution in self.data['v17']:
+                    institutions.append(self.data['v17'][0]['_'])
+
+        if len(institutions) > 0:
+            return institutions
+        
+    @property
+    def sponsor(self):
+        """
+        This method retrieves the sponsor in the given citation, if it exists.
+        """ 
+        sponsors = []
+        if 'v58' in self.data:
+            for sponsor in self.data['v58']:
+                sponsors.append(self.data['v58'][0]['_'])
+
+        if len(sponsors) > 0:
+            return sponsors
+
+    @property
+    def editor(self):
+        """
+        This method retrieves the editor in the given citation, if it exists.
+        """ 
+
+        editors = []
+        if 'v29' in self.data:
+            for editor in self.data['v29']:
+                editors.append(self.data['v29'][0]['_'])
+
+        if len(editors) > 0:
+            return editors
+
+    @property
+    def thesis_institution(self):
+        """
+        This method retrieves the thesis institution in the given citation, if it exists.
+        """
+
+        institutions = []
+        if 'v50' in self.data:
+            for institution in self.data['v50']:
+                institutions.append(self.data['v50'][0]['_'])
+
+        if len(institutions) > 0:
+            return institutions
 
     @property
     def issn(self):
@@ -551,7 +626,78 @@ class Citation(object):
         if 'v237' in self.data:
             return self.data['v237'][0]['_']
 
+    @property
+    def authors(self):
+        """
+        This method retrieves the authors of the given citation. These authors may
+        correspond to an article, book analytic, link or thesis.
+        """
+        docs = [u'article', u'book', u'link', u'thesis']
+        authors = []
+        if self.publication_type in docs and 'v10' in self.data:
+            for author in self.data['v10']:
+                authordict = {}
+                if 's' in author:
+                    authordict['surname'] = author['s']
+                if 'n' in author:
+                    authordict['given-names'] = author['n']
+                if 's' in author or 'n' in author:
+                    authors.append(authordict)
+        
+        if len(authors) > 0:
+            return authors
 
+    @property
+    def monographic_authors(self):
+        """
+        This method retrieves the authors of the given book citation. These authors may
+        correspond to a book monography citation.
+        """
+        authors = []
+        if self.publication_type == u'book' and 'v16' in self.data:
+            for author in self.data['v16']:
+                authordict = {}
+                if 's' in author:
+                    authordict['surname'] = author['s']
+                if 'n' in author:
+                    authordict['given-names'] = author['n']
+                if 's' in author or 'n' in author:
+                    authors.append(authordict)
+        
+        if len(authors) > 0:
+            return authors
 
+    @property
+    def serie(self):
+        """
+        This method retrieves the series title. The serie title must be in a book, article or
+        conference citation.
+        """
+        docs = [u'conference', u'book', u'article']
+        if self.publication_type in docs and 'v25' in self.data:
+            return self.data['v25'][0]['_']
 
+    @property
+    def publisher(self):
+        """
+        This method retrieves the publisher name, if it exists.
+        """
+        if 'v62' in self.data:
+            return self.data['v62'][0]['_']
 
+    @property
+    def publisher_address(self):
+        """
+        This method retrieves the publisher address, if it exists.
+        """
+        address = []
+        if 'v66' in self.data:
+            address.append(self.data['v66'][0]['_'])
+            if 'e' in self.data['v66'][0]:
+                address.append(self.data['v66'][0]['e'])
+
+        if 'v67' in self.data:
+            address.append(self.data['v67'][0]['_'])
+
+        if len(address) > 0:
+            return"; ".join(address)
