@@ -959,8 +959,6 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(article.translated_abstracts(iso_format=None), expected)
 
     def test_thesis_degree(self):
-        self.fulldoc['article']['v18']  = [{u'_': u'It is the thesis title'}]
-        self.fulldoc['article']['v45']  = [{u'_': u'20120000'}]
         self.fulldoc['article']['v51']  = [{u'_': u'Degree 1'}]
 
         article = Article(self.fulldoc)
@@ -968,12 +966,36 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(article.thesis_degree, u'Degree 1')
 
     def test_without_thesis_degree(self):
-        self.fulldoc['article']['v18']  = [{u'_': u'It is the thesis title'}]
-        self.fulldoc['article']['v45']  = [{u'_': u'20120000'}]
-
         article = Article(self.fulldoc)
 
         self.assertEqual(article.thesis_degree, None)
+
+    def test_thesis_organization(self):
+        self.fulldoc['article']['v52']  = [{u'_': u'It is the thesis organization'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_organization, [{u'name': u'It is the thesis organization'}])
+
+    def test_thesis_organization_and_division(self):
+        self.fulldoc['article']['v52']  = [{u'_': u'It is the thesis organization', u'd': u'divisão 1'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_organization, [{u'name': u'It is the thesis organization',
+                                                        u'division': u'divisão 1'}])
+
+    def test_thesis_organization_without_name(self):
+        self.fulldoc['article']['v52']  = [{u'd': u'divisão 1'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_organization, [{u'division': u'divisão 1'}])
+
+    def test_without_thesis_organization(self):
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_organization, None)
 
     @unittest.skip
     def test_citations(self):
@@ -1168,23 +1190,6 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.link_title, None)
 
-    def test_conference_date(self):
-        json_citation = {}
-        json_citation['v53'] = [{u'_': u'It is the conference title'}]
-        json_citation['v54'] = [{u'_': u'2008'}]
-
-        citation = Citation(json_citation)
-
-        self.assertEqual(citation.conference_date, u'2008')
-
-    def test_conference_without_date(self):
-        json_citation = {}
-        json_citation['v53'] = [{u'_': u'It is the conference title'}]
-
-        citation = Citation(json_citation)
-
-        self.assertEqual(citation.conference_date, None)
-
     def test_conference_sponsor(self):
         json_citation = {}
         json_citation['v53'] = [{u'_': u'It is the conference title'}]
@@ -1224,6 +1229,16 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.date, u'2012')
+
+    def test_a_link_access_date(self):
+        json_citation = {}
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v110'] = [{u'_': u'201300'}]
+        json_citation['v65'] = [{u'_': u'2012'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.date, u'2013')
 
     def test_without_date(self):
         json_citation = {}

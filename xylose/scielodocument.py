@@ -22,7 +22,7 @@ class Article(object):
         self.data = data
         self.print_issn = None
         self.electronic_issn = None
-        self._load_issn()            
+        self._load_issn()  
 
     def _load_issn(self):
         """
@@ -408,14 +408,6 @@ class Article(object):
                                                                              self.publisher_id)
 
     @property
-    def thesis_degree(self):
-        """
-        This method retrieves the thesis degree of the given document. This must be a thesis document. 
-        """
-        if self.publication_type == u'thesis' and 'v51' in self.data:
-            return self.data['v51'][0]['_']
-
-    @property
     def issue_url(self):
         """
         This method retrieves the issue url of the given article.
@@ -467,6 +459,36 @@ class Article(object):
                 return self.print_issn
             else:
                 return self.electronic_issn
+
+    @property
+    def thesis_degree(self):
+        """
+        This method retrieves the thesis degree of the given document, If it exists. 
+        This method deals with the legacy fields (51).
+        """
+        if 'v51' in self.data['article']:
+            return self.data['article']['v51'][0]['_']
+
+    @property
+    def thesis_organization(self):
+        """
+        This method retrieves the thesis organization of the given article, if it exists.
+        This method deals with the legacy fields (52).
+        """
+
+        organizations = []
+        if 'v52' in self.data['article']:
+            for organization in self.data['article']['v52']:
+                org = {}
+                if '_' in organization:
+                    org = {'name': organization['_']}
+                if 'd' in organization:
+                    org.update({'division': organization['d']})
+
+                organizations.append(org)
+
+        if len(organizations) > 0:
+            return organizations
 
     @property
     def citations(self):
@@ -573,16 +595,6 @@ class Citation(object):
             return self.data['v12'][0]['_']
 
     @property
-    def conference_date(self):
-        """
-        If it is a conference citation, this method retrieves the conference date, if it exists.
-        The conference date is presented like it is in the citation.
-        """
-
-        if self.publication_type == u'conference' and 'v54' in self.data:
-            return self.data['v54'][0]['_']
-
-    @property
     def conference_sponsor(self):
         """
         If it is a conference citation, this method retrieves the conference sponsor, if it exists.
@@ -607,8 +619,11 @@ class Citation(object):
         This method retrieves the citation date, if it is exists.
         """
 
+        if self.publication_type == u'link' and 'v110' in self.data:
+            return tools.get_publication_date(self.data['v110'][0]['_'])
+
         if 'v65' in self.data:
-            return self.data['v65'][0]['_']
+            return tools.get_publication_date(self.data['v65'][0]['_'])
 
     @property
     def edition(self):
