@@ -408,6 +408,14 @@ class Article(object):
                                                                              self.publisher_id)
 
     @property
+    def thesis_degree(self):
+        """
+        This method retrieves the thesis degree of the given document. This must be a thesis document. 
+        """
+        if self.publication_type == u'thesis' and 'v51' in self.data:
+            return self.data['v51'][0]['_']
+
+    @property
     def issue_url(self):
         """
         This method retrieves the issue url of the given article.

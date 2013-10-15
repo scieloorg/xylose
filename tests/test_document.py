@@ -958,6 +958,23 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.translated_abstracts(iso_format=None), expected)
 
+    def test_thesis_degree(self):
+        self.fulldoc['article']['v18']  = [{u'_': u'It is the thesis title'}]
+        self.fulldoc['article']['v45']  = [{u'_': u'20120000'}]
+        self.fulldoc['article']['v51']  = [{u'_': u'Degree 1'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_degree, u'Degree 1')
+
+    def test_without_thesis_degree(self):
+        self.fulldoc['article']['v18']  = [{u'_': u'It is the thesis title'}]
+        self.fulldoc['article']['v45']  = [{u'_': u'20120000'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.thesis_degree, None)
+
     @unittest.skip
     def test_citations(self):
         article = self.article
