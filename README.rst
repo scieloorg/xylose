@@ -15,4 +15,19 @@ This library intends to delivery a object interface that abstracts the ISIS2JSON
 Install
 =======
 
+How to use
+==========
 
+Code::
+
+    >>> import json
+    >>> import urllib2
+    >>> from xylose.scielodocument import Article
+    >>> article_json = json.loads(urllib2.urlopen('http://200.136.72 76:7000/api/v1/article?code=S2179-975X2011000300002&format=json').read()
+    >>> article = Article(article_json)
+    >>> article.original_title()
+    u'First adult record of Misgurnus anguillicaudatus, Cantor 1842 from Ribeira de Iguape River Basin, Brazil'
+    >>> article.any_issn()
+    u'2179-975X'
+    >>> article.authors
+    [{'role': u'ND', 'xref': [u'A01'], 'surname': u'Gomes', 'given_names': u'Caio Isola Dallevo do Amaral'}, {'role': u'ND', 'xref': [u'A02'], 'surname': u'Peressin', 'given_names': u'Alexandre'}, {'role': u'ND', 'xref': [u'A03'], 'surname': u'Cetra', 'given_names': u'Mauricio'}, {'role': u'ND', 'xref': [u'A04'], 'surname': u'Barrella', 'given_names': u'Walter'}]
