@@ -322,7 +322,7 @@ class Article(object):
 
         return trans_abstracts
 
-    @ property
+    @property
     def authors(self):
         """
         This method retrieves the analytics authors of the given article, if it exists.
@@ -514,13 +514,14 @@ class Citation(object):
         """
 
         if 'v18' in self.data:
-            return u'book'
+            if 'v45' in self.data:
+                return u'thesis'
+            else:
+                return u'book'
         elif 'v12' in self.data and 'v30' in self.data:
             return u'article'
         elif 'v53' in self.data:
             return u'conference'
-        elif 'v45' in self.data:
-            return u'thesis'
         elif 'v37' in self.data:
             return u'link'
         else:
@@ -570,8 +571,8 @@ class Citation(object):
         If it is a thesis citation, this method retrieves the thesis title, if it exists.
         """
 
-        if self.publication_type == u'thesis' and 'v45' in self.data:
-            return self.data['v45'][0]['_']
+        if self.publication_type == u'thesis' and 'v18' in self.data:
+            return self.data['v18'][0]['_']
 
     @property
     def conference_title(self):

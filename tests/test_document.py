@@ -1048,7 +1048,8 @@ class CitationTest(unittest.TestCase):
     def test_publication_type_thesis(self):
         json_citation = {}
 
-        json_citation['v45'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v18'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v45'] = [{u'_': u'20120000'}]
 
         citation = Citation(json_citation)
 
@@ -1133,7 +1134,8 @@ class CitationTest(unittest.TestCase):
 
     def test_thesis_title(self):
         json_citation = {}
-        json_citation['v45'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v18'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v45'] = [{u'_': u'20120000'}]
 
         citation = Citation(json_citation)
 
@@ -1621,7 +1623,8 @@ class CitationTest(unittest.TestCase):
     def test_authors_thesis(self):
         json_citation = {}
 
-        json_citation['v45'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v18'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v45'] = [{u'_': u'20120000'}]
         json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
                                 {u's': u'Hurricane Carter', u'n': u'Rubin'},
                                 {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
