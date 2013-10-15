@@ -86,34 +86,6 @@ class Article(object):
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
-    def publication_country(self):
-        """
-        This method retrieves the publication country of the given article, if it exists.
-        This method deals with the legacy fields (67).
-        """
-        if 'v67' in self.data['article']:
-            return self.data['article']['v67'][0]['_']
-
-    @property
-    def publication_city(self):
-        """
-        This method retrieves the publication city of the given article, if it exists.
-        This method deals with the legacy fields (66).
-        """
-        if 'v66' in self.data['article']:
-            return self.data['article']['v66'][0]['_']
-
-    @property
-    def publication_state(self):
-        """
-        This method retrieves the publication state of the given article, if it exists.
-        This method deals with the legacy fields (66).
-        """
-        if 'v66' in self.data['article']:
-            if 'e' in self.data['article']['v66'][0]:
-                return self.data['article']['v66'][0]['e']
-
-    @property
     def contract(self):
         """
         This method retrieves the contract of the given article, if it exists.

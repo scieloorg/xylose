@@ -272,36 +272,6 @@ class ArticleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             article.publication_date
 
-    def test_publication_country(self):
-        self.fulldoc['article']['v67'] = [{u'_': u'Brazil'}]
-        
-        article = Article(self.fulldoc)        
-
-        self.assertEqual(article.publication_country, u'Brazil')
-
-    def test_without_publication_country(self):
-        self.assertEqual(self.article.publication_country, None)
-
-    def test_publication_city(self):
-        self.fulldoc['article']['v66'] = [{u'_': u'São Paulo'}]
-        
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.publication_city, u'São Paulo')
-
-    def test_without_publication_city(self):
-        self.assertEqual(self.article.publication_city, None)
-
-    def test_publication_state(self):
-        self.fulldoc['article']['v66'] = [{u'e': u'SP'}]
-        
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.publication_state, u'SP')
-
-    def test_without_publication_state(self):
-        self.assertEqual(self.article.publication_state, None)
-
     def test_publication_contract(self):
         self.fulldoc['article']['v60'] = [{u'_': u'2009/53056-8'}]
         
