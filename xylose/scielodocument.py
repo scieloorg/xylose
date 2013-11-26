@@ -59,6 +59,16 @@ class Article(object):
         return tools.get_language(self.data['article']['v40'][0]['_'], fmt)
 
     @property
+    def subject_areas(self):
+        """
+        This method retrieves the subject areas of the given article, if it exists.
+        The subject areas are based on the journal subject areas.
+        This method deals with the legacy fields (441).
+        """
+        if 'v441' in self.data['title']:
+            return [area['_'] for area in self.data['title']['v441']]
+
+    @property
     def publisher_name(self):
         """
         This method retrieves the publisher name of the given article, if it exists.
