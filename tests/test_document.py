@@ -94,6 +94,13 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_subject_areas(self):
+        self.fulldoc['title']['v441'] = [{u'_': u'HEALTH SCIENCES'}, {u'_': u'BIOLOGICAL SCIENCES'}]
+        
+        article = Article(self.fulldoc)        
+
+        self.assertEqual(article.subject_areas, [u'HEALTH SCIENCES', u'BIOLOGICAL SCIENCES'])
+
     def test_journal_abbreviated_title(self):
         self.fulldoc['article']['v30'] = [{u'_': u'It is the journal title'}]
         
