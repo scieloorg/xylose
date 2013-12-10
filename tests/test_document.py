@@ -1619,10 +1619,10 @@ class CitationTest(unittest.TestCase):
                                 {u'n': u'Acelino Popó Freitas'},
                                 {u's': u'Zé Marreta'}]
 
-        expected = [{u'given-names': u'Mike', 'surname': 'Sullivan'},
-                    {u'given-names': u'Rubin', 'surname': 'Hurricane Carter'},
-                    {u'given-names': u'Adilson', 'surname': 'Maguila Rodrigues'},
-                    {u'given-names': u'Acelino Popó Freitas'},
+        expected = [{u'given_names': u'Mike', 'surname': 'Sullivan'},
+                    {u'given_names': u'Rubin', 'surname': 'Hurricane Carter'},
+                    {u'given_names': u'Adilson', 'surname': 'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
                     {u'surname': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
@@ -1640,10 +1640,10 @@ class CitationTest(unittest.TestCase):
                                 {u'n': u'Acelino Popó Freitas'},
                                 {u's': u'Zé Marreta'}]
 
-        expected = [{u'given-names': u'Mike', 'surname': 'Sullivan'},
-                    {u'given-names': u'Rubin', 'surname': 'Hurricane Carter'},
-                    {u'given-names': u'Adilson', 'surname': 'Maguila Rodrigues'},
-                    {u'given-names': u'Acelino Popó Freitas'},
+        expected = [{u'given_names': u'Mike', 'surname': 'Sullivan'},
+                    {u'given_names': u'Rubin', 'surname': 'Hurricane Carter'},
+                    {u'given_names': u'Adilson', 'surname': 'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
                     {u'surname': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
@@ -1660,10 +1660,10 @@ class CitationTest(unittest.TestCase):
                                 {u'n': u'Acelino Popó Freitas'},
                                 {u's': u'Zé Marreta'}]
 
-        expected = [{u'given-names': u'Mike', 'surname': 'Sullivan'},
-                    {u'given-names': u'Rubin', 'surname': 'Hurricane Carter'},
-                    {u'given-names': u'Adilson', 'surname': 'Maguila Rodrigues'},
-                    {u'given-names': u'Acelino Popó Freitas'},
+        expected = [{u'given_names': u'Mike', 'surname': 'Sullivan'},
+                    {u'given_names': u'Rubin', 'surname': 'Hurricane Carter'},
+                    {u'given_names': u'Adilson', 'surname': 'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
                     {u'surname': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
@@ -1680,10 +1680,10 @@ class CitationTest(unittest.TestCase):
                                 {u'n': u'Acelino Popó Freitas'},
                                 {u's': u'Zé Marreta'}]
 
-        expected = [{u'given-names': u'Mike', 'surname': 'Sullivan'},
-                    {u'given-names': u'Rubin', 'surname': 'Hurricane Carter'},
-                    {u'given-names': u'Adilson', 'surname': 'Maguila Rodrigues'},
-                    {u'given-names': u'Acelino Popó Freitas'},
+        expected = [{u'given_names': u'Mike', 'surname': 'Sullivan'},
+                    {u'given_names': u'Rubin', 'surname': 'Hurricane Carter'},
+                    {u'given_names': u'Adilson', 'surname': 'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
                     {u'surname': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
