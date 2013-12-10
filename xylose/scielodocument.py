@@ -851,7 +851,7 @@ class Citation(object):
                 if 's' in author:
                     authordict['surname'] = author['s']
                 if 'n' in author:
-                    authordict['given-names'] = author['n']
+                    authordict['given_names'] = author['n']
                 if 's' in author or 'n' in author:
                     authors.append(authordict)
         
