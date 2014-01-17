@@ -4,6 +4,7 @@ from . import tools
 
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
+
 class Article(object):
 
     def __init__(self, data, iso_format=None):
@@ -11,7 +12,8 @@ class Article(object):
         Create an Aricle object given a isis2json type 3 SciELO document.
 
         Keyword arguments:
-        iso_format -- the language iso format for methods that retrieve content identified by language.
+        iso_format -- the language iso format for methods that retrieve content
+        identified by language.
         ['iso 639-2', 'iso 639-1', None]
         """
 
@@ -22,12 +24,12 @@ class Article(object):
         self.data = data
         self.print_issn = None
         self.electronic_issn = None
-        self._load_issn()  
+        self._load_issn()
 
     def _load_issn(self):
         """
-        This method creates an object level attributes (print_issn and/or electronic issn),
-        according to the given metadata.
+        This method creates an object level attributes (print_issn and/or
+        electronic issn), according to the given metadata.
         This method deal with the legacy datamodel fields (935, 400, 35) where:
         """
         # ISSN and Other Complex Stuffs from the old version
@@ -87,12 +89,21 @@ class Article(object):
             return self.data['title']['v100'][0]['_']
 
     @property
+    def journal_acronym(self):
+        """
+        This method retrieves the journal_acronym of the given article, if it exists.
+        This method deals with the legacy fields (68).
+        """
+        if 'v68' in self.data['title']:
+            return self.data['title']['v68'][0]['_'].lower()
+
+    @property
     def publication_date(self):
         """
         This method retrieves the publication date of the given article, if it exists.
         This method deals with the legacy fields (65).
         """
-        
+
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
