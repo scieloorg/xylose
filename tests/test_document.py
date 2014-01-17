@@ -255,6 +255,17 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v480'])
         self.assertEqual(article.publisher_name, None)
 
+    def test_publisher_loc(self):
+        article = self.article
+
+        self.assertEqual(article.publisher_loc, u'Rio Claro')
+
+    def test_without_publisher_loc(self):
+        article = self.article
+
+        del(article.data['title']['v490'])
+        self.assertEqual(article.publisher_loc, None)
+
     def test_journal_title(self):
         article = self.article
 
