@@ -63,7 +63,8 @@ class Article(object):
     @property
     def subject_areas(self):
         """
-        This method retrieves the subject areas of the given article, if it exists.
+        This method retrieves the subject areas of the given article,
+        if it exists.
         The subject areas are based on the journal subject areas.
         This method deals with the legacy fields (441).
         """
@@ -73,16 +74,28 @@ class Article(object):
     @property
     def publisher_name(self):
         """
-        This method retrieves the publisher name of the given article, if it exists.
+        This method retrieves the publisher name of the given article,
+        if it exists.
         This method deals with the legacy fields (480).
         """
         if 'v480' in self.data['title']:
             return self.data['title']['v480'][0]['_']
 
     @property
+    def publisher_loc(self):
+        """
+        This method retrieves the publisher localization of the given article,
+        if it exists.
+        This method deals with the legacy fields (490).
+        """
+        if 'v490' in self.data['title']:
+            return self.data['title']['v490'][0]['_']
+
+    @property
     def journal_title(self):
         """
-        This method retrieves the journal_title of the given article, if it exists.
+        This method retrieves the journal_title of the given article,
+        if it exists.
         This method deals with the legacy fields (100).
         """
         if 'v100' in self.data['title']:
@@ -91,7 +104,8 @@ class Article(object):
     @property
     def journal_acronym(self):
         """
-        This method retrieves the journal_acronym of the given article, if it exists.
+        This method retrieves the journal_acronym of the given article,
+        if it exists.
         This method deals with the legacy fields (68).
         """
         if 'v68' in self.data['title']:
