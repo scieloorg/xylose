@@ -266,9 +266,20 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v100'])
         self.assertEqual(article.journal_title, None)
 
+    def test_journal_acronym(self):
+        article = self.article
+
+        self.assertEqual(article.journal_acronym, u'alb')
+
+    def test_without_journal_acronym(self):
+        article = self.article
+
+        del(article.data['title']['v68'])
+        self.assertEqual(article.journal_acronym, None)
+
     def test_publication_date(self):
         article = self.article
-        
+
         article.data['article']['v65'] = [{u'_': u'20120102'}]
         self.assertEqual(article.publication_date, '2012-01-02')
 
