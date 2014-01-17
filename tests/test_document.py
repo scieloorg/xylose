@@ -96,10 +96,31 @@ class ArticleTests(unittest.TestCase):
 
     def test_subject_areas(self):
         self.fulldoc['title']['v441'] = [{u'_': u'HEALTH SCIENCES'}, {u'_': u'BIOLOGICAL SCIENCES'}]
-        
-        article = Article(self.fulldoc)        
+
+        article = Article(self.fulldoc)
 
         self.assertEqual(article.subject_areas, [u'HEALTH SCIENCES', u'BIOLOGICAL SCIENCES'])
+
+    def test_without_subject_areas(self):
+        del(self.fulldoc['title']['v441'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.subject_areas, None)
+
+    def test_wos_subject_areas(self):
+        self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.wos_subject_areas, [u'MARINE & FRESHWATER BIOLOGY', u'OCEANOGRAPHY'])
+
+    def test_without_wos_subject_areas(self):
+        del(self.fulldoc['title']['v854'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.wos_subject_areas, None)
 
     def test_journal_abbreviated_title(self):
         self.fulldoc['article']['v30'] = [{u'_': u'It is the journal title'}]

@@ -72,6 +72,16 @@ class Article(object):
             return [area['_'] for area in self.data['title']['v441']]
 
     @property
+    def wos_subject_areas(self):
+        """
+        This method retrieves the Wob of Sciences subject areas of the given
+        article, if it exists.
+        This method deals with the legacy fields (854).
+        """
+        if 'v854' in self.data['title']:
+            return [area['_'] for area in self.data['title']['v854']]
+
+    @property
     def publisher_name(self):
         """
         This method retrieves the publisher name of the given article,
