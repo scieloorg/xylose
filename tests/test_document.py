@@ -1709,10 +1709,10 @@ class CitationTest(unittest.TestCase):
                                 {u'n': u'Acelino Popó Freitas'},
                                 {u's': u'Zé Marreta'}]
 
-        expected = [{u'given-names': u'Mike', 'surname': 'Sullivan'},
-                    {u'given-names': u'Rubin', 'surname': 'Hurricane Carter'},
-                    {u'given-names': u'Adilson', 'surname': 'Maguila Rodrigues'},
-                    {u'given-names': u'Acelino Popó Freitas'},
+        expected = [{u'given_names': u'Mike', u'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
                     {u'surname': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
