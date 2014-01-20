@@ -470,7 +470,7 @@ class Article(object):
             return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(self.scielo_domain,
                                                                             self.publisher_id[1:10])
 
-    def keywords(self, iso_format='iso 639-2'):
+    def keywords(self, iso_format=None):
         """
         This method retrieves the keywords of the given article, if it exists.
         This method deals with the legacy fields (85).
