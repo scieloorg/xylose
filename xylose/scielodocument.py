@@ -575,6 +575,63 @@ class Citation(object):
             return u'undefined'
 
     @property
+    def start_page(self):
+        """
+        This method retrieves the start page of the citation.
+        This method deals with the legacy fields (514 and 14).
+        """
+
+        if 'v514' in self.data:
+            if not 'f' in self.data['v514'][0]:
+                return None
+
+            return self.data['v514'][0]['f']
+
+        if not 'v14' in self.data:
+            return None
+
+        return self.data['v14'][0]['_'].split('-')[0]
+
+    @property
+    def end_page(self):
+        """
+        This method retrieves the end page of the citation.
+        This method deals with the legacy fields (514 and 14).
+        """
+
+        if 'v514' in self.data:
+            if not 'l' in self.data['v514'][0]:
+                return None
+
+            return self.data['v514'][0]['l']
+
+        if not 'v14' in self.data:
+            return None
+
+        splited = self.data['v14'][0]['_'].split('-')
+
+        if not len(splited) == 2:
+            return None
+
+        return splited[1]
+
+    @property
+    def pages(self):
+        """
+        This method retrieves the start and end page of the citation
+        separeted by hipen.
+        This method deals with the legacy fields (514 and 14).
+        """
+
+        if 'v514' in self.data:
+            return '-'.join(sorted([v for v in self.data['v514'][0].values()]))
+
+        if not 'v14' in self.data:
+            return None
+
+        return self.data['v14'][0]['_']
+
+    @property
     def index_number(self):
         """
         This method retrieves the index number of the citation. The 
