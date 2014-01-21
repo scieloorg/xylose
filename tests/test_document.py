@@ -1877,3 +1877,81 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.publisher_address, None)
+
+    def test_start_page_14(self):
+        json_citation = {}
+
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.start_page, u'220')
+
+    def test_end_page_14(self):
+        json_citation = {}
+
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.end_page, u'230')
+
+    def test_end_page_withdout_data(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.end_page, None)
+
+    def test_start_page_514(self):
+        json_citation = {}
+
+        json_citation['v514'] = [{u'f': u'220', u'l': '230'}]
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.start_page, u'220')
+
+    def test_start_page_withdout_data(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.start_page, None)
+
+    def test_end_page_514(self):
+        json_citation = {}
+
+        json_citation['v514'] = [{u'f': u'220', u'l': '230'}]
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.end_page, u'230')
+
+    def test_pages_14(self):
+        json_citation = {}
+
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.pages, u'220-230')
+
+    def test_pages_514(self):
+        json_citation = {}
+
+        json_citation['v514'] = [{u'f': u'220', u'l': '230'}]
+        json_citation['v14'] = [{u'_': u'220-230'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.pages, u'220-230')
+
+    def test_pages_withdout_data(self):
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.pages, None)
