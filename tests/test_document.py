@@ -83,6 +83,7 @@ class ToolsTests(unittest.TestCase):
         date = tools.get_publication_date('2012xx01')
         self.assertEqual(date, '2012')
 
+
 class ArticleTests(unittest.TestCase):
 
     def setUp(self):
@@ -99,6 +100,22 @@ class ArticleTests(unittest.TestCase):
         article = Article(self.fulldoc)
 
         self.assertEqual(article.collection_acronym, u'bra')
+
+    def test_collection_acronym_priorizing_collection(self):
+        self.fulldoc['collection'] = u'yyy'
+        self.fulldoc['title']['v992'] = [{u'_': u'xxx'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_acronym, u'yyy')
+
+    def test_collection_acronym_retrieving_v992(self):
+        del(self.fulldoc['collection'])
+        self.fulldoc['title']['v992'] = [{u'_': u'xxx'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_acronym, u'xxx')
 
     def test_without_collection_acronym(self):
         del(self.fulldoc['collection'])
