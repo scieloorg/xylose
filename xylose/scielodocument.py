@@ -61,6 +61,16 @@ class Article(object):
         return tools.get_language(self.data['article']['v40'][0]['_'], fmt)
 
     @property
+    def collection_acronym(self):
+        """
+        This method retrieves the collection of the given article,
+        if it exists.
+        The subject areas are based on the journal subject areas.
+        """
+        if 'collection' in self.data:
+            return self.data['collection']
+
+    @property
     def subject_areas(self):
         """
         This method retrieves the subject areas of the given article,

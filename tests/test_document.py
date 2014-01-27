@@ -94,6 +94,19 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_collection_acronym(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_acronym, u'bra')
+
+    def test_without_collection_acronym(self):
+        del(self.fulldoc['collection'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_acronym, None)
+
     def test_subject_areas(self):
         self.fulldoc['title']['v441'] = [{u'_': u'HEALTH SCIENCES'}, {u'_': u'BIOLOGICAL SCIENCES'}]
 
