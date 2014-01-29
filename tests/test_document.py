@@ -154,8 +154,8 @@ class ArticleTests(unittest.TestCase):
 
     def test_journal_abbreviated_title(self):
         self.fulldoc['article']['v30'] = [{u'_': u'It is the journal title'}]
-        
-        article = Article(self.fulldoc)        
+
+        article = Article(self.fulldoc)
 
         self.assertEqual(article.journal_abbreviated_title, u'It is the journal title')
 
@@ -280,19 +280,19 @@ class ArticleTests(unittest.TestCase):
 
     def test_original_language_iso639_2(self):
         article = self.article
-        
+
         self.assertEqual(article.original_language(iso_format='iso 639-2'), u'eng')
 
     def test_original_language_invalid_iso639_2(self):
         article = self.article
-        
+
         article.data['article']['v40'][0]['_'] = u'XXX'
 
         self.assertEqual(article.original_language(iso_format='iso 639-2'), u'#undefined XXX#')
 
     def test_original_language_original(self):
         article = self.article
-        
+
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
     def test_publisher_name(self):
@@ -352,9 +352,22 @@ class ArticleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             article.publication_date
 
+    def test_ahead_date(self):
+        article = self.article
+
+        article.data['article']['v223'] = [{u'_': u'20131125'}]
+        self.assertEqual(article.ahead_date, '2013-11-25')
+
+    def test_whitwout_ahead_date(self):
+        article = self.article
+
+        del(article.data['article']['v223'])
+        with self.assertRaises(KeyError):
+            article.ahead_date
+
     def test_publication_contract(self):
         self.fulldoc['article']['v60'] = [{u'_': u'2009/53056-8'}]
-        
+
         article = Article(self.fulldoc)
 
         self.assertEqual(article.contract, u'2009/53056-8')
@@ -365,7 +378,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_project_name(self):
         self.fulldoc['article']['v59'] = [{u'_': u'Projeto ABCD'}]
-        
+
         article = Article(self.fulldoc)
 
         self.assertEqual(article.project_name, u'Projeto ABCD')
@@ -377,7 +390,7 @@ class ArticleTests(unittest.TestCase):
         self.fulldoc['article']['v58'] = [{u'_': u'Sponsor name', u'd': u'divisão 1'},
                                           {u'_': u'Sponsor name'},
                                           {u'd': u'divisão 1'}]
-        
+
         article = Article(self.fulldoc)
 
         expected = [{u'orgname': u'Sponsor name', u'orgdiv': u'divisão 1'},
@@ -427,7 +440,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['article']['v132'] = [{u'_': u'test_suppl_issue'}]
-        
+
         self.assertEqual(article.supplement_issue, u'test_suppl_issue')
 
     def test_without_suplement_issue(self):
@@ -523,7 +536,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v12'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'en'}, 
+        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'en'},
                                           {u'_': u'article title 2'}]
 
         self.assertEqual(article.original_title(iso_format=None), u'article title 1')
@@ -534,7 +547,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v12'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'}, 
+        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'},
                                           {u'_': u'article title 2', u'l': u'en'}]
 
         self.assertEqual(article.original_title(iso_format=None), u'article title 2')
@@ -545,7 +558,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v12'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'}, 
+        article.data['article']['v12'] = [{u'_': u'article title 1', u'l': u'pt'},
                                           {u'_': u'article title 2', u'l': u'fr'}]
 
         self.assertEqual(article.original_title(iso_format=None), None)
@@ -570,7 +583,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v83'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'en'}, 
+        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'en'},
                                           {u'a': u'article abstract 2'}]
 
         self.assertEqual(article.original_abstract(iso_format=None), u'article abstract 1')
@@ -581,7 +594,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v83'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'}, 
+        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'},
                                           {u'a': u'article abstract 2', u'l': u'en'}]
 
         self.assertEqual(article.original_abstract(iso_format=None), u'article abstract 2')
@@ -592,7 +605,7 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v83'])
 
         article.data['article']['v40'][0]['_'] = u'en'
-        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'}, 
+        article.data['article']['v83'] = [{u'a': u'article abstract 1', u'l': u'pt'},
                                           {u'a': u'article abstract 2', u'l': u'fr'}]
 
         self.assertEqual(article.original_abstract(iso_format=None), None)
@@ -626,7 +639,7 @@ class ArticleTests(unittest.TestCase):
     def test_authors(self):
         article = self.article
 
-        authors = [{u'role': u'ND', 
+        authors = [{u'role': u'ND',
                     u'xref': [u'A01'],
                     u'surname': u'Gomes',
                     u'given_names': u'Caio Isola Dallevo do Amaral'},
@@ -647,7 +660,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_author_with_two_affiliations(self):
         article = self.article
-        
+
         del(article.data['article']['v10'])
         article.data['article']['v10'] = [{u"1": "A01 A02",
                                            u"s": "Gomes",
@@ -658,12 +671,12 @@ class ArticleTests(unittest.TestCase):
                      u'xref': [u'A01', u'A02'],
                      u'surname': u'Gomes',
                      u'given_names': u'Caio Isola Dallevo do Amaral'}]
-        
+
         self.assertEqual(article.authors, expected)
 
     def test_author_without_affiliations(self):
         article = self.article
-        
+
         del(article.data['article']['v10'])
         article.data['article']['v10'] = [{u"s": "Gomes",
                                            u"r": "ND",
@@ -672,12 +685,12 @@ class ArticleTests(unittest.TestCase):
         expected = [{u'role': u'ND',
                      u'surname': u'Gomes',
                      u'given_names': u'Caio Isola Dallevo do Amaral'}]
-        
+
         self.assertEqual(article.authors, expected)
 
     def test_author_without_surname_and_given_names(self):
         article = self.article
-        
+
         del(article.data['article']['v10'])
         article.data['article']['v10'] = [{u"1": u"A01 A02",
                                            u"r": u"ND",
@@ -686,12 +699,12 @@ class ArticleTests(unittest.TestCase):
                      u'xref': [u'A01', u'A02'],
                      u'surname': u'',
                      u'given_names': u''}]
-        
+
         self.assertEqual(article.authors, expected)
 
     def test_author_with_two_role(self):
         article = self.article
-        
+
         del(article.data['article']['v10'])
         article.data['article']['v10'] = [{u"1": u"A01 A02",
                                            u"s": u"Gomes",
@@ -748,7 +761,7 @@ class ArticleTests(unittest.TestCase):
                                            u"p": u"BRAZIL",
                                            u"s": u"SP",
                                            u"z": u"18052-780"}]
-        
+
         self.assertEqual(article.affiliations, None)
 
     def test_affiliation_just_with_affiliation_name(self):
@@ -759,24 +772,24 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v70'] = [{u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"}]
 
         expected = [{u'index': u'nd', u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'}]
-        
+
         self.assertEqual(article.affiliations, expected)
 
     def test_without_scielo_domain(self):
         article = self.article
 
         del(article.data['title']['v690'])
-        
+
         self.assertEqual(article.scielo_domain, None)
 
     def test_without_scielo_domain_title_v690(self):
         article = self.article
-        
+
         self.assertEqual(article.scielo_domain, u'www.scielo.br')
 
     def test_without_scielo_domain_article_v69(self):
         article = self.article
-        
+
         del(article.data['title']['v690'])
 
         article.data['article']['v69'] = [{u'_': u'http://www.scielo.br'}]
@@ -784,7 +797,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_without_scielo_domain_article_v69_and_title_v690(self):
         article = self.article
-        
+
         article.data['title']['v690'] = [{u'_': u'http://www.scielo1.br'}]
         article.data['article']['v69'] = [{u'_': u'http://www.scielo2.br'}]
 
@@ -952,7 +965,7 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(article.citations, None)
 
     def test_translated_titles_without_v12(self):
-        article = self.article        
+        article = self.article
 
         del(article.data['article']['v12'])
 
@@ -996,7 +1009,7 @@ class ArticleTests(unittest.TestCase):
 
 
     def test_translated_abstracts_without_v83(self):
-        article = self.article        
+        article = self.article
 
         del(article.data['article']['v83'])
 
@@ -1767,7 +1780,7 @@ class CitationTest(unittest.TestCase):
         json_citation = {}
 
         json_citation['v10'] = []
-        
+
         citation = Citation(json_citation)
 
         self.assertEqual(citation.authors, None)
