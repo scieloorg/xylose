@@ -146,6 +146,16 @@ class Article(object):
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
+    def ahead_publication_date(self):
+        """
+        This method retrieves the ahead of print date of the given article, if it exist.
+        This method deals with the legacy fields (223).
+        """
+        if 'v223' in self.data['article']:
+            return tools.get_publication_date(self.data['article']['v223'][0]['_'])
+        return None
+
+    @property
     def contract(self):
         """
         This method retrieves the contract of the given article, if it exists.
@@ -283,7 +293,7 @@ class Article(object):
 
     def original_title(self, iso_format=None):
         """
-        This method retrieves just the title related with the original language 
+        This method retrieves just the title related with the original language
         of the given article, if it exists.
         This method deals with the legacy fields (12).
         """
@@ -321,7 +331,7 @@ class Article(object):
 
     def original_abstract(self, iso_format=None):
         """
-        This method retrieves just the abstract related with the original language 
+        This method retrieves just the abstract related with the original language
         of the given article, if it exists.
         This method deals with the legacy fields (83).
         """
@@ -523,7 +533,7 @@ class Article(object):
     @property
     def thesis_degree(self):
         """
-        This method retrieves the thesis degree of the given document, If it exists. 
+        This method retrieves the thesis degree of the given document, If it exists.
         This method deals with the legacy fields (51).
         """
         if 'v51' in self.data['article']:
@@ -649,7 +659,7 @@ class Citation(object):
     @property
     def index_number(self):
         """
-        This method retrieves the index number of the citation. The 
+        This method retrieves the index number of the citation. The
         index number represents the original number given in the article.
         """
         if 'v701' in self.data:
@@ -766,7 +776,7 @@ class Citation(object):
         """
         This method retrieves the institutions in the given citation without care about
         the citation type (article, book, thesis, conference, etc).
-        """ 
+        """
 
         institutions = []
         if 'v11' in self.data:
@@ -786,9 +796,9 @@ class Citation(object):
     @property
     def analytic_institution(self):
         """
-        This method retrieves the institutions in the given citation. The citation must be 
+        This method retrieves the institutions in the given citation. The citation must be
         an article or book citation, if it exists.
-        """ 
+        """
         institutions = []
         if self.publication_type in [u'article', u'book'] and 'v11' in self.data:
             if 'v11' in self.data:
@@ -799,11 +809,11 @@ class Citation(object):
             return institutions
 
     @property
-    def monographic_institution(self):        
+    def monographic_institution(self):
         """
-        This method retrieves the institutions in the given citation. The citation must be 
+        This method retrieves the institutions in the given citation. The citation must be
         a book citation, if it exists.
-        """ 
+        """
         institutions = []
         if self.publication_type == u'book' and 'v17' in self.data:
             if 'v17' in self.data:
@@ -812,12 +822,12 @@ class Citation(object):
 
         if len(institutions) > 0:
             return institutions
-        
+
     @property
     def sponsor(self):
         """
         This method retrieves the sponsors in the given citation, if it exists.
-        """ 
+        """
         sponsors = []
         if 'v58' in self.data:
             for sponsor in self.data['v58']:
@@ -830,7 +840,7 @@ class Citation(object):
     def editor(self):
         """
         This method retrieves the editors in the given citation, if it exists.
-        """ 
+        """
 
         editors = []
         if 'v29' in self.data:
@@ -941,7 +951,7 @@ class Citation(object):
                     authordict['given_names'] = author['n']
                 if 's' in author or 'n' in author:
                     authors.append(authordict)
-        
+
         if len(authors) > 0:
             return authors
 
@@ -961,7 +971,7 @@ class Citation(object):
                     authordict['given_names'] = author['n']
                 if 's' in author or 'n' in author:
                     authors.append(authordict)
-        
+
         if len(authors) > 0:
             return authors
 
