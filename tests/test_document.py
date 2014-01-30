@@ -352,18 +352,17 @@ class ArticleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             article.publication_date
 
-    def test_ahead_date(self):
+    def test_ahead_publication_date(self):
         article = self.article
 
         article.data['article']['v223'] = [{u'_': u'20131125'}]
-        self.assertEqual(article.ahead_date, '2013-11-25')
+        self.assertEqual(article.ahead_publication_date, '2013-11-25')
 
-    def test_whitwout_ahead_date(self):
+    def test_whitwout_ahead_publication_date(self):
         article = self.article
 
         del(article.data['article']['v223'])
-        with self.assertRaises(KeyError):
-            article.ahead_date
+        self.assertEqual(article.ahead_publication_date, None)
 
     def test_publication_contract(self):
         self.fulldoc['article']['v60'] = [{u'_': u'2009/53056-8'}]

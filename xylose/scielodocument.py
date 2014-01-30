@@ -146,13 +146,14 @@ class Article(object):
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
-    def ahead_date(self):
+    def ahead_publication_date(self):
         """
         This method retrieves the ahead of print date of the given article, if it exist.
         This method deals with the legacy fields (223).
         """
-
-        return tools.get_publication_date(self.data['article']['v223'][0]['_'])
+        if 'v223' in self.data['article']:
+            return tools.get_publication_date(self.data['article']['v223'][0]['_'])
+        return None
 
     @property
     def contract(self):
