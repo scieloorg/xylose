@@ -352,6 +352,41 @@ class ArticleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             article.publication_date
 
+    def test_receive_date(self):
+        article = self.article
+
+        article.data['article']['v112'] = [{u'_': u'20110706'}]
+        self.assertEqual(article.receive_date, '2011-07-06')
+
+    def test_whitwout_receive_date(self):
+        article = self.article
+
+        del(article.data['article']['v112'])
+        self.assertEqual(article.receive_date, None)
+
+    def test_acceptance_date(self):
+        article = self.article
+
+        article.data['article']['v114'] = [{u'_': u'20111214'}]
+        self.assertEqual(article.acceptance_date, '2011-12-14')
+
+    def test_whitwout_acceptance_date(self):
+        article = self.article
+
+        del(article.data['article']['v114'])
+        self.assertEqual(article.acceptance_date, None)
+
+    def test_review_date(self):
+        article = self.article
+
+        article.data['article']['v116'] = [{u'_': u'20111215'}]
+        self.assertEqual(article.review_date, '2011-12-15')
+
+    def test_whitwout_review_date(self):
+        article = self.article
+
+        self.assertEqual(article.review_date, None)
+
     def test_ahead_publication_date(self):
         article = self.article
 

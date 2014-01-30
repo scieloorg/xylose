@@ -146,6 +146,36 @@ class Article(object):
         return tools.get_publication_date(self.data['article']['v65'][0]['_'])
 
     @property
+    def receive_date(self):
+        """
+        This method retrieves the receive date of the given article, if it exist.
+        This method deals with the legacy fields (112).
+        """
+        if 'v112' in self.data['article']:
+            return tools.get_publication_date(self.data['article']['v112'][0]['_'])
+        return None
+
+    @property
+    def acceptance_date(self):
+        """
+        This method retrieves the acceptance date of the given article, if it exist.
+        This method deals with the legacy fields (114).
+        """
+        if 'v114' in self.data['article']:
+            return tools.get_publication_date(self.data['article']['v114'][0]['_'])
+        return None
+
+    @property
+    def review_date(self):
+        """
+        This method retrieves the review date of the given article, if it exist.
+        This method deals with the legacy fields (116).
+        """
+        if 'v116' in self.data['article']:
+            return tools.get_publication_date(self.data['article']['v116'][0]['_'])
+        return None
+
+    @property
     def ahead_publication_date(self):
         """
         This method retrieves the ahead of print date of the given article, if it exist.
