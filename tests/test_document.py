@@ -163,6 +163,13 @@ class ArticleTests(unittest.TestCase):
         del(self.fulldoc['article']['v30'])
         self.assertEqual(self.article.journal_abbreviated_title, None)
 
+    def test_scielo_issn(self):
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.scielo_issn, '2222-2222')
+
     def test_load_issn_with_v935_without_v35(self):
         del(self.fulldoc['title']['v35'])
         self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
