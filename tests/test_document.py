@@ -103,7 +103,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_collection_acronym_priorizing_collection(self):
         self.fulldoc['collection'] = u'yyy'
-        self.fulldoc['title']['v992'] = [{u'_': u'xxx'}]
+        self.fulldoc['article']['v992'] = [{u'_': u'xxx'}]
 
         article = Article(self.fulldoc)
 
@@ -111,7 +111,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_collection_acronym_retrieving_v992(self):
         del(self.fulldoc['collection'])
-        self.fulldoc['title']['v992'] = [{u'_': u'xxx'}]
+        self.fulldoc['article']['v992'] = [{u'_': u'xxx'}]
 
         article = Article(self.fulldoc)
 
