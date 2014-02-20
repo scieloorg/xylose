@@ -84,8 +84,8 @@ class Article(object):
         if 'collection' in self.data:
             return self.data['collection']
 
-        if 'v992' in self.data['title']:
-            return self.data['title']['v992'][0]['_']
+        if 'v992' in self.data['article']:
+            return self.data['article']['v992'][0]['_']
 
     @property
     def subject_areas(self):
