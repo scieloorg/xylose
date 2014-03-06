@@ -23,7 +23,7 @@ Code::
     >>> import json
     >>> import urllib2
     >>> from xylose.scielodocument import Article
-    >>> article_json = json.loads(urllib2.urlopen('http://200.136.72 76:7000/api/v1/article?code=S2179-975X2011000300002&format=json').read()
+    >>> article_json = json.loads(urllib2.urlopen('http://200.136.72.162:7000/api/v1/article?code=S2179-975X2011000300002&format=json').read())
     >>> article = Article(article_json)
     >>> article.original_title()
     u'First adult record of Misgurnus anguillicaudatus, Cantor 1842 from Ribeira de Iguape River Basin, Brazil'
