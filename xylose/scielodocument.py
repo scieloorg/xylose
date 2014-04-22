@@ -1,8 +1,19 @@
 # encoding: utf-8
+import HTMLParser
+from functools import wraps
+
 from . import choices
 from . import tools
 
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
+
+
+def html_decode(string):
+    html_parser = HTMLParser.HTMLParser()
+    try:
+        return html_parser.unescape(string)
+    except TypeError:
+        return None
 
 
 class Article(object):
@@ -350,7 +361,7 @@ class Article(object):
                 if 'l' in title:
                     language = tools.get_language(title['l'], fmt)
                     if language == self.original_language(iso_format=fmt):
-                        return title['_']
+                        return html_decode(title['_'])
 
     def translated_titles(self, iso_format=None):
         """
@@ -366,13 +377,15 @@ class Article(object):
                 if 'l' in title:
                     language = tools.get_language(title['l'], fmt)
                     if language != self.original_language(iso_format=fmt):
-                        trans_titles.setdefault(language, title['_'])
+                        trans_titles.setdefault(
+                            language,
+                            html_decode(title['_'])
+                        )
 
         if len(trans_titles) == 0:
             return None
 
         return trans_titles
-
 
     def original_abstract(self, iso_format=None):
         """
@@ -387,7 +400,7 @@ class Article(object):
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
                     language = tools.get_language(abstract['l'], fmt)
                     if language == self.original_language(iso_format=fmt):
-                        return abstract['a']
+                        return html_decode(abstract['a'])
 
     def translated_abstracts(self, iso_format=None):
         """
@@ -402,7 +415,10 @@ class Article(object):
                 if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
                     language = tools.get_language(abstract['l'], fmt)
                     if language != self.original_language(iso_format=fmt):
-                        trans_abstracts.setdefault(language, abstract['a'])
+                        trans_abstracts.setdefault(
+                            language,
+                            html_decode(abstract['a'])
+                        )
 
         if len(trans_abstracts) == 0:
             return None
@@ -729,7 +745,7 @@ class Citation(object):
         If it is a book citation, this method retrieves a chapter title, if it exists.
         """
         if self.publication_type == u'book' and 'v12' in self.data:
-            return self.data['v12'][0]['_']
+            return html_decode(self.data['v12'][0]['_'])
 
     @property
     def article_title(self):
@@ -737,7 +753,7 @@ class Citation(object):
         If it is an article citation, this method retrieves the article title, if it exists.
         """
         if self.publication_type == u'article' and 'v12' in self.data:
-            return self.data['v12'][0]['_']
+            return html_decode(self.data['v12'][0]['_'])
 
     @property
     def thesis_title(self):
@@ -746,7 +762,7 @@ class Citation(object):
         """
 
         if self.publication_type == u'thesis' and 'v18' in self.data:
-            return self.data['v18'][0]['_']
+            return html_decode(self.data['v18'][0]['_'])
 
     @property
     def conference_title(self):
@@ -755,7 +771,7 @@ class Citation(object):
         """
 
         if self.publication_type == u'conference' and 'v53' in self.data:
-            return self.data['v53'][0]['_']
+            return html_decode(self.data['v53'][0]['_'])
 
     @property
     def link_title(self):
@@ -800,8 +816,8 @@ class Citation(object):
     @property
     def edition(self):
         """
-        This method retrieves the edition, if it is exists. The citation must be
-        a conference or book citation.
+        This method retrieves the edition, if it is exists. The citation must
+        be a conference or book citation.
         """
 
         if self.publication_type in [u'conference', u'book']:
@@ -819,8 +835,8 @@ class Citation(object):
     @property
     def institutions(self):
         """
-        This method retrieves the institutions in the given citation without care about
-        the citation type (article, book, thesis, conference, etc).
+        This method retrieves the institutions in the given citation without
+        care about the citation type (article, book, thesis, conference, etc).
         """
 
         institutions = []
@@ -841,8 +857,8 @@ class Citation(object):
     @property
     def analytic_institution(self):
         """
-        This method retrieves the institutions in the given citation. The citation must be
-        an article or book citation, if it exists.
+        This method retrieves the institutions in the given citation. The
+        citation must be an article or book citation, if it exists.
         """
         institutions = []
         if self.publication_type in [u'article', u'book'] and 'v11' in self.data:
@@ -856,8 +872,8 @@ class Citation(object):
     @property
     def monographic_institution(self):
         """
-        This method retrieves the institutions in the given citation. The citation must be
-        a book citation, if it exists.
+        This method retrieves the institutions in the given citation. The
+        citation must be a book citation, if it exists.
         """
         institutions = []
         if self.publication_type == u'book' and 'v17' in self.data:
@@ -898,7 +914,8 @@ class Citation(object):
     @property
     def thesis_institution(self):
         """
-        This method retrieves the thesis institutions in the given citation, if it exists.
+        This method retrieves the thesis institutions in the given citation, if
+        it exists.
         """
 
         institutions = []
@@ -912,8 +929,8 @@ class Citation(object):
     @property
     def issn(self):
         """
-        This method retrieves the journal issn, if it is exists. The citation must be
-        an article citation.
+        This method retrieves the journal issn, if it is exists. The citation
+        must be an article citation.
         """
 
         if self.publication_type == u'article' and 'v35' in self.data:
@@ -922,8 +939,8 @@ class Citation(object):
     @property
     def isbn(self):
         """
-        This method retrieves the book isbn, if it is exists. The citation must be
-        a book citation.
+        This method retrieves the book isbn, if it is exists. The citation must
+        be a book citation.
         """
 
         if self.publication_type == u'book' and 'v69' in self.data:
@@ -932,8 +949,8 @@ class Citation(object):
     @property
     def volume(self):
         """
-        This method retrieves the book our journal volume number, if it exists. The citation must be
-        a book our an article citation.
+        This method retrieves the book our journal volume number, if it exists.
+        The citation must be a book our an article citation.
         """
 
         if self.publication_type in [u'article', u'book']:
@@ -943,8 +960,8 @@ class Citation(object):
     @property
     def issue(self):
         """
-        This method retrieves the journal issue number, if it exists. The citation must be
-        an article citation.
+        This method retrieves the journal issue number, if it exists. The
+        citation must be an article citation.
         """
 
         if self.publication_type in u'article' and 'v32' in self.data:
@@ -953,22 +970,22 @@ class Citation(object):
     @property
     def issue_title(self):
         """
-        This method retrieves the issue title, if it exists. The citation must be
-        an article citation.
+        This method retrieves the issue title, if it exists. The citation must
+        be an article citation.
         """
 
         if self.publication_type in u'article' and 'v33' in self.data:
-            return self.data['v33'][0]['_']
+            return html_decode(html_decode(self.data['v33'][0]['_']))
 
     @property
     def issue_part(self):
         """
-        This method retrieves the issue part, if it exists. The citation must be
-        an article citation.
+        This method retrieves the issue part, if it exists. The citation must
+        be an article citation.
         """
 
         if self.publication_type in u'article' and 'v34' in self.data:
-            return self.data['v34'][0]['_']
+            return html_decode(self.data['v34'][0]['_'])
 
     @property
     def doi(self):
@@ -982,8 +999,8 @@ class Citation(object):
     @property
     def authors(self):
         """
-        This method retrieves the authors of the given citation. These authors may
-        correspond to an article, book analytic, link or thesis.
+        This method retrieves the authors of the given citation. These authors
+        may correspond to an article, book analytic, link or thesis.
         """
         docs = [u'article', u'book', u'link', u'thesis']
         authors = []
@@ -1028,7 +1045,7 @@ class Citation(object):
         """
         docs = [u'conference', u'book', u'article']
         if self.publication_type in docs and 'v25' in self.data:
-            return self.data['v25'][0]['_']
+            return html_decode(self.data['v25'][0]['_'])
 
     @property
     def publisher(self):
