@@ -21,5 +21,6 @@ article_types = {
     'cr': 'case-report',
     'sc': 'rapid-communication',
     'co': 'article-commentary',
-    'rn': 'brief-report'
+    'rn': 'brief-report',
+    'pr': 'press-release'
 }
