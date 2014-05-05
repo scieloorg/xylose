@@ -359,6 +359,19 @@ class ArticleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             article.publication_date
 
+    def test_processing_date(self):
+        article = self.article
+
+        article.data['article']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.processing_date, '2012-04-19')
+
+    def test_without_processing_date(self):
+        article = self.article
+
+        del(article.data['article']['v91'])
+        with self.assertRaises(KeyError):
+            article.processing_date
+
     def test_receive_date(self):
         article = self.article
 
