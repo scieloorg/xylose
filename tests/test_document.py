@@ -138,6 +138,19 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.subject_areas, None)
 
+    def test_wos_citation_indexes(self):
+        self.fulldoc['title']['v851'] = [{u'_': u'SCIE'}, {u'_': u'SSCI'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.wos_citation_indexes, [u'SCIE', u'SSCI'])
+
+    def test_without_wos_citation_indexes(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.wos_citation_indexes, None)
+
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
 

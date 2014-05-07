@@ -116,11 +116,22 @@ class Article(object):
     def wos_subject_areas(self):
         """
         This method retrieves the Wob of Sciences subject areas of the given
-        article, if it exists.
+        journal, if it exists.
         This method deals with the legacy fields (854).
         """
         if 'v854' in self.data['title']:
             return [area['_'] for area in self.data['title']['v854']]
+
+
+    @property
+    def wos_citation_indexes(self):
+        """
+        This method retrieves the Wob of Sciences Citation Indexes of the given
+        journal, if it exists.
+        This method deals with the legacy fields (851).
+        """
+        if 'v851' in self.data['title']:
+            return [area['_'] for area in self.data['title']['v851']]
 
     @property
     def publisher_name(self):
