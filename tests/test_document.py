@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citation
+from xylose.scielodocument import Article, Citation, html_decode
 from xylose import tools
 
 class ToolsTests(unittest.TestCase):
@@ -90,6 +90,24 @@ class ArticleTests(unittest.TestCase):
         path = os.path.dirname(os.path.realpath(__file__))
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.article = Article(self.fulldoc)
+
+    def test_html_decode(self):
+
+        result = html_decode(u'Teste &#100;')
+
+        self.assertEqual('Teste d', result)
+
+    def test_html_decode_amp(self):
+
+        result = html_decode(u'Teste &amp;')
+
+        self.assertEqual('Teste &', result)
+
+    def test_html_decode_out_of_inicode_range(self):
+
+        result = html_decode(u'Teste &#10130000000000;')
+
+        self.assertEqual('Teste &#10130000000000;', result)
 
     def test_article(self):
         article = self.article

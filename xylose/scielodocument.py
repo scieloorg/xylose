@@ -12,8 +12,8 @@ def html_decode(string):
     html_parser = HTMLParser.HTMLParser()
     try:
         return html_parser.unescape(string)
-    except TypeError:
-        return None
+    except:
+        return string
 
 
 class Article(object):
