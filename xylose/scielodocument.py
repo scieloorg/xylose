@@ -4,7 +4,7 @@ from functools import wraps
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
-except:
+except ImportError:
     from HTMLParser import HTMLParser
 
 from . import choices
