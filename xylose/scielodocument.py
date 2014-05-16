@@ -1,17 +1,33 @@
 # encoding: utf-8
-import HTMLParser
+import sys
 from functools import wraps
+
+try:  # Keep compatibility with python 2.7
+    from html import unescape
+except:
+    from HTMLParser import HTMLParser
 
 from . import choices
 from . import tools
 
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
+# --------------
+# Py2 compat
+# --------------
+PY2 = sys.version_info[0] == 2
+
+if PY2:
+    html_parser = HTMLParser().unescape
+else:
+    html_parser = unescape
+# --------------
+
 
 def html_decode(string):
-    html_parser = HTMLParser.HTMLParser()
+
     try:
-        return html_parser.unescape(string)
+        return html_parser(string)
     except:
         return string
 
