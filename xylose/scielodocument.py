@@ -136,7 +136,7 @@ class Article(object):
         This method deals with the legacy fields (702).
         """
         if 'v702' in self.data['article']:
-            splited = self.data['article']['v702'][0]['_'].split('\\')
+            splited = self.data['article']['v702'][0]['_'].replace('/', '\\').split('\\')
             filename = splited[-1].split('.')[0]
             return filename
 

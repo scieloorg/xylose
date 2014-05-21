@@ -157,6 +157,20 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.file_code, 'alb_aop_230302')
 
+    def test_file_code_crazy_slashs_1(self):
+        self.fulldoc['article']['v702'] = [{u'_': u'file://r\\\\x//y//z\\\\file.html'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.file_code, 'file')
+
+    def test_file_code_crazy_slashs_2(self):
+        self.fulldoc['article']['v702'] = [{"_": "rsp/v47n4/0034-8910-rsp-47-04-0675.xml"}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.file_code, '0034-8910-rsp-47-04-0675')
+
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
 
