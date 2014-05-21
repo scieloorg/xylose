@@ -129,6 +129,18 @@ class Article(object):
             return [area['_'] for area in self.data['title']['v441']]
 
     @property
+    def file_code(self):
+        """
+        This method retrieves the file code for the pdf and html files stored
+        in the file system.
+        This method deals with the legacy fields (702).
+        """
+        if 'v702' in self.data['article']:
+            splited = self.data['article']['v702'][0]['_'].split('\\')
+            filename = splited[-1].split('.')[0]
+            return filename
+
+    @property
     def wos_subject_areas(self):
         """
         This method retrieves the Wob of Sciences subject areas of the given

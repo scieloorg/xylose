@@ -152,6 +152,11 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.wos_citation_indexes, None)
 
+    def test_file_code(self):
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.file_code, 'alb_aop_230302')
+
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
 
