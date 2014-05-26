@@ -100,6 +100,17 @@ class Article(object):
         return tools.get_language(self.data['article']['v40'][0]['_'], fmt)
 
     @property
+    def collection_name(self):
+        """
+        This method retrieves the collection name of the given article,
+        if it exists.
+        """
+        return choices.collections.get(
+            self.collection_acronym,
+            u'Undefined: %s' % self.collection_acronym
+        )
+
+    @property
     def collection_acronym(self):
         """
         This method retrieves the collection of the given article,

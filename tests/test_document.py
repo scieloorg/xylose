@@ -96,6 +96,20 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_collection_name_brazil(self):
+        self.fulldoc['collection'] = u'scl'
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_name, u'Brazil')
+
+    def test_collection_name_undefined(self):
+        self.fulldoc['collection'] = u'xxx'
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.collection_name, u'Undefined: xxx')
+
     def test_collection_acronym(self):
 
         article = Article(self.fulldoc)
