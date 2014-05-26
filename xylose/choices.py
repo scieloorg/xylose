@@ -24,3 +24,23 @@ article_types = {
     'rn': 'brief-report',
     'pr': 'press-release'
 }
+
+collections = {
+    'scl': 'Brazil',
+    'arg': 'Argentina',
+    'cub': 'Cuba',
+    'esp': 'Spain',
+    'col': 'Colombia',
+    'sss': 'Social Sciences',
+    'spa': 'Health Sciences',
+    'mex': 'Mexico',
+    'prt': 'Portugal',
+    'cri': 'Costa Rica',
+    'ven': 'Venezuela',
+    'ury': 'Uruguay',
+    'per': 'Peru',
+    'chl': 'Chile',
+    'sza': 'South Africa',
+    'bol': 'Bolivia',
+    'par': 'Paraguay'
+}
