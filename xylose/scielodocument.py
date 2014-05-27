@@ -107,8 +107,8 @@ class Article(object):
         """
         return choices.collections.get(
             self.collection_acronym,
-            u'Undefined: %s' % self.collection_acronym
-        )
+            [u'Undefined: %s' % self.collection_acronym, '']
+        )[0]
 
     @property
     def collection_acronym(self):
@@ -574,6 +574,13 @@ class Article(object):
         This method retrieves the collection domains of the given article, if it exists.
         This method deals with the legacy fields (69, 690).
         """
+
+        if self.collection_acronym:
+            return choices.collections.get(
+                self.collection_acronym,
+                [u'Undefined: %s' % self.collection_acronym, None]
+            )[1] or None
+
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
         elif 'v69' in self.data['article']:

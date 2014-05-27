@@ -114,7 +114,7 @@ class ArticleTests(unittest.TestCase):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.collection_acronym, u'bra')
+        self.assertEqual(article.collection_acronym, u'scl')
 
     def test_collection_acronym_priorizing_collection(self):
         self.fulldoc['collection'] = u'yyy'
@@ -880,6 +880,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['title']['v690'])
+        del(article.data['collection'])
 
         self.assertEqual(article.scielo_domain, None)
 
@@ -896,8 +897,10 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v69'] = [{u'_': u'http://www.scielo.br'}]
         self.assertEqual(article.scielo_domain, u'www.scielo.br')
 
-    def test_without_scielo_domain_article_v69_and_title_v690(self):
+    def test_without_scielo_domain_article_v69_and_with_title_v690(self):
         article = self.article
+        
+        del(article.data['collection'])
 
         article.data['title']['v690'] = [{u'_': u'http://www.scielo1.br'}]
         article.data['article']['v69'] = [{u'_': u'http://www.scielo2.br'}]
@@ -908,6 +911,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['title']['v690'])
+        del(article.data['collection'])
 
         self.assertEqual(article.pdf_url, None)
 
@@ -915,7 +919,6 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
-        article.data['title']['v690'] = [{u'_': u'http://www.scielo.br'}]
 
         expected = u"http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2179-975X2011000300002"
 
@@ -925,6 +928,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['title']['v690'])
+        del(article.data['collection'])
 
         self.assertEqual(article.html_url, None)
 
@@ -932,7 +936,6 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
-        article.data['title']['v690'] = [{u'_': u'http://www.scielo.br'}]
 
         expected = u"http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002"
 
@@ -942,6 +945,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['title']['v690'])
+        del(article.data['collection'])
 
         self.assertEqual(article.issue_url, None)
 
@@ -949,7 +953,6 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
-        article.data['title']['v690'] = [{u'_': u'http://www.scielo.br'}]
 
         expected = u"http://www.scielo.br/scielo.php?script=sci_issuetoc&pid=S2179-975X20110003"
 
@@ -959,6 +962,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['title']['v690'])
+        del(article.data['collection'])
 
         self.assertEqual(article.journal_url, None)
 
@@ -966,7 +970,6 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
-        article.data['title']['v690'] = [{u'_': u'http://www.scielo.br'}]
 
         expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X"
 

@@ -26,21 +26,21 @@ article_types = {
 }
 
 collections = {
-    'scl': 'Brazil',
-    'arg': 'Argentina',
-    'cub': 'Cuba',
-    'esp': 'Spain',
-    'col': 'Colombia',
-    'sss': 'Social Sciences',
-    'spa': 'Health Sciences',
-    'mex': 'Mexico',
-    'prt': 'Portugal',
-    'cri': 'Costa Rica',
-    'ven': 'Venezuela',
-    'ury': 'Uruguay',
-    'per': 'Peru',
-    'chl': 'Chile',
-    'sza': 'South Africa',
-    'bol': 'Bolivia',
-    'par': 'Paraguay'
+    'scl': ['Brazil', 'www.scielo.br'],
+    'arg': ['Argentina', 'www.scielo.org.ar'],
+    'cub': ['Cuba', 'scielo.sld.cu'],
+    'esp': ['Spain', 'scielo.isciii.es'],
+    'col': ['Colombia', 'scielo.org.co'],
+    'sss': ['Social Sciences', 'socialsciences.scielo.org'],
+    'spa': ['Health Sciences', 'scielosp.org'],
+    'mex': ['Mexico', 'scielo.org.mx'],
+    'prt': ['Portugal', 'www.scielo.gpeari.mctes.pt'],
+    'cri': ['Costa Rica', 'scielo.sa.cr'],
+    'ven': ['Venezuela', 'scielo.org.ve'],
+    'ury': ['Uruguay', 'scielo.org.uy'],
+    'per': ['Peru', 'scielo.org.pe'],
+    'chl': ['Chile', 'scielo.cl'],
+    'sza': ['South Africa', 'scielo.org.za'],
+    'bol': ['Bolivia', 'scielo.org.bo'],
+    'par': ['Paraguay' 'scielo.iics.una.py']
 }
