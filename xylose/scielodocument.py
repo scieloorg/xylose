@@ -161,7 +161,6 @@ class Article(object):
         if 'v854' in self.data['title']:
             return [area['_'] for area in self.data['title']['v854']]
 
-
     @property
     def wos_citation_indexes(self):
         """
@@ -169,8 +168,19 @@ class Article(object):
         journal, if it exists.
         This method deals with the legacy fields (851).
         """
+
+        areas = []
         if 'v851' in self.data['title']:
-            return [area['_'] for area in self.data['title']['v851']]
+            areas += [area['_'] for area in self.data['title']['v851']]
+
+        if 'v852' in self.data['title']:
+            areas += [area['_'] for area in self.data['title']['v852']]
+
+        if 'v853' in self.data['title']:
+            areas += [area['_'] for area in self.data['title']['v853']]
+
+        if not len(areas) == 0:
+            return areas
 
     @property
     def publisher_name(self):
