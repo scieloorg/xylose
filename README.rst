@@ -20,8 +20,6 @@ How to use
 
 **Reading an Article**
 
-Code::
-
     >>> import json
     >>> import urllib2
     >>> from xylose.scielodocument import Article
