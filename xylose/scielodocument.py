@@ -846,7 +846,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.any_issn", DeprecationWarning)
 
-        return journal.any_issn(priority=priority)
+        return self.journal.any_issn(priority=priority)
 
     @property
     def thesis_degree(self):
