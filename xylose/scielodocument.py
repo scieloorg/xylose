@@ -32,6 +32,62 @@ def html_decode(string):
         return string
 
 
+class Journal(object):
+
+    def __init__(self, data, iso_format=None):
+        """
+        Create an Journal object given a isis2json type 3 SciELO document.
+
+        Keyword arguments:
+        iso_format -- the language iso format for methods that retrieve content
+        identified by language.
+        ['iso 639-2', 'iso 639-1', None]
+        """
+        if not iso_format in allowed_formats:
+            raise ValueError('Language format not allowed ({0})'.format(iso_format))
+
+        self._iso_format = iso_format
+        self.data = data
+        self.print_issn = None
+        self.electronic_issn = None
+        self._load_issn()
+
+    def _load_issn(self):
+        """
+        This method creates an object level attributes (print_issn and/or
+        electronic issn), according to the given metadata.
+        This method deal with the legacy datamodel fields (935, 400, 35) where:
+        """
+        if not 'v35' in self.data['title']:
+            return None
+
+        # ISSN and Other Complex Stuffs from the old version
+        if not 'v935' in self.data['title']:  # Old fashion ISSN persistance style
+            if self.data['title']['v35'][0]['_'] == "PRINT":
+                self.print_issn = self.data['title']['v400'][0]['_']
+            else:
+                self.electronic_issn = self.data['title']['v400'][0]['_']
+        else:  # New ISSN persistance style
+            if self.data['title']['v35'][0]['_'] == "PRINT":
+                self.print_issn = self.data['title']['v935'][0]['_']
+                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
+                    self.electronic_issn = self.data['title']['v400'][0]['_']
+            else:
+                self.electronic_issn = self.data['title']['v935'][0]['_']
+                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
+                    self.print_issn = self.data['title']['v400'][0]['_']
+
+    @property
+    def scielo_issn(self):
+        """
+        This method retrieves the original language of the given article.
+        This method deals with the legacy fields (v400).
+        """
+        if not 'v400' in self.data['title']:
+            return None
+
+        return self.data['title']['v400'][0]['_']
+
 class Article(object):
 
     def __init__(self, data, iso_format=None):

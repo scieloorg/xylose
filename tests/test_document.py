@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citation, html_decode
+from xylose.scielodocument import Article, Citation, Journal, html_decode
 from xylose import tools
 
 
@@ -83,6 +83,18 @@ class ToolsTests(unittest.TestCase):
 
         date = tools.get_publication_date('2012xx01')
         self.assertEqual(date, '2012')
+
+
+class JournalTests(unittest.TestCase):
+
+    def setUp(self):
+        path = os.path.dirname(os.path.realpath(__file__))
+        self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
+        self.journal = Journal(self.fulldoc['title'])
+
+    def test_journal(self):
+        journal = self.journal
+        self.assertTrue(isinstance(journal, Journal))
 
 
 class ArticleTests(unittest.TestCase):
