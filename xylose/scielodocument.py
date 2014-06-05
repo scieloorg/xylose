@@ -352,7 +352,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.wos_citation_index", DeprecationWarning)
 
-        return self.journal.wos_citation_index
+        return self.journal.wos_citation_indexes
 
     @property
     def publisher_name(self):
