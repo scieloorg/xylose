@@ -1,6 +1,7 @@
 # encoding: utf-8
 import sys
 from functools import wraps
+import warnings
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -58,24 +59,66 @@ class Journal(object):
         electronic issn), according to the given metadata.
         This method deal with the legacy datamodel fields (935, 400, 35) where:
         """
-        if not 'v35' in self.data['title']:
+        if not 'v35' in self.data:
             return None
 
         # ISSN and Other Complex Stuffs from the old version
-        if not 'v935' in self.data['title']:  # Old fashion ISSN persistance style
-            if self.data['title']['v35'][0]['_'] == "PRINT":
-                self.print_issn = self.data['title']['v400'][0]['_']
+        if not 'v935' in self.data:  # Old fashion ISSN persistance style
+            if self.data['v35'][0]['_'] == "PRINT":
+                self.print_issn = self.data['v400'][0]['_']
             else:
-                self.electronic_issn = self.data['title']['v400'][0]['_']
+                self.electronic_issn = self.data['v400'][0]['_']
         else:  # New ISSN persistance style
-            if self.data['title']['v35'][0]['_'] == "PRINT":
-                self.print_issn = self.data['title']['v935'][0]['_']
-                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
-                    self.electronic_issn = self.data['title']['v400'][0]['_']
+            if self.data['v35'][0]['_'] == "PRINT":
+                self.print_issn = self.data['v935'][0]['_']
+                if self.data['v935'][0]['_'] != self.data['v400'][0]['_']:
+                    self.electronic_issn = self.data['v400'][0]['_']
             else:
-                self.electronic_issn = self.data['title']['v935'][0]['_']
-                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
-                    self.print_issn = self.data['title']['v400'][0]['_']
+                self.electronic_issn = self.data['v935'][0]['_']
+                if self.data['v935'][0]['_'] != self.data['v400'][0]['_']:
+                    self.print_issn = self.data['v400'][0]['_']
+
+    @property
+    def collection_acronym(self):
+        """
+        This method retrieves the collection of the given article,
+        if it exists.
+        This method deals with the legacy fields (v992).
+        """
+
+        if 'v992' in self.data:
+            return self.data['v992'][0]['_']
+
+    @property
+    def scielo_domain(self):
+        """
+        This method retrieves the collection domains of the given article, if it exists.
+        This method deals with the legacy fields (690).
+        """
+
+        if self.collection_acronym:
+            return choices.collections.get(
+                self.collection_acronym,
+                [u'Undefined: %s' % self.collection_acronym, None]
+            )[1] or None
+
+        if 'v690' in self.data:
+            return self.data['v690'][0]['_'].replace('http://', '')
+
+    def any_issn(self, priority=u'electronic'):
+        """
+        This method retrieves the issn of the given article, acoording to the given priority.
+        """
+        if priority == u'electronic':
+            if self.electronic_issn:
+                return self.electronic_issn
+            else:
+                return self.print_issn
+        else:
+            if self.print_issn:
+                return self.print_issn
+            else:
+                return self.electronic_issn
 
     @property
     def scielo_issn(self):
@@ -83,10 +126,120 @@ class Journal(object):
         This method retrieves the original language of the given article.
         This method deals with the legacy fields (v400).
         """
-        if not 'v400' in self.data['title']:
+        if not 'v400' in self.data:
             return None
 
-        return self.data['title']['v400'][0]['_']
+        return self.data['v400'][0]['_']
+
+    @property
+    def url(self):
+        """
+        This method retrieves the journal url of the given article.
+        """
+
+        if self.scielo_domain:
+            return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(
+                self.scielo_domain,
+                self.scielo_issn
+            )
+
+    @property
+    def subject_areas(self):
+        """
+        This method retrieves the subject areas of the given article,
+        if it exists.
+        The subject areas are based on the journal subject areas.
+        This method deals with the legacy fields (441).
+        """
+
+        if 'v441' in self.data:
+            return [area['_'] for area in self.data['v441']]
+
+    @property
+    def wos_subject_areas(self):
+        """
+        This method retrieves the Wob of Sciences subject areas of the given
+        journal, if it exists.
+        This method deals with the legacy fields (854).
+        """
+
+        if 'v854' in self.data:
+            return [area['_'] for area in self.data['v854']]
+
+    @property
+    def abbreviated_title(self):
+        """
+        This method retrieves the journal abbreviated title of the given article, if it exists.
+        This method deals with the legacy fields (150).
+        """
+        if 'v150' in self.data:
+            return self.data['v150'][0]['_']
+
+    @property
+    def wos_citation_indexes(self):
+        """
+        This method retrieves the Wob of Sciences Citation Indexes of the given
+        journal, if it exists.
+        This method deals with the legacy fields (851).
+        """
+
+        areas = []
+        if 'v851' in self.data:
+            areas += [area['_'] for area in self.data['v851']]
+
+        if 'v852' in self.data:
+            areas += [area['_'] for area in self.data['v852']]
+
+        if 'v853' in self.data:
+            areas += [area['_'] for area in self.data['v853']]
+
+        if not len(areas) == 0:
+            return areas
+
+    @property
+    def publisher_name(self):
+        """
+        This method retrieves the publisher name of the given article,
+        if it exists.
+        This method deals with the legacy fields (480).
+        """
+
+        if 'v480' in self.data:
+            return self.data['v480'][0]['_']
+
+    @property
+    def publisher_loc(self):
+        """
+        This method retrieves the publisher localization of the given article,
+        if it exists.
+        This method deals with the legacy fields (490).
+        """
+
+        if 'v490' in self.data:
+            return self.data['v490'][0]['_']
+
+    @property
+    def title(self):
+        """
+        This method retrieves the journal_title of the given article,
+        if it exists.
+        This method deals with the legacy fields (100).
+        """
+
+        if 'v100' in self.data:
+            return self.data['v100'][0]['_']
+
+    @property
+    def acronym(self):
+        """
+        This method retrieves the journal_acronym of the given article,
+        if it exists.
+        This method deals with the legacy fields (68).
+        """
+
+        if 'v68' in self.data:
+            return self.data['v68'][0]['_'].lower()
+
 
 class Article(object):
 
@@ -107,32 +260,16 @@ class Article(object):
         self.data = data
         self.print_issn = None
         self.electronic_issn = None
-        self._load_issn()
+        self._journal = None
+        self._citations = None
 
-    def _load_issn(self):
-        """
-        This method creates an object level attributes (print_issn and/or
-        electronic issn), according to the given metadata.
-        This method deal with the legacy datamodel fields (935, 400, 35) where:
-        """
-        if not 'v35' in self.data['title']:
-            return None
+    @property
+    def journal(self):
 
-        # ISSN and Other Complex Stuffs from the old version
-        if not 'v935' in self.data['title']:  # Old fashion ISSN persistance style
-            if self.data['title']['v35'][0]['_'] == "PRINT":
-                self.print_issn = self.data['title']['v400'][0]['_']
-            else:
-                self.electronic_issn = self.data['title']['v400'][0]['_']
-        else:  # New ISSN persistance style
-            if self.data['title']['v35'][0]['_'] == "PRINT":
-                self.print_issn = self.data['title']['v935'][0]['_']
-                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
-                    self.electronic_issn = self.data['title']['v400'][0]['_']
-            else:
-                self.electronic_issn = self.data['title']['v935'][0]['_']
-                if self.data['title']['v935'][0]['_'] != self.data['title']['v400'][0]['_']:
-                    self.print_issn = self.data['title']['v400'][0]['_']
+        if 'title' in self.data:
+            self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+
+        return self._journal
 
     @property
     def scielo_issn(self):
@@ -140,10 +277,9 @@ class Article(object):
         This method retrieves the original language of the given article.
         This method deals with the legacy fields (v400).
         """
-        if not 'v400' in self.data['title']:
-            return None
+        warnings.warn("deprecated, use journal.scielo_issn", DeprecationWarning)
 
-        return self.data['title']['v400'][0]['_']
+        return journal.scielo_issn
 
     def original_language(self, iso_format=None):
         """
@@ -192,8 +328,75 @@ class Article(object):
         The subject areas are based on the journal subject areas.
         This method deals with the legacy fields (441).
         """
-        if 'v441' in self.data['title']:
-            return [area['_'] for area in self.data['title']['v441']]
+        warnings.warn("deprecated, use journal.subject_areas", DeprecationWarning)
+
+        return self.journal.subject_areas
+
+    @property
+    def wos_subject_areas(self):
+        """
+        This method retrieves the Wob of Sciences subject areas of the given
+        journal, if it exists.
+        This method deals with the legacy fields (854).
+        """
+        warnings.warn("deprecated, use journal.wos_subject_areas", DeprecationWarning)
+
+        return self.journal.wos_subject_areas
+
+    @property
+    def wos_citation_indexes(self):
+        """
+        This method retrieves the Wob of Sciences Citation Indexes of the given
+        journal, if it exists.
+        This method deals with the legacy fields (851).
+        """
+        warnings.warn("deprecated, use journal.wos_citation_index", DeprecationWarning)
+
+        return self.journal.wos_citation_index
+
+    @property
+    def publisher_name(self):
+        """
+        This method retrieves the publisher name of the given article,
+        if it exists.
+        This method deals with the legacy fields (480).
+        """
+        warnings.warn("deprecated, use journal.publisher_name", DeprecationWarning)
+
+        return self.journal.publisher_name
+
+    @property
+    def publisher_loc(self):
+        """
+        This method retrieves the publisher localization of the given article,
+        if it exists.
+        This method deals with the legacy fields (490).
+        """
+        warnings.warn("deprecated, use journal.publisher_loc", DeprecationWarning)
+
+        return self.journal.publisher_loc
+
+    @property
+    def journal_title(self):
+        """
+        This method retrieves the journal_title of the given article,
+        if it exists.
+        This method deals with the legacy fields (100).
+        """
+        warnings.warn("deprecated, use journal.title", DeprecationWarning)
+
+        return self.journal.title
+
+    @property
+    def journal_acronym(self):
+        """
+        This method retrieves the journal_acronym of the given article,
+        if it exists.
+        This method deals with the legacy fields (68).
+        """
+        warnings.warn("deprecated, use journal.acronym", DeprecationWarning)
+
+        return self.journal.acronym
 
     @property
     def file_code(self):
@@ -206,77 +409,6 @@ class Article(object):
             splited = self.data['article']['v702'][0]['_'].replace('/', '\\').split('\\')
             filename = splited[-1].split('.')[0]
             return filename
-
-    @property
-    def wos_subject_areas(self):
-        """
-        This method retrieves the Wob of Sciences subject areas of the given
-        journal, if it exists.
-        This method deals with the legacy fields (854).
-        """
-        if 'v854' in self.data['title']:
-            return [area['_'] for area in self.data['title']['v854']]
-
-    @property
-    def wos_citation_indexes(self):
-        """
-        This method retrieves the Wob of Sciences Citation Indexes of the given
-        journal, if it exists.
-        This method deals with the legacy fields (851).
-        """
-
-        areas = []
-        if 'v851' in self.data['title']:
-            areas += [area['_'] for area in self.data['title']['v851']]
-
-        if 'v852' in self.data['title']:
-            areas += [area['_'] for area in self.data['title']['v852']]
-
-        if 'v853' in self.data['title']:
-            areas += [area['_'] for area in self.data['title']['v853']]
-
-        if not len(areas) == 0:
-            return areas
-
-    @property
-    def publisher_name(self):
-        """
-        This method retrieves the publisher name of the given article,
-        if it exists.
-        This method deals with the legacy fields (480).
-        """
-        if 'v480' in self.data['title']:
-            return self.data['title']['v480'][0]['_']
-
-    @property
-    def publisher_loc(self):
-        """
-        This method retrieves the publisher localization of the given article,
-        if it exists.
-        This method deals with the legacy fields (490).
-        """
-        if 'v490' in self.data['title']:
-            return self.data['title']['v490'][0]['_']
-
-    @property
-    def journal_title(self):
-        """
-        This method retrieves the journal_title of the given article,
-        if it exists.
-        This method deals with the legacy fields (100).
-        """
-        if 'v100' in self.data['title']:
-            return self.data['title']['v100'][0]['_']
-
-    @property
-    def journal_acronym(self):
-        """
-        This method retrieves the journal_acronym of the given article,
-        if it exists.
-        This method deals with the legacy fields (68).
-        """
-        if 'v68' in self.data['title']:
-            return self.data['title']['v68'][0]['_'].lower()
 
     @property
     def publication_date(self):
@@ -684,9 +816,9 @@ class Article(object):
         """
         This method retrieves the journal url of the given article.
         """
-        if self.scielo_domain:
-            return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(self.scielo_domain,
-                                                                            self.publisher_id[1:10])
+        warnings.warn("deprecated, use journal.url", DeprecationWarning)
+
+        return self.journal.url
 
     def keywords(self, iso_format=None):
         """
@@ -712,16 +844,9 @@ class Article(object):
         """
         This method retrieves the issn of the given article, acoording to the given priority.
         """
-        if priority == u'electronic':
-            if self.electronic_issn:
-                return self.electronic_issn
-            else:
-                return self.print_issn
-        else:
-            if self.print_issn:
-                return self.print_issn
-            else:
-                return self.electronic_issn
+        warnings.warn("deprecated, use journal.any_issn", DeprecationWarning)
+
+        return journal.any_issn(priority=priority)
 
     @property
     def thesis_degree(self):

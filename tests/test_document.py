@@ -96,6 +96,263 @@ class JournalTests(unittest.TestCase):
         journal = self.journal
         self.assertTrue(isinstance(journal, Journal))
 
+    def test_scielo_issn(self):
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.scielo_issn, '2222-2222')
+
+    def test_load_issn_with_v935_without_v35(self):
+        del(self.fulldoc['title']['v35'])
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, None)
+        self.assertEqual(journal.electronic_issn, None)
+
+    def test_load_issn_without_v935_without_v35(self):
+        del(self.fulldoc['title']['v35'])
+        del(self.fulldoc['title']['v935'])
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, None)
+
+    def test_load_issn_without_v935_and_v35_PRINT(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'PRINT'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        del(self.fulldoc['title']['v935'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, u'2222-2222')
+        self.assertEqual(journal.electronic_issn, None)
+
+    def test_load_issn_without_v935_and_v35_ONLINE(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        del(self.fulldoc['title']['v935'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, None)
+        self.assertEqual(journal.electronic_issn, u'2222-2222')
+
+    def test_load_issn_with_v935_and_v35_PRINT(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'PRINT'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, u'3333-3333')
+        self.assertEqual(journal.electronic_issn, u'2222-2222')
+
+    def test_load_issn_with_v935_and_v35_ONLINE(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, u'2222-2222')
+        self.assertEqual(journal.electronic_issn, u'3333-3333')
+
+    def test_load_issn_with_v935_equal_v400_and_v35_PRINT(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'PRINT'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, u'3333-3333')
+        self.assertEqual(journal.electronic_issn, None)
+
+    def test_load_issn_with_v935_equal_v400_and_v35_ONLINE(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, None)
+        self.assertEqual(journal.electronic_issn, u'3333-3333')
+
+    def test_any_issn_priority_electronic(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.any_issn(priority='electronic'), u'3333-3333')
+
+    def test_any_issn_priority_electronic_without_electronic(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'PRINT'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.any_issn(priority='electronic'), u'3333-3333')
+
+    def test_any_issn_priority_print(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.any_issn(priority='print'), u'2222-2222')
+
+    def test_any_issn_priority_print_without_print(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'ONLINE'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
+        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.any_issn(priority='print'), u'3333-3333')
+
+    def test_without_scielo_domain(self):
+        journal = self.journal
+
+        del(journal.data['v690'])
+
+        self.assertEqual(journal.scielo_domain, None)
+
+    def test_without_scielo_domain_title_v690(self):
+        journal = self.journal
+
+        self.assertEqual(journal.scielo_domain, u'www.scielo.br')
+
+    def test_collection_acronym(self):
+
+        self.fulldoc['title']['v992'] = [{'_': 'scl'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.collection_acronym, u'scl')
+
+    def test_without_journal_url(self):
+        journal = self.journal
+
+        del(journal.data['v690'])
+
+        self.assertEqual(journal.url, None)
+
+    def test_journal_url(self):
+        journal = self.journal
+
+        expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X"
+
+        self.assertEqual(journal.url, expected)
+
+    def test_wos_subject_areas(self):
+        self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.wos_subject_areas, [u'MARINE & FRESHWATER BIOLOGY', u'OCEANOGRAPHY'])
+
+    def test_without_wos_subject_areas(self):
+        del(self.fulldoc['title']['v854'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.wos_subject_areas, None)
+
+    def test_journal_abbreviated_title(self):
+        self.fulldoc['title']['v150'] = [{u'_': u'It is the journal title'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.abbreviated_title, u'It is the journal title')
+
+    def test_without_journal_abbreviated_title(self):
+        del(self.fulldoc['title']['v150'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.abbreviated_title, None)
+
+    def test_subject_areas(self):
+        self.fulldoc['title']['v441'] = [{u'_': u'HEALTH SCIENCES'}, {u'_': u'BIOLOGICAL SCIENCES'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subject_areas, [u'HEALTH SCIENCES', u'BIOLOGICAL SCIENCES'])
+
+    def test_without_subject_areas(self):
+        del(self.fulldoc['title']['v441'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subject_areas, None)
+
+    def test_wos_citation_indexes(self):
+        self.fulldoc['title']['v851'] = [{u'_': u'SCIE'}]
+        self.fulldoc['title']['v852'] = [{u'_': u'SSCI'}]
+        self.fulldoc['title']['v853'] = [{u'_': u'AHCI'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.wos_citation_indexes, [u'SCIE', u'SSCI', u'AHCI'])
+
+    def test_without_wos_citation_indexes(self):
+
+        journal = Journal(self.fulldoc)
+
+        self.assertEqual(journal.wos_citation_indexes, None)
+
+    def test_publisher_name(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_name, u'Associação Brasileira de Limnologia')
+
+    def test_without_publisher_name(self):
+        journal = self.journal
+
+        del(journal.data['v480'])
+        self.assertEqual(journal.publisher_name, None)
+
+    def test_publisher_loc(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_loc, u'Rio Claro')
+
+    def test_without_publisher_loc(self):
+        journal = self.journal
+
+        del(journal.data['v490'])
+        self.assertEqual(journal.publisher_loc, None)
+
+    def test_journal_title(self):
+        journal = self.journal
+
+        self.assertEqual(journal.title, u'Acta Limnologica Brasiliensia')
+
+    def test_without_journal_title(self):
+        journal = self.journal
+
+        del(journal.data['v100'])
+        self.assertEqual(journal.title, None)
+
+    def test_journal_acronym(self):
+        journal = self.journal
+
+        self.assertEqual(journal.acronym, u'alb')
+
+    def test_without_journal_acronym(self):
+        journal = self.journal
+
+        del(journal.data['v68'])
+        self.assertEqual(journal.acronym, None)
+
 
 class ArticleTests(unittest.TestCase):
 
@@ -156,14 +413,14 @@ class ArticleTests(unittest.TestCase):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.subject_areas, [u'HEALTH SCIENCES', u'BIOLOGICAL SCIENCES'])
+        self.assertEqual(article.journal.subject_areas, [u'HEALTH SCIENCES', u'BIOLOGICAL SCIENCES'])
 
     def test_without_subject_areas(self):
         del(self.fulldoc['title']['v441'])
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.subject_areas, None)
+        self.assertEqual(article.journal.subject_areas, None)
 
     def test_wos_citation_indexes(self):
         self.fulldoc['title']['v851'] = [{u'_': u'SCIE'}]
@@ -172,13 +429,13 @@ class ArticleTests(unittest.TestCase):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.wos_citation_indexes, [u'SCIE', u'SSCI', u'AHCI'])
+        self.assertEqual(article.journal.wos_citation_indexes, [u'SCIE', u'SSCI', u'AHCI'])
 
     def test_without_wos_citation_indexes(self):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.wos_citation_indexes, None)
+        self.assertEqual(article.journal.wos_citation_indexes, None)
 
     def test_file_code(self):
         article = Article(self.fulldoc)
@@ -204,147 +461,25 @@ class ArticleTests(unittest.TestCase):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.wos_subject_areas, [u'MARINE & FRESHWATER BIOLOGY', u'OCEANOGRAPHY'])
+        self.assertEqual(article.journal.wos_subject_areas, [u'MARINE & FRESHWATER BIOLOGY', u'OCEANOGRAPHY'])
 
     def test_without_wos_subject_areas(self):
         del(self.fulldoc['title']['v854'])
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.wos_subject_areas, None)
+        self.assertEqual(article.journal.wos_subject_areas, None)
 
     def test_journal_abbreviated_title(self):
-        self.fulldoc['article']['v30'] = [{u'_': u'It is the journal title'}]
+        self.fulldoc['title']['v150'] = [{u'_': u'It is the journal title'}]
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.journal_abbreviated_title, u'It is the journal title')
+        self.assertEqual(article.journal.abbreviated_title, u'It is the journal title')
 
     def test_without_journal_abbreviated_title(self):
-        del(self.fulldoc['article']['v30'])
-        self.assertEqual(self.article.journal_abbreviated_title, None)
-
-    def test_scielo_issn(self):
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.scielo_issn, '2222-2222')
-
-    def test_load_issn_with_v935_without_v35(self):
-        del(self.fulldoc['title']['v35'])
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, None)
-        self.assertEqual(article.electronic_issn, None)
-
-    def test_load_issn_without_v935_without_v35(self):
-        del(self.fulldoc['title']['v35'])
-        del(self.fulldoc['title']['v935'])
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, None)
-
-    def test_load_issn_without_v935_and_v35_PRINT(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'PRINT'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        del(self.fulldoc['title']['v935'])
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, u'2222-2222')
-        self.assertEqual(article.electronic_issn, None)
-
-    def test_load_issn_without_v935_and_v35_ONLINE(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        del(self.fulldoc['title']['v935'])
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, None)
-        self.assertEqual(article.electronic_issn, u'2222-2222')
-
-    def test_load_issn_with_v935_and_v35_PRINT(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'PRINT'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, u'3333-3333')
-        self.assertEqual(article.electronic_issn, u'2222-2222')
-
-    def test_load_issn_with_v935_and_v35_ONLINE(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, u'2222-2222')
-        self.assertEqual(article.electronic_issn, u'3333-3333')
-
-    def test_load_issn_with_v935_equal_v400_and_v35_PRINT(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'PRINT'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, u'3333-3333')
-        self.assertEqual(article.electronic_issn, None)
-
-    def test_load_issn_with_v935_equal_v400_and_v35_ONLINE(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.print_issn, None)
-        self.assertEqual(article.electronic_issn, u'3333-3333')
-
-    def test_any_issn_priority_electronic(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.any_issn(priority='electronic'), u'3333-3333')
-
-    def test_any_issn_priority_electronic_without_electronic(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'PRINT'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.any_issn(priority='electronic'), u'3333-3333')
-
-    def test_any_issn_priority_print(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.any_issn(priority='print'), u'2222-2222')
-
-    def test_any_issn_priority_print_without_print(self):
-        self.fulldoc['title']['v35']  = [{u'_': u'ONLINE'}]
-        self.fulldoc['title']['v400'] = [{u'_': u'3333-3333'}]
-        self.fulldoc['title']['v935'] = [{u'_': u'3333-3333'}]
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.any_issn(priority='print'), u'3333-3333')
+        del(self.fulldoc['title']['v150'])
+        self.assertEqual(self.article.journal.abbreviated_title, None)
 
     def test_original_language_iso639_2(self):
         article = self.article
@@ -366,46 +501,46 @@ class ArticleTests(unittest.TestCase):
     def test_publisher_name(self):
         article = self.article
 
-        self.assertEqual(article.publisher_name, u'Associação Brasileira de Limnologia')
+        self.assertEqual(article.journal.publisher_name, u'Associação Brasileira de Limnologia')
 
     def test_without_publisher_name(self):
         article = self.article
 
         del(article.data['title']['v480'])
-        self.assertEqual(article.publisher_name, None)
+        self.assertEqual(article.journal.publisher_name, None)
 
     def test_publisher_loc(self):
         article = self.article
 
-        self.assertEqual(article.publisher_loc, u'Rio Claro')
+        self.assertEqual(article.journal.publisher_loc, u'Rio Claro')
 
     def test_without_publisher_loc(self):
         article = self.article
 
         del(article.data['title']['v490'])
-        self.assertEqual(article.publisher_loc, None)
+        self.assertEqual(article.journal.publisher_loc, None)
 
     def test_journal_title(self):
         article = self.article
 
-        self.assertEqual(article.journal_title, u'Acta Limnologica Brasiliensia')
+        self.assertEqual(article.journal.title, u'Acta Limnologica Brasiliensia')
 
     def test_without_journal_title(self):
         article = self.article
 
         del(article.data['title']['v100'])
-        self.assertEqual(article.journal_title, None)
+        self.assertEqual(article.journal.title, None)
 
     def test_journal_acronym(self):
         article = self.article
 
-        self.assertEqual(article.journal_acronym, u'alb')
+        self.assertEqual(article.journal.acronym, u'alb')
 
     def test_without_journal_acronym(self):
         article = self.article
 
         del(article.data['title']['v68'])
-        self.assertEqual(article.journal_acronym, None)
+        self.assertEqual(article.journal.acronym, None)
 
     def test_publication_date(self):
         article = self.article
@@ -971,23 +1106,6 @@ class ArticleTests(unittest.TestCase):
         expected = u"http://www.scielo.br/scielo.php?script=sci_issuetoc&pid=S2179-975X20110003"
 
         self.assertEqual(article.issue_url, expected)
-
-    def test_without_journal_url(self):
-        article = self.article
-
-        del(article.data['title']['v690'])
-        del(article.data['collection'])
-
-        self.assertEqual(article.journal_url, None)
-
-    def test_journal_url(self):
-        article = self.article
-
-        article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
-
-        expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X"
-
-        self.assertEqual(article.journal_url, expected)
 
     def test_without_keywords(self):
         article = self.article
