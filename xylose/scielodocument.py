@@ -586,8 +586,10 @@ class Article(object):
         This method retrieves the journal abbreviated title of the given article, if it exists.
         This method deals with the legacy fields (30).
         """
-        if 'v30' in self.data['article']:
-            return self.data['article']['v30'][0]['_']
+
+        warnings.warn("deprecated, use journal.abbreviated_title", DeprecationWarning)
+
+        return self.journal.abbreviated_title
 
     @property
     def document_type(self):
