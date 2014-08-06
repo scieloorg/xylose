@@ -1001,15 +1001,18 @@ class ArticleTests(unittest.TestCase):
         ]
 
         expected = [
-            {u'index': u'A02',
+            {u'Normalized': True,
+             u'index': u'A02',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A03',
              u'institution': u'University of Florida Not Normalized',
-             u'country': u'US'},
+             u'country': u'US',
+             u'Normalized': False},
             {u'index': u'A01',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-             u'country': u'Brazil'}
+             u'country': u'Brazil',
+             u'Normalized': True}
         ]
 
         self.assertEqual(article.mixed_affiliations, expected)
