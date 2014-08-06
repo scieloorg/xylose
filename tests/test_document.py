@@ -966,6 +966,185 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.authors, expected)
 
+    def test_mixed_affiliations(self):
+        article = self.article
+
+        article.data['article']['v240'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A02",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            }
+        ]
+
+        article.data['article']['v70'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BRAZIL",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A02",
+                u"p": u"BRAZIL",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A03",
+                u"p": u"US",
+                u"_": u"University of Florida Not Normalized"
+            }
+        ]
+
+        expected = [
+            {u'index': u'A02',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A03',
+             u'institution': u'University of Florida Not Normalized',
+             u'country': u'US'},
+            {u'index': u'A01',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'}
+        ]
+
+        self.assertEqual(article.mixed_affiliations, expected)
+
+    def test_without_normalized_affiliations(self):
+        article = self.article
+
+        self.assertEqual(article.normalized_affiliations, None)
+
+    def test_normalized_affiliations_without_p(self):
+        article = self.article
+
+        article.data['article']['v240'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A02",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A03",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A04",
+                u"p": u"BR",
+                u"_": u"PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO"
+            }
+        ]
+
+        affiliations = [
+            {u'index': u'A01',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A02',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A03',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'},
+            {u'index': u'A04',
+             u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
+             u'country': u'Brazil'}
+        ]
+
+        self.assertEqual(article.normalized_affiliations, affiliations)
+
+    def test_normalized_affiliations_undefined_ISO_3661_CODE(self):
+        article = self.article
+
+        article.data['article']['v240'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A02",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A03",
+                u"p": u"XX",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A04",
+                u"p": u"BR",
+                u"_": u"PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO"
+            }
+        ]
+
+        affiliations = [
+            {u'index': u'A01',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A02',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A03',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'},
+            {u'index': u'A04',
+             u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
+             u'country': u'Brazil'}
+        ]
+
+        self.assertEqual(article.normalized_affiliations, affiliations)
+
+    def test_normalized_affiliations(self):
+        article = self.article
+
+        article.data['article']['v240'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A02",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A03",
+                u"p": u"BR",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+            {
+                u"i": u"A04",
+                u"p": u"BR",
+                u"_": u"PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO"
+            }
+        ]
+
+        affiliations = [
+            {u'index': u'A01',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A02',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A03',
+             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
+             u'country': u'Brazil'},
+            {u'index': u'A04',
+             u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
+             u'country': u'Brazil'}
+        ]
+
+        self.assertEqual(article.normalized_affiliations, affiliations)
+
     def test_without_affiliations(self):
         article = self.article
 
