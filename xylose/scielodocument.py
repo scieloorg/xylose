@@ -738,9 +738,58 @@ class Article(object):
         return authors
 
     @property
+    def mixed_affiliations(self):
+        """
+        This method retrieves the normalized affiliations of the given
+        article, if it exists.
+        If some document does not have all the affiliations normalized, this
+        method will mix the original affiliation data with the normalized data.
+        """
+        original = self.affiliations
+
+        normalized = {}
+        for aff in self.normalized_affiliations:
+            aff['normalized'] = True
+            normalized[aff['index']] = aff
+
+        for aff in self.affiliations:
+            if not aff['index'] in normalized:
+                aff['normalized'] = False
+                normalized[aff['index']] = aff
+
+        return [v for i, v in normalized.items()]
+
+    @property
+    def normalized_affiliations(self):
+        """
+        This method retrieves the affiliations of the given article, if it exists.
+        This method deals with the legacy fields (240).
+        """
+        affiliations = []
+        if 'v240' in self.data['article']:
+            for aff in self.data['article']['v240']:
+                affdict = {}
+                if '_' in aff:
+                    if len(aff['_'].strip()) > 0:
+                        affdict['institution'] = aff['_']
+                        if 'i' in aff:
+                            affdict['index'] = aff['i'].upper()
+                        else:
+                            affdict['index'] = 'nd'
+                        if 'p' in aff and aff['p'] in choices.ISO_3166:
+                            affdict['country'] = choices.ISO_3166[aff['p']]
+
+                        affiliations.append(affdict)
+
+        if len(affiliations) == 0:
+            return None
+
+        return affiliations
+
+    @property
     def affiliations(self):
         """
-        This method retrieves the authors affiliations of the given article, if it exists.
+        This method retrieves the affiliations of the given article, if it exists.
         This method deals with the legacy fields (70).
         """
         affiliations = []
@@ -751,7 +800,7 @@ class Article(object):
                     if len(aff['_'].strip()) > 0:
                         affdict['institution'] = aff['_']
                         if 'i' in aff:
-                            affdict['index'] = aff['i']
+                            affdict['index'] = aff['i'].upper()
                         else:
                             affdict['index'] = 'nd'
                         if 'c' in aff:
