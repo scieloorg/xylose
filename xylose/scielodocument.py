@@ -754,7 +754,7 @@ class Article(object):
                 aff['normalized'] = True
                 normalized[aff['index']] = aff
 
-        if self.normalized_affiliations:
+        if self.affiliations:
             for aff in self.affiliations:
                 if not aff['index'] in normalized:
                     aff['normalized'] = False
