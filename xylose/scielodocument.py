@@ -748,14 +748,17 @@ class Article(object):
         original = self.affiliations
 
         normalized = {}
-        for aff in self.normalized_affiliations:
-            aff['normalized'] = True
-            normalized[aff['index']] = aff
 
-        for aff in self.affiliations:
-            if not aff['index'] in normalized:
-                aff['normalized'] = False
+        if self.normalized_affiliations:
+            for aff in self.normalized_affiliations:
+                aff['normalized'] = True
                 normalized[aff['index']] = aff
+
+        if self.normalized_affiliations:
+            for aff in self.affiliations:
+                if not aff['index'] in normalized:
+                    aff['normalized'] = False
+                    normalized[aff['index']] = aff
 
         return [v for i, v in normalized.items()]
 
