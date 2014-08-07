@@ -1000,22 +1000,13 @@ class ArticleTests(unittest.TestCase):
             }
         ]
 
-        expected = [
-            {u'Normalized': True,
-             u'index': u'A02',
-             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-             u'country': u'Brazil'},
-            {u'index': u'A03',
-             u'institution': u'University of Florida Not Normalized',
-             u'country': u'US',
-             u'Normalized': False},
-            {u'index': u'A01',
-             u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-             u'country': u'Brazil',
-             u'Normalized': True}
-        ]
+        result_index = ''.join([i['index'] for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
+        result_country = ''.join([i['country'] for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
+        result_status = ''.join([str(i['normalized']) for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
 
-        self.assertEqual(article.mixed_affiliations, expected)
+        self.assertEqual(result_index, 'A01A02A03')
+        self.assertEqual(result_country, 'BrazilBrazilUS')
+        self.assertEqual(result_status, 'TrueTrueFalse')
 
     def test_without_normalized_affiliations(self):
         article = self.article
@@ -1063,7 +1054,7 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.normalized_affiliations, affiliations)
 
-    def test_normalized_affiliations_undefined_ISO_3661_CODE(self):
+    def test_normalized_affiliations_undefined_ISO_3166_CODE(self):
         article = self.article
 
         article.data['article']['v240'] = [

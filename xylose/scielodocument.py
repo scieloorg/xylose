@@ -776,8 +776,8 @@ class Article(object):
                             affdict['index'] = aff['i'].upper()
                         else:
                             affdict['index'] = 'nd'
-                        if 'p' in aff and aff['p'] in choices.ISO_3661:
-                            affdict['country'] = choices.ISO_3661[aff['p']]
+                        if 'p' in aff and aff['p'] in choices.ISO_3166:
+                            affdict['country'] = choices.ISO_3166[aff['p']]
 
                         affiliations.append(affdict)
 
