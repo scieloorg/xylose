@@ -243,14 +243,14 @@ class JournalTests(unittest.TestCase):
 
         del(journal.data['v690'])
 
-        self.assertEqual(journal.url, None)
+        self.assertEqual(journal.url(), None)
 
     def test_journal_url(self):
         journal = self.journal
 
-        expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X"
+        expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X&lng=en"
 
-        self.assertEqual(journal.url, expected)
+        self.assertEqual(journal.url(), expected)
 
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
@@ -1235,16 +1235,16 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v690'])
         del(article.data['collection'])
 
-        self.assertEqual(article.pdf_url, None)
+        self.assertEqual(article.pdf_url(), None)
 
     def test_pdf_url(self):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
 
-        expected = u"http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2179-975X2011000300002"
+        expected = u"http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2179-975X2011000300002&lng=en&tlng=en"
 
-        self.assertEqual(article.pdf_url, expected)
+        self.assertEqual(article.pdf_url(), expected)
 
     def test_without_html_url(self):
         article = self.article
@@ -1252,16 +1252,16 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v690'])
         del(article.data['collection'])
 
-        self.assertEqual(article.html_url, None)
+        self.assertEqual(article.html_url(), None)
 
     def test_html_url(self):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
 
-        expected = u"http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002"
+        expected = u"http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&tlng=en"
 
-        self.assertEqual(article.html_url, expected)
+        self.assertEqual(article.html_url(), expected)
 
     def test_without_issue_url(self):
         article = self.article
@@ -1269,16 +1269,16 @@ class ArticleTests(unittest.TestCase):
         del(article.data['title']['v690'])
         del(article.data['collection'])
 
-        self.assertEqual(article.issue_url, None)
+        self.assertEqual(article.issue_url(), None)
 
     def test_issue_url(self):
         article = self.article
 
         article.data['article']['v880'] = [{u'_': u'S2179-975X2011000300002'}]
 
-        expected = u"http://www.scielo.br/scielo.php?script=sci_issuetoc&pid=S2179-975X20110003"
+        expected = u"http://www.scielo.br/scielo.php?script=sci_issuetoc&pid=S2179-975X20110003&lng=en"
 
-        self.assertEqual(article.issue_url, expected)
+        self.assertEqual(article.issue_url(), expected)
 
     def test_without_keywords(self):
         article = self.article
