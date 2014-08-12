@@ -131,16 +131,16 @@ class Journal(object):
 
         return self.data['v400'][0]['_']
 
-    @property
-    def url(self):
+    def url(self, language='en'):
         """
         This method retrieves the journal url of the given article.
         """
 
         if self.scielo_domain:
-            return "http://{0}/scielo.php?script=sci_serial&pid={1}".format(
+            return "http://{0}/scielo.php?script=sci_serial&pid={1}&lng={2}".format(
                 self.scielo_domain,
-                self.scielo_issn
+                self.scielo_issn,
+                language
             )
 
     @property
@@ -838,41 +838,49 @@ class Article(object):
         elif 'v69' in self.data['article']:
             return self.data['article']['v69'][0]['_'].replace('http://', '')
 
-    @property
-    def pdf_url(self):
+    def pdf_url(self, language='en'):
         """
         This method retrieves the pdf url of the given article.
         """
         if self.scielo_domain:
-            return "http://{0}/scielo.php?script=sci_pdf&pid={1}".format(self.scielo_domain,
-                                                                         self.publisher_id)
+            return "http://{0}/scielo.php?script=sci_pdf&pid={1}&lng={2}&tlng={3}".format(
+                self.scielo_domain,
+                self.publisher_id,
+                language,
+                language
+            )
 
-    @property
-    def html_url(self):
+    def html_url(self, language='en'):
         """
         This method retrieves the html url of the given article.
         """
         if self.scielo_domain:
-            return "http://{0}/scielo.php?script=sci_arttext&pid={1}".format(self.scielo_domain,
-                                                                             self.publisher_id)
+            return "http://{0}/scielo.php?script=sci_arttext&pid={1}&lng={2}&tlng={3}".format(
+                self.scielo_domain,
+                self.publisher_id,
+                language,
+                language
+            )
 
-    @property
-    def issue_url(self):
+    def issue_url(self, language='en'):
         """
         This method retrieves the issue url of the given article.
         """
         if self.scielo_domain:
-            return "http://{0}/scielo.php?script=sci_issuetoc&pid={1}".format(self.scielo_domain,
-                                                                              self.publisher_id[0:18])
+            return "http://{0}/scielo.php?script=sci_issuetoc&pid={1}&lng={2}".format(
+                self.scielo_domain,
+                self.publisher_id[0:18],
+                language
+            )
 
     @property
-    def journal_url(self):
+    def journal_url(self, language='en'):
         """
         This method retrieves the journal url of the given article.
         """
         warnings.warn("deprecated, use journal.url", DeprecationWarning)
 
-        return self.journal.url
+        return self.journal.url(language=language)
 
     def keywords(self, iso_format=None):
         """
