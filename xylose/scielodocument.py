@@ -873,7 +873,6 @@ class Article(object):
                 language
             )
 
-    @property
     def journal_url(self, language='en'):
         """
         This method retrieves the journal url of the given article.
