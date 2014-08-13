@@ -569,8 +569,11 @@ class Article(object):
         """
         This method retrieves the DOI of the given article, if it exists.
         """
-        if 'doi' in self.data['article']:
-            return self.data['article']['doi']
+        if 'doi' in self.data:
+            return self.data['doi']
+
+        if 'v237' in self.data['article']:
+            return self.data['article'][0]['v237']['_']
 
     @property
     def publisher_id(self):
