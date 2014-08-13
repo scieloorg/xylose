@@ -729,12 +729,13 @@ class ArticleTests(unittest.TestCase):
     def test_doi(self):
         article = self.article
 
+        article.data['doi'] = u'10.1590/S2179-975X2012005000004'
+
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
 
     def test_without_doi(self):
         article = self.article
 
-        del(article.data['article']['doi'])
         self.assertEqual(article.doi, None)
 
     def test_publisher_id(self):
