@@ -271,10 +271,38 @@ class Article(object):
 
         return self._journal
 
+    def languages(self, iso_format=None):
+        """
+        This method retrieves the languages of the fulltext versions available
+        for the given article. This method deals with the fields (v740, v601 and
+        v720).
+        v740: Original Language (must have fulltext)
+        v720: Field that extracts the fulltext languages from translations in the file system
+        v601: Field that extracts the fulltext languages from translations in the XML files
+        """
+
+        fmt = self._iso_format if not iso_format else iso_format
+
+        languages = {}
+
+        if 'v740' in self.data['article']:
+            languages.setdefault(self.data['article']['v740'][0]['_'], {})
+
+        if 'v601' in self.data['article']:
+            for language in self.data['article']['v601']:
+                languages.setdefault(language['_'], {'xml': self.html_url(language=language['_'])})
+
+        if 'v720' in self.data['article']:
+            for language in self.data['article']['v720']:
+                reg = languages.setdefault(language['l'], {})
+                reg[language['f']] = language['u']
+
+        return languages
+
     @property
     def scielo_issn(self):
         """
-        This method retrieves the original language of the given article.
+        This method retrieves the issn used as id in SciELO.
         This method deals with the legacy fields (v400).
         """
         warnings.warn("deprecated, use journal.scielo_issn", DeprecationWarning)
