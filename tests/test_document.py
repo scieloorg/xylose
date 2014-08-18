@@ -386,7 +386,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'ori',
                 'l': 'pt',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=pt'
             },
             {
                 'v': 'trd',
@@ -398,7 +398,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'trd',
                 'l': 'es',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=es'
             },
             {
                 'v': 'trd',
@@ -410,7 +410,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'trd',
                 'l': 'en',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=en'
             }
 
         ]
@@ -419,11 +419,11 @@ class ArticleTests(unittest.TestCase):
         result = article.languages()
         self.assertEqual(sorted(result.keys()), ['en', 'es', 'pt'])
         self.assertEqual(result['en']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_en.pdf')
-        self.assertEqual(result['en']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en')
+        self.assertEqual(result['en']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=en')
         self.assertEqual(result['es']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_es.pdf')
-        self.assertEqual(result['es']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es')
+        self.assertEqual(result['es']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=es')
         self.assertEqual(result['pt']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01.pdf')
-        self.assertEqual(result['pt']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt')
+        self.assertEqual(result['pt']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=pt')
 
     def test_languages_field_v601_v720(self):
 
@@ -440,7 +440,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'ori',
                 'l': 'pt',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=pt'
             },
             {
                 'v': 'trd',
@@ -452,7 +452,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'trd',
                 'l': 'es',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=es'
             },
             {
                 'v': 'trd',
@@ -464,7 +464,7 @@ class ArticleTests(unittest.TestCase):
                 'v': 'trd',
                 'l': 'en',
                 'f': 'html',
-                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en'
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=en'
             }
 
         ]
@@ -473,12 +473,14 @@ class ArticleTests(unittest.TestCase):
         result = article.languages()
         self.assertEqual(sorted(result.keys()), ['en', 'es', 'pt'])
         self.assertEqual(result['en']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_en.pdf')
-        self.assertEqual(result['en']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en')
+        self.assertEqual(result['en']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=en')
         self.assertEqual(result['es']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_es.pdf')
-        self.assertEqual(result['es']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es')
+        self.assertEqual(result['es']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=es')
         self.assertEqual(result['pt']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01.pdf')
-        self.assertEqual(result['pt']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt')
-        self.assertEqual(result['pt']['xml'], None)
+        self.assertEqual(result['pt']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&nrm=iso&tlng=pt')
+        self.assertEqual(result['es']['xml'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=es&tlng=es')
+        self.assertEqual(result['en']['xml'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=en&tlng=en')
+        self.assertEqual(result['pt']['xml'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-975X2011000300002&lng=pt&tlng=pt')
 
     def test_collection_name_brazil(self):
         self.fulldoc['collection'] = u'scl'
