@@ -290,7 +290,7 @@ class Article(object):
 
         if 'v601' in self.data['article']:
             for language in self.data['article']['v601']:
-                languages.setdefault(language['_'], {'format': 'xml'})
+                languages.setdefault(language['_'], {'xml': None})
 
         if 'v720' in self.data['article']:
             for language in self.data['article']['v720']:
