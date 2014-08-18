@@ -365,6 +365,67 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_languages_field_v601(self):
+
+        self.fulldoc['article']['v601'] = [{'_': 'pt'}, {'_': 'es'}, {'_': 'en'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(sorted(article.languages().keys()), ['en', 'es', 'pt'])
+
+    def test_languages_field_v720(self):
+
+        self.fulldoc['article']['v720'] = [
+            {
+                'v': 'ori',
+                'l': 'pt',
+                'f': 'pdf',
+                'u': 'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01.pdf'
+            },
+            {
+                'v': 'ori',
+                'l': 'pt',
+                'f': 'html',
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt'
+            },
+            {
+                'v': 'trd',
+                'l': 'es',
+                'f': 'pdf',
+                'u': 'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_es.pdf'
+            },
+            {
+                'v': 'trd',
+                'l': 'es',
+                'f': 'html',
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es'
+            },
+            {
+                'v': 'trd',
+                'l': 'en',
+                'f': 'pdf',
+                'u': 'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_en.pdf'
+            },
+            {
+                'v': 'trd',
+                'l': 'en',
+                'f': 'html',
+                'u': 'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en'
+            }
+
+        ]
+
+        article = Article(self.fulldoc)
+        result = article.languages()
+        self.assertEqual(sorted(result.keys()), ['en', 'es', 'pt'])
+        self.assertEqual(result['en']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_en.pdf')
+        self.assertEqual(result['en']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=en')
+        self.assertEqual(result['es']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01_es.pdf')
+        self.assertEqual(result['es']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=es')
+        self.assertEqual(result['pt']['pdf'], u'http://www.scielo.br/pdf/abcd/v22n3/v22n3a01.pdf')
+        self.assertEqual(result['pt']['html'], u'http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0102-67202009000300001&lng=en&nrm=iso&tlng=pt')
+
+
     def test_collection_name_brazil(self):
         self.fulldoc['collection'] = u'scl'
 
