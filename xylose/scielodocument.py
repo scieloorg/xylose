@@ -601,7 +601,7 @@ class Article(object):
             return self.data['doi']
 
         if 'v237' in self.data['article']:
-            return self.data['article'][0]['v237']['_']
+            return self.data['article']['v237'][0]['_']
 
     @property
     def publisher_id(self):
