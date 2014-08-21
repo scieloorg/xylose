@@ -42,25 +42,27 @@ ISO639_1_to_2 = {
 ISO639_1 = set([k for k, v in ISO639_1_to_2.items()])
 
 article_types = {
-    'rc': 'undefined',
     'ab': 'abstract',
-    'pv': 'article-commentary',
-    'ed': 'editorial',
-    'in': 'oration',
-    'tr': 'research-article',
-    'up': 'review-article',
-    'oa': 'research-article',
-    'an': 'undefined',
-    'ax': 'undefined',
-    'mt': 'research-article',
-    'le': 'letter',
-    'ra': 'review-article',
-    'nd': 'undefined',
-    'cr': 'case-report',
-    'sc': 'rapid-communication',
+    'an': 'news',
+    'ax': 'addendum',
     'co': 'article-commentary',
-    'rn': 'brief-report',
+    'cr': 'case-report',
+    'ct': 'research-article',
+    'ed': 'editorial',
+    'er': 'correction',
+    'in': 'editorial',
+    'le': 'letter',
+    'mt': 'research-article',
+    'nd': 'undefined',
+    'oa': 'research-article',
     'pr': 'press-release'
+    'pv': 'editorial',
+    'rc': 'review-article',
+    'rn': 'brief-report',
+    'ra': 'review-article',
+    'sc': 'rapid-communication',
+    'tr': 'research-article',
+    'up': 'undefined'
 }
 
 collections = {
