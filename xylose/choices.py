@@ -55,7 +55,7 @@ article_types = {
     'mt': 'research-article',
     'nd': 'undefined',
     'oa': 'research-article',
-    'pr': 'press-release'
+    'pr': 'press-release',
     'pv': 'editorial',
     'rc': 'review-article',
     'rn': 'brief-report',
