@@ -346,10 +346,16 @@ class Article(object):
             return self.data['collection']
 
         if 'v992' in self.data['article']:
-            return self.data['article']['v992'][0]['_']
+            if isinstance(self.data['v992'], list):
+                return self.data['v992'][0]['_']
+            else:
+                return self.data['v992']
 
-        if 'v992' in self.data['title']:
-            return self.data['title']['v992'][0]['_']
+        if 'v992' in self.data:
+            if isinstance(self.data['v992'], list):
+                return self.data['v992'][0]['_']
+            else:
+                return self.data['v992']
 
     @property
     def subject_areas(self):
