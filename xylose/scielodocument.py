@@ -81,18 +81,21 @@ class Journal(object):
     @property
     def collection_acronym(self):
         """
-        This method retrieves the collection of the given article,
+        This method retrieves the collection of the given journal,
         if it exists.
         This method deals with the legacy fields (v992).
         """
 
         if 'v992' in self.data:
-            return self.data['v992'][0]['_']
+            if isinstance(self.data['v992'], list):
+                return self.data['v992'][0]['_']
+            else:
+                return self.data['v992']
 
     @property
     def scielo_domain(self):
         """
-        This method retrieves the collection domains of the given article, if it exists.
+        This method retrieves the collection domains of the given journal, if it exists.
         This method deals with the legacy fields (690).
         """
 
