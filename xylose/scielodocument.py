@@ -1097,9 +1097,6 @@ class Citation(object):
         if self.publication_type == u'book' and 'v18' in self.data:
             return self.data['v18'][0]['_']
 
-        if self.publication_type == u'thesis' and 'v18' in self.data:
-            return self.data['v18'][0]['_']
-
     @property
     def chapter_title(self):
         """
