@@ -1168,6 +1168,9 @@ class Citation(object):
         if self.publication_type == u'link' and 'v110' in self.data:
             return tools.get_publication_date(self.data['v110'][0]['_'])
 
+        if self.publication_type == u'thesis' and 'v45' in self.data:
+            return tools.get_publication_date(self.data['v45'][0]['_'])
+
         if 'v65' in self.data:
             return tools.get_publication_date(self.data['v65'][0]['_'])
 
