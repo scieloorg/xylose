@@ -1097,6 +1097,9 @@ class Citation(object):
         if self.publication_type == u'book' and 'v18' in self.data:
             return self.data['v18'][0]['_']
 
+        if self.publication_type == u'thesis' and 'v18' in self.data:
+            return self.data['v18'][0]['_']
+
     @property
     def chapter_title(self):
         """
@@ -1381,8 +1384,9 @@ class Citation(object):
         This method retrieves the authors of the given book citation. These authors may
         correspond to a book monography citation.
         """
+        docs = [u'book', u'thesis']
         authors = []
-        if self.publication_type == u'book' and 'v16' in self.data:
+        if self.publication_type in docs and 'v16' in self.data:
             for author in self.data['v16']:
                 authordict = {}
                 if 's' in author:
