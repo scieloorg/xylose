@@ -1140,6 +1140,16 @@ class Citation(object):
         if self.publication_type == u'link' and 'v12' in self.data:
             return self.data['v12'][0]['_']
 
+    def title(self):
+        """
+        This method returns the first title independent of citation type
+        """
+        type_titles = ['article_title', 'thesis_title', 'conference_title', 'link_title']
+
+        for title in type_titles:
+            if getattr(self, title):
+                return getattr(self, title)
+
     @property
     def conference_sponsor(self):
         """

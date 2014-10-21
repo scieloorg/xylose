@@ -1339,7 +1339,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_without_scielo_domain_article_v69_and_with_title_v690(self):
         article = self.article
-        
+
         del(article.data['collection'])
 
         article.data['title']['v690'] = [{u'_': u'http://www.scielo1.br'}]
@@ -1796,7 +1796,6 @@ class CitationTest(unittest.TestCase):
         json_citation = {}
         json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
         json_citation['v12'] = [{u'_': u'It is the link title'}]
-
 
         citation = Citation(json_citation)
 
@@ -2525,3 +2524,70 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.pages, None)
+
+    def test_title_when_article_citation(self):
+        """
+        Test the method citation.title() when it is a article citation.
+        """
+        json_citation = {}
+
+        #when it is a article citation
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is a article title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.title(), u'It is a article title')
+
+    def test_title_when_thesis_citation(self):
+        """
+        Test the method citation.title() when it is a thesis citation.
+        """
+        json_citation = {}
+
+        #when it is a thesis citation
+        json_citation['v18'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v45'] = [{u'_': u'20120000'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.title(), u'It is the thesis title')
+
+    def test_title_when_conference_citation(self):
+        """
+        Test the method citation.title() when it is a conference citation.
+        """
+        json_citation = {}
+
+        #when it is a conference citation
+        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.title(), u'It is the conference title')
+
+    def test_title_when_link_citation(self):
+        """
+        Test the method citation.title() when it is a link citation.
+        """
+        json_citation = {}
+
+        #when it is a link citation
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v12'] = [{u'_': u'It is the link title'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.title(), u'It is the link title')
+
+    def test_title_when_unknow_citation(self):
+        """
+        Test the method citation.title() when unknow citation.
+
+        Its must return None
+        """
+        json_citation = {}
+
+        citation = Citation(json_citation)
+
+        self.assertIsNone(citation.title())
