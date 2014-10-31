@@ -89,7 +89,7 @@ class Journal(object):
             data['text'] = self.data['v540'][0]['t']
             data['url'] = LICENSE_REGEX.findall(self.data['v540'][0]['t'])[0]
             data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
-            if self.data['v540'][0]['t'] == 'en':
+            if self.data['v540'][0]['l'] == 'en':
                 break
 
         return data
@@ -290,6 +290,22 @@ class Article(object):
 
         return self._journal
 
+    @property
+    def permissions(self):
+
+        if 'v540' in self.data:
+            data = {}
+            for license in self.data['v540']:
+                data['text'] = license['t']
+                data['url'] = LICENSE_REGEX.findall(license['t'])[0]
+                data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
+                if license['l'] == 'en':
+                    break
+        else:
+            data = self.journal.permissions
+
+        return data
+
     def languages(self, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
@@ -326,7 +342,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.scielo_issn", DeprecationWarning)
 
-        return journal.scielo_issn
+        return self.journal.scielo_issn
 
     def original_language(self, iso_format=None):
         """
