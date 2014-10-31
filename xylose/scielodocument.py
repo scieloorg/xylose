@@ -85,11 +85,11 @@ class Journal(object):
     def permissions(self):
 
         data = {}
-        for license in self.data['v540']:
-            data['text'] = self.data['v540'][0]['t']
-            data['url'] = LICENSE_REGEX.findall(self.data['v540'][0]['t'])[0]
+        for dlicense in self.data['v540']:
+            data['text'] = dlicense['t']
+            data['url'] = LICENSE_REGEX.findall(dlicense['t'])[0]
             data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
-            if self.data['v540'][0]['l'] == 'en':
+            if dlicense['l'] == 'en':
                 break
 
         return data
@@ -293,13 +293,13 @@ class Article(object):
     @property
     def permissions(self):
 
-        if 'v540' in self.data:
+        if 'v540' in self.data['article']:
             data = {}
-            for license in self.data['v540']:
-                data['text'] = license['t']
-                data['url'] = LICENSE_REGEX.findall(license['t'])[0]
+            for dlicense in self.data['article']['v540']:
+                data['text'] = dlicense['t']
+                data['url'] = LICENSE_REGEX.findall(dlicense['t'])[0]
                 data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
-                if license['l'] == 'en':
+                if dlicense['l'] == 'en':
                     break
         else:
             data = self.journal.permissions

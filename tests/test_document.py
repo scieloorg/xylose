@@ -235,7 +235,7 @@ class JournalTests(unittest.TestCase):
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a> Todo el contenido de esta revista, excepto d\xf3nde est\xe1 identificado, est&#225; bajo una <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Licencia Creative Commons</a>')
+        self.assertEqual(journal.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution License</a>')
 
     def test_without_scielo_domain(self):
         journal = self.journal
