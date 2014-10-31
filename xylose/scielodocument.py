@@ -83,14 +83,28 @@ class Journal(object):
 
     @property
     def permissions(self):
+        data = None
 
-        data = {}
-        for dlicense in self.data['v540']:
-            data['text'] = dlicense['t']
-            data['url'] = LICENSE_REGEX.findall(dlicense['t'])[0]
-            data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
-            if dlicense['l'] == 'en':
-                break
+        if  'v540' in self.data:
+            for dlicense in self.data['v540']:
+                if not 't' in dlicense:
+                    continue
+                license_url = LICENSE_REGEX.findall(dlicense['t'])
+                if len(license_url) == 0:
+                    continue
+
+                license_id = LICENSE_CREATIVE_COMMONS.findall(license_url[0])
+
+                if len(license_id) == 0:
+                    continue
+
+                data = {}
+                data['text'] = dlicense['t']
+                data['url'] = license_url[0]
+                data['id'] = license_id[0]
+
+                if 'l' in dlicense and dlicense['l'] == 'en':
+                    break
 
         return data
 
@@ -292,14 +306,27 @@ class Article(object):
 
     @property
     def permissions(self):
+        data = None
 
-        if 'v540' in self.data['article']:
-            data = {}
-            for dlicense in self.data['article']['v540']:
+        if  'v540' in self.data:
+            for dlicense in self.data['v540']:
+                if not 't' in dlicense:
+                    continue
+                license_url = LICENSE_REGEX.findall(dlicense['t'])
+                if len(license_url) == 0:
+                    continue
+
+                license_id = LICENSE_CREATIVE_COMMONS.findall(license_url[0])
+
+                if len(license_id) == 0:
+                    continue
+
+                data = {}
                 data['text'] = dlicense['t']
-                data['url'] = LICENSE_REGEX.findall(dlicense['t'])[0]
-                data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
-                if dlicense['l'] == 'en':
+                data['url'] = license_url[0]
+                data['id'] = license_id[0]
+
+                if 'l' in dlicense and dlicense['l'] == 'en':
                     break
         else:
             data = self.journal.permissions
