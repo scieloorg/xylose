@@ -218,6 +218,25 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.any_issn(priority='print'), u'3333-3333')
 
+    def test_permission_id(self):
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['id'], 'by-nc')
+
+
+    def test_permission_url(self):
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
+
+    def test_permission_text(self):
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a> Todo el contenido de esta revista, excepto d\xf3nde est\xe1 identificado, est&#225; bajo una <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Licencia Creative Commons</a>')
+
     def test_without_scielo_domain(self):
         journal = self.journal
 

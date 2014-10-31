@@ -2,6 +2,7 @@
 import sys
 from functools import wraps
 import warnings
+import re
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -24,6 +25,8 @@ else:
     html_parser = unescape
 # --------------
 
+LICENSE_REGEX = re.compile(r'a.+href="(.+)"')
+LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*)/.') # Extracts the creative commons id from the url.
 
 def html_decode(string):
 
@@ -77,6 +80,19 @@ class Journal(object):
                 self.electronic_issn = self.data['v935'][0]['_']
                 if self.data['v935'][0]['_'] != self.data['v400'][0]['_']:
                     self.print_issn = self.data['v400'][0]['_']
+
+    @property
+    def permissions(self):
+
+        data = {}
+        for license in self.data['v540']:
+            data['text'] = self.data['v540'][0]['t']
+            data['url'] = LICENSE_REGEX.findall(self.data['v540'][0]['t'])[0]
+            data['id'] = LICENSE_CREATIVE_COMMONS.findall(data['url'])[0]
+            if self.data['v540'][0]['t'] == 'en':
+                break
+
+        return data
 
     @property
     def collection_acronym(self):
