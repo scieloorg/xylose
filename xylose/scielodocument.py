@@ -1156,6 +1156,9 @@ class Citation(object):
         if self.publication_type == u'book' and 'v18' in self.data:
             return self.data['v18'][0]['_']
 
+        if self.publication_type == u'conference' and 'v12' in self.data:
+            return self.data['v12'][0]['_']
+
     @property
     def chapter_title(self):
         """
@@ -1188,7 +1191,11 @@ class Citation(object):
         """
 
         if self.publication_type == u'conference' and 'v53' in self.data:
-            return html_decode(self.data['v53'][0]['_'])
+            titles = []
+            for item in self.data['v53']:
+                titles.append(item['_'])
+
+            return '; '.join(titles)
 
     @property
     def link_title(self):
@@ -1205,9 +1212,13 @@ class Citation(object):
         """
         type_titles = ['article_title', 'thesis_title', 'conference_title', 'link_title']
 
+        titles = []
+
         for title in type_titles:
             if getattr(self, title):
-                return getattr(self, title)
+                titles.append(getattr(self, title))
+
+        return ', '.join(titles)
 
     @property
     def conference_sponsor(self):
@@ -1218,6 +1229,16 @@ class Citation(object):
 
         if self.publication_type == u'conference' and 'v52' in self.data:
             return self.data['v52'][0]['_']
+
+    @property
+    def conference_location(self):
+        """
+        If it is a conference citation, this method retrieves the conference location, if it exists.
+        The conference location is presented like it is in the citation.
+        """
+
+        if self.publication_type == u'conference' and 'v56' in self.data:
+            return self.data['v56'][0]['_']
 
     @property
     def link(self):
@@ -1239,6 +1260,9 @@ class Citation(object):
 
         if self.publication_type == u'thesis' and 'v45' in self.data:
             return tools.get_publication_date(self.data['v45'][0]['_'])
+
+        if self.publication_type == u'conference' and 'v54' in self.data:
+            return tools.get_publication_date(self.data['v54'][0]['_'])
 
         if 'v65' in self.data:
             return tools.get_publication_date(self.data['v65'][0]['_'])
@@ -1355,6 +1379,31 @@ class Citation(object):
 
         if len(institutions) > 0:
             return institutions
+
+    @property
+    def comment(self):
+        """
+        This method retrieves the citation comment, mainly used in link citation
+        if exists (v61).
+        """
+
+        if 'v61' in self.data:
+            return self.data['v61'][0]['_']
+
+    @property
+    def mixed_citation(self):
+        if 'v704' in self.data:
+            return self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', '')
+
+    @property
+    def link_access_date(self):
+        """
+        This method retrieves the citation access date, mainly used in link citation
+        if exists (v109).
+        """
+
+        if 'v109' in self.data:
+            return self.data['v109'][0]['_']
 
     @property
     def issn(self):
