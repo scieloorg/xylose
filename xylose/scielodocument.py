@@ -1530,8 +1530,6 @@ class Citation(object):
             return self.authors[0]
         elif self.monographic_authors:
             return self.monographic_authors[0]
-        else:
-            return None
 
     @property
     def serie(self):
