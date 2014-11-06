@@ -1518,6 +1518,22 @@ class Citation(object):
             return authors
 
     @property
+    def first_author(self):
+        """
+        This property retrieves the first author of the given citation,
+        independent of citation type.
+
+        :returns: dict with keys ``given_names`` and ``surname``
+        """
+
+        if self.authors:
+            return self.authors[0]
+        elif self.monographic_authors:
+            return self.monographic_authors[0]
+        else:
+            return None
+
+    @property
     def serie(self):
         """
         This method retrieves the series title. The serie title must be in a book, article or
