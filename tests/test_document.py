@@ -1121,6 +1121,22 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.authors, expected)
 
+    def test_first_author_without_author(self):
+        article = self.article
+
+        del(article.data['article']['v10'])
+        self.assertEqual(article.first_author, None)
+
+    def test_first_author(self):
+        article = self.article
+
+        expected_author = {u'role': u'ND',
+                           u'xref': [u'A01'],
+                           u'surname': u'Gomes',
+                           u'given_names': u'Caio Isola Dallevo do Amaral'}
+
+        self.assertEqual(article.first_author, expected_author)
+
     def test_mixed_affiliations(self):
         article = self.article
 
