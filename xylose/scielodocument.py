@@ -814,6 +814,17 @@ class Article(object):
         return authors
 
     @property
+    def first_author(self):
+        """
+        This property try do get the first author of the article, otherwise
+        returns None.
+
+        :returns: dict with key ``surname``, ``given_names``, ``role`` adn ``xref``.
+        """
+        if self.authors:
+            return self.authors[0]
+
+    @property
     def corporative_authors(self):
         """
         This method retrieves the organizational authors of the given article, if it exists.
