@@ -1083,6 +1083,8 @@ class Citation(object):
                 return u'thesis'
             else:
                 return u'book'
+        elif 'v150' in self.data:
+            return u'patent'
         elif 'v37' in self.data:
             return u'link'
         else:
@@ -1238,7 +1240,7 @@ class Citation(object):
     def conference_sponsor(self):
         """
         If it is a conference citation, this method retrieves the conference sponsor, if it exists.
-        The conference sponsor is presented like it is in the citation.
+        The conference sponsor is presented like it is in the citation. (v52)
         """
 
         if self.publication_type == u'conference' and 'v52' in self.data:
@@ -1248,7 +1250,7 @@ class Citation(object):
     def conference_location(self):
         """
         If it is a conference citation, this method retrieves the conference location, if it exists.
-        The conference location is presented like it is in the citation.
+        The conference location is presented like it is in the citation. (v56)
         """
 
         if self.publication_type == u'conference' and 'v56' in self.data:
@@ -1275,8 +1277,8 @@ class Citation(object):
         if self.publication_type == u'thesis' and 'v45' in self.data:
             return tools.get_publication_date(self.data['v45'][0]['_'])
 
-        if self.publication_type == u'conference' and 'v54' in self.data:
-            return tools.get_publication_date(self.data['v54'][0]['_'])
+        if self.publication_type == u'conference' and 'v55' in self.data:
+            return tools.get_publication_date(self.data['v55'][0]['_'])
 
         if 'v65' in self.data:
             return tools.get_publication_date(self.data['v65'][0]['_'])
