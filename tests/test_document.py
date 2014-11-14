@@ -1715,7 +1715,7 @@ class CitationTest(unittest.TestCase):
         json_citation = {}
 
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v51'] = [{u'_': u'Grau da these'}]
 
         citation = Citation(json_citation)
 
@@ -1801,7 +1801,7 @@ class CitationTest(unittest.TestCase):
     def test_thesis_title(self):
         json_citation = {}
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v51'] = [{u'_': u'20120000'}]
 
         citation = Citation(json_citation)
 
@@ -1814,15 +1814,15 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.thesis_title, None)
 
-    def test_conference_title(self):
+    def test_conference_name(self):
         json_citation = {}
         json_citation['v53'] = [{u'_': u'It is the conference title'}]
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.conference_title, u'It is the conference title')
+        self.assertEqual(citation.conference_name, u'It is the conference title')
 
-    def test_conference_without_title(self):
+    def test_conference_without_name(self):
         json_citation = {}
 
         citation = Citation(json_citation)
@@ -2563,9 +2563,6 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.pages, None)
 
     def test_title_when_article_citation(self):
-        """
-        Test the method citation.title() when it is a article citation.
-        """
         json_citation = {}
 
         #when it is a article citation
@@ -2577,36 +2574,28 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.title(), u'It is a article title')
 
     def test_title_when_thesis_citation(self):
-        """
-        Test the method citation.title() when it is a thesis citation.
-        """
         json_citation = {}
 
         #when it is a thesis citation
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v51'] = [{u'_': u'20120000'}]
 
         citation = Citation(json_citation)
 
         self.assertEqual(citation.title(), u'It is the thesis title')
 
     def test_title_when_conference_citation(self):
-        """
-        Test the method citation.title() when it is a conference citation.
-        """
         json_citation = {}
 
         #when it is a conference citation
-        json_citation['v53'] = [{u'_': u'It is the conference title'}]
+        json_citation['v53'] = [{u'_': u'It is the conference name'}]
+        json_citation['v12'] = [{u'_': u'It is the conference title'}]
 
         citation = Citation(json_citation)
 
         self.assertEqual(citation.title(), u'It is the conference title')
 
     def test_title_when_link_citation(self):
-        """
-        Test the method citation.title() when it is a link citation.
-        """
         json_citation = {}
 
         #when it is a link citation
@@ -2635,6 +2624,7 @@ class CitationTest(unittest.TestCase):
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.conference_title, u'JORNADAS NACIONALES, 6; Y CONGRESO INTERNACIONAL DE ENSEÑANZA DE LA BIOLOGÍA, 1')
+        self.assertEqual(citation.conference_title, u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales')
+        self.assertEqual(citation.conference_name, u'JORNADAS NACIONALES, 6; Y CONGRESO INTERNACIONAL DE ENSEÑANZA DE LA BIOLOGÍA, 1')
         self.assertEqual(citation.date, u'2004')
         self.assertEqual(citation.conference_location, u'Buenos Aires')

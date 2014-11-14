@@ -1063,15 +1063,15 @@ class Citation(object):
         This method retrieves the publication type of the citation.
         """
 
-        if 'v18' in self.data:
-            if 'v45' in self.data:
-                return u'thesis'
-            else:
-                return u'book'
-        elif 'v12' in self.data and 'v30' in self.data:
+        if 'v12' in self.data and 'v30' in self.data:
             return u'article'
         elif 'v53' in self.data:
             return u'conference'
+        elif 'v18' in self.data:
+            if 'v51' in self.data:
+                return u'thesis'
+            else:
+                return u'book'
         elif 'v37' in self.data:
             return u'link'
         else:
@@ -1153,11 +1153,8 @@ class Citation(object):
         if self.publication_type == u'article' and 'v30' in self.data:
             return self.data['v30'][0]['_']
 
-        if self.publication_type == u'book' and 'v18' in self.data:
+        if self.publication_type in [u'book', u'conference'] and 'v18' in self.data:
             return self.data['v18'][0]['_']
-
-        if self.publication_type == u'conference' and 'v12' in self.data:
-            return self.data['v12'][0]['_']
 
     @property
     def chapter_title(self):
@@ -1186,8 +1183,14 @@ class Citation(object):
 
     @property
     def conference_title(self):
+        if self.publication_type == u'conference' and 'v12' in self.data:
+            return self.data['v12'][0]['_']
+
+
+    @property
+    def conference_name(self):
         """
-        If it is a conference citation, this method retrieves the conference title, if it exists.
+        If it is a conference citation, this method retrieves the conference name, if it exists.
         """
 
         if self.publication_type == u'conference' and 'v53' in self.data:
@@ -1280,11 +1283,11 @@ class Citation(object):
 
     @property
     def first_page(self):
-        pass
+        return self.start_page
 
     @property
     def last_page(self):
-        pass
+        return self.end_page
 
     @property
     def institutions(self):
