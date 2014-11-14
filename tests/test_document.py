@@ -1817,7 +1817,7 @@ class CitationTest(unittest.TestCase):
     def test_thesis_title(self):
         json_citation = {}
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v51'] = [{u'_': u'20120000'}]
+        json_citation['v51'] = [{u'_': u'Grau de Thesis'}]
 
         citation = Citation(json_citation)
 
@@ -2709,7 +2709,7 @@ class CitationTest(unittest.TestCase):
 
         #when it is a thesis citation
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v51'] = [{u'_': u'20120000'}]
+        json_citation['v51'] = [{u'_': u'Grau de Thesis'}]
 
         citation = Citation(json_citation)
 
