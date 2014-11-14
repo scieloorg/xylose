@@ -814,6 +814,17 @@ class Article(object):
         return authors
 
     @property
+    def first_author(self):
+        """
+        This property try do get the first author of the article, otherwise
+        returns None.
+
+        :returns: dict with key ``surname``, ``given_names``, ``role`` adn ``xref``.
+        """
+        if self.authors:
+            return self.authors[0]
+
+    @property
     def corporative_authors(self):
         """
         This method retrieves the organizational authors of the given article, if it exists.
@@ -1519,6 +1530,20 @@ class Citation(object):
 
         if len(authors) > 0:
             return authors
+
+    @property
+    def first_author(self):
+        """
+        This property retrieves the first author of the given citation,
+        independent of citation type.
+
+        :returns: dict with keys ``given_names`` and ``surname``
+        """
+
+        if self.authors:
+            return self.authors[0]
+        elif self.monographic_authors:
+            return self.monographic_authors[0]
 
     @property
     def serie(self):

@@ -1121,6 +1121,22 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.authors, expected)
 
+    def test_first_author_without_author(self):
+        article = self.article
+
+        del(article.data['article']['v10'])
+        self.assertEqual(article.first_author, None)
+
+    def test_first_author(self):
+        article = self.article
+
+        expected_author = {u'role': u'ND',
+                           u'xref': [u'A01'],
+                           u'surname': u'Gomes',
+                           u'given_names': u'Caio Isola Dallevo do Amaral'}
+
+        self.assertEqual(article.first_author, expected_author)
+
     def test_mixed_affiliations(self):
         article = self.article
 
@@ -2392,6 +2408,121 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.monographic_authors, None)
+
+    def test_first_author_article(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+
+        expected = {u'given_names': u'Mike', 'surname': 'Sullivan'}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, expected)
+
+    def test_first_author_thesis(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the thesis title'}]
+        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v10'] = [{u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Sullivan', u'n': u'Mike'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+
+        expected = {u'given_names': u'Adilson', 'surname': 'Maguila Rodrigues'}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, expected)
+
+    def test_first_author_book(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v10'] = [{u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+
+        expected = {u'given_names': u'Rubin', 'surname': 'Hurricane Carter'}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, expected)
+
+    def test_first_author_link(self):
+        json_citation = {}
+
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v10'] = [{u's': u'Acelino Popó Freitas'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u's': u'Zé Marreta'}]
+
+        expected = {u'surname': u'Acelino Popó Freitas'}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, expected)
+
+    def test_without_first_author(self):
+        json_citation = {}
+
+        json_citation['v10'] = []
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, None)
+
+    def test_monographic_first_author(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+
+        expected = {u'given_names': u'Mike', u'surname': u'Sullivan'}
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, expected)
+
+    def test_first_author_without_monographic_authors(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v16'] = []
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, None)
+
+    def test_first_author_without_monographic_authors_but_not_a_book_citation(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.first_author, None)
+
 
     def test_series_journal(self):
         json_citation = {}
