@@ -103,6 +103,20 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.scielo_issn, '2222-2222')
 
+    def test_current_without_v51(self):
+        del(self.fulldoc['title']['v51'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.current_status, u'current')
+
+    def test_status_without_v51(self):
+        del(self.fulldoc['title']['v51'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status_history, [(u'2011-03-25', u'current')])
+
     def test_current_status(self):
         journal = Journal(self.fulldoc['title'])
 

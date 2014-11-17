@@ -284,7 +284,7 @@ class Journal(object):
         history = []
 
         if not 'v51' in self.data:
-            return None
+            return [(self.creation_date, choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress'))]
 
         for item in self.data['v51']:
 
