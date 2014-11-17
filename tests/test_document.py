@@ -103,6 +103,76 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.scielo_issn, '2222-2222')
 
+    def test_current_status(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.current_status, u'current')
+
+    def test_status(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status, [(u'2011-04', u'current')])
+
+    def test_current_status_some_changes(self):
+
+        v51 = [
+            {'a': '19981126', 'c': "20020000", 'b': "C", 'd': "D", '_': ""}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.current_status, u'deceased')
+
+    def test_status_some_changes(self):
+
+        v51 = [
+            {'a': '19981126', 'c': "20020000", 'b': "C", 'd': "D", '_': ""}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status, [('1998-11-26', 'current'), ('2002', 'deceased')])
+
+    def test_status_lots_of_changes(self):
+
+        v51 = [
+            {'a': "20100800", 'b': "C", '_': "" },
+            {'a': "19981016", 'c': "20050100", 'b': "C", 'd': "S", '_': ""}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status, [(u'2010-08', u'current')])
+
+    def test_status_lots_of_changes(self):
+
+        v51 = [
+            {'a': "20100800", 'b': "C", '_': "" },
+            {'a': "19981016", 'c': "20050100", 'b': "C", 'd': "S", '_': ""}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status, [('1998-10-16', 'current'), ('2005-01', 'suspended'), ('2010-08', 'current')])
+
+    def test_creation_date(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.creation_date, '2011-03-25')
+
+    def test_update_date(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.update_date, '2012-08-24')
+
     def test_load_issn_with_v935_without_v35(self):
         del(self.fulldoc['title']['v35'])
         self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]

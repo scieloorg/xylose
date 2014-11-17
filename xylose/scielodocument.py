@@ -273,6 +273,63 @@ class Journal(object):
         if 'v68' in self.data:
             return self.data['v68'][0]['_'].lower()
 
+    @property
+    def status(self):
+        """
+        This method retrieves the journal status of the given journal,
+        if it exists.
+        This method deals with the legacy fields (51) and retrieve a list of
+        statuses sorted ascending according to the date of the status change.
+        """
+        history = []
+
+        if not 'v51' in self.data:
+            return None
+
+        for item in self.data['v51']:
+
+            history.append(
+                (
+                    tools.get_publication_date(item['a']),
+                    choices.journal_status.get(item['b'].lower(), 'inprogress')
+                )
+            )
+
+            if 'c' in item and 'd' in item:
+                history.append(
+                    (
+                        tools.get_publication_date(item['c']),
+                        choices.journal_status.get(item['d'].lower(), 'inprogress')
+                    )
+                )
+
+        return sorted(history)
+
+    @property
+    def current_status(self):
+        """
+        Fast track to get the current_status.
+        """
+
+        return self.status[-1][1]
+
+    @property
+    def creation_date(self):
+        """
+        This method retrieves the creation date of the given journal, if it exists.
+        This method deals with the legacy fields (940).
+        """
+
+        return tools.get_publication_date(self.data['v940'][0]['_'])
+
+    @property
+    def update_date(self):
+        """
+        This method retrieves the update date of the given journal, if it exists.
+        This method deals with the legacy fields (941).
+        """
+
+        return tools.get_publication_date(self.data['v941'][0]['_'])
 
 class Article(object):
 

@@ -360,7 +360,13 @@ ISO_3166 = {
     'MZ': u'Mozambique'
 }
 
-
+journal_status = {
+    'c': 'current',
+    'd': 'deceased',
+    '?': 'inprogress',
+    'p': 'inprogress',
+    's': 'suspended'
+}
 
 
 
