@@ -274,7 +274,7 @@ class Journal(object):
             return self.data['v68'][0]['_'].lower()
 
     @property
-    def status(self):
+    def status_history(self):
         """
         This method retrieves the journal status of the given journal,
         if it exists.
@@ -311,7 +311,7 @@ class Journal(object):
         Fast track to get the current_status.
         """
 
-        return self.status[-1][1]
+        return self.status_history[-1][1]
 
     @property
     def creation_date(self):
