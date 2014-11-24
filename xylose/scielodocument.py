@@ -1131,7 +1131,7 @@ class Citation(object):
         This method retrieves the publication type of the citation.
         """
 
-        if 'v12' in self.data and 'v30' in self.data:
+        if 'v30' in self.data:
             return u'article'
         elif 'v53' in self.data:
             return u'conference'
