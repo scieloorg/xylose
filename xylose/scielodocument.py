@@ -1382,6 +1382,17 @@ class Citation(object):
             return institutions
 
     @property
+    def issn(self):
+        """
+        This method retrieves the journal ISSN if it is present in the citation.
+        This method deals with the legacy field v35.
+        """
+
+        if self.publication_type == 'article':
+            return self.data.get('v35', None)
+
+
+    @property
     def analytic_institution(self):
         """
         This method retrieves the institutions in the given citation. The
@@ -1462,6 +1473,9 @@ class Citation(object):
 
         if 'v61' in self.data:
             return self.data['v61'][0]['_']
+
+        if self.publication_type == u'link' and 'v37' in self.data:
+            return 'Available at: <ext-link ext-link-type="uri" ns0:href="{0}">{1}</ext-link>'.format(self.link, self.link)
 
     @property
     def mixed_citation(self):
