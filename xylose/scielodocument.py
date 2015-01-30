@@ -311,7 +311,14 @@ class Journal(object):
         Fast track to get the current_status.
         """
 
-        return self.status_history[-1][1]
+        last_change = self.status_history[-1][0]
+
+        same_date_statuses = [i[1] for i in self.status_history if i[0] == last_change]
+
+        if len(same_date_statuses) == 1:
+            return same_date_statuses[0]
+
+        return choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress')
 
     @property
     def creation_date(self):
@@ -1475,7 +1482,7 @@ class Citation(object):
             return self.data['v61'][0]['_']
 
         if self.publication_type == u'link' and 'v37' in self.data:
-            return 'Available at: <ext-link ext-link-type="uri" ns0:href="{0}">{1}</ext-link>'.format(self.link, self.link)
+            return u'Available at: <ext-link ext-link-type="uri" ns0:href="{0}">{1}</ext-link>'.format(self.link, self.link)
 
     @property
     def mixed_citation(self):

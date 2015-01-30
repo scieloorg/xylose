@@ -137,6 +137,8 @@ class JournalTests(unittest.TestCase):
 
         journal = Journal(self.fulldoc['title'])
 
+        journal.current_status
+
         self.assertEqual(journal.current_status, u'deceased')
 
     def test_status_some_changes(self):
@@ -176,6 +178,31 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.status_history, [('1998-10-16', 'current'), ('2005-01', 'suspended'), ('2010-08', 'current')])
+
+    def test_status_lots_of_changes_study_case_1(self):
+
+        v51 = [
+            {u'a': u'20140805', u'c': u'20140805', u'b': u'?', u'd': u'C', u'_': u''}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.status_history, [(u'2014-08-05', 'current'), (u'2014-08-05', 'inprogress')])
+
+
+    def test_current_status_lots_of_changes_study_case_1(self):
+
+        v51 = [
+            {u'a': u'20140805', u'c': u'20140805', u'b': u'?', u'd': u'C', u'_': u''}
+        ]
+
+        self.fulldoc['title']['v51'] = v51
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.current_status, u'current')
 
     def test_creation_date(self):
         journal = Journal(self.fulldoc['title'])
