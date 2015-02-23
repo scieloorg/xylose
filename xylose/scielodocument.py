@@ -558,6 +558,7 @@ class Article(object):
 
         return self.journal.acronym
 
+    @property
     def data_model_version(self, fullpath=False):
         """
         This method retrieves the document version
