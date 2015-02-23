@@ -558,6 +558,16 @@ class Article(object):
 
         return self.journal.acronym
 
+    def data_model_version(self, fullpath=False):
+        """
+        This method retrieves the document version
+        This method deals with the legacy fields (601).
+        """
+        if 'v601' in self.data['article']:
+            return 'xml'
+
+        return 'html'
+
     def file_code(self, fullpath=False):
         """
         This method retrieves the file code for the pdf and html files stored
