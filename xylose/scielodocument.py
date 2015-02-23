@@ -558,7 +558,6 @@ class Article(object):
 
         return self.journal.acronym
 
-    @property
     def file_code(self, fullpath=False):
         """
         This method retrieves the file code for the pdf and html files stored
