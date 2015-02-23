@@ -559,16 +559,19 @@ class Article(object):
         return self.journal.acronym
 
     @property
-    def file_code(self):
+    def file_code(self, fullpath=False):
         """
         This method retrieves the file code for the pdf and html files stored
         in the file system.
         This method deals with the legacy fields (702).
         """
+        if fullpath == True and 'v702' in self.data['article']:
+            return self.data['article']['v702'][0]['_']
+
         if 'v702' in self.data['article']:
             splited = self.data['article']['v702'][0]['_'].replace('/', '\\').split('\\')
             filename = splited[-1].split('.')[0]
-            return filename
+            return filename            
 
     @property
     def publication_date(self):
