@@ -409,6 +409,16 @@ class Article(object):
 
         return data
 
+    def xml_languages(self, iso_format=None):
+        """
+        This method retrieves the languages of the fulltext versions available in XML
+        for the given article. This method deals with the fields (v601).
+        v601: Field that extracts the fulltext languages from translations in the XML files
+        """
+
+        if 'v601' in self.data['article']:
+            return [i['_'] for i in self.data['article']['v601']]:
+
     def languages(self, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
@@ -418,8 +428,6 @@ class Article(object):
         v720: Field that extracts the fulltext languages from translations in the file system
         v601: Field that extracts the fulltext languages from translations in the XML files
         """
-
-        fmt = self._iso_format if not iso_format else iso_format
 
         languages = {}
 
