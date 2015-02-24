@@ -417,7 +417,7 @@ class Article(object):
         """
 
         if 'v601' in self.data['article']:
-            return [i['_'] for i in self.data['article']['v601']]:
+            return [i['_'] for i in self.data['article']['v601']]
 
     def languages(self, iso_format=None):
         """
