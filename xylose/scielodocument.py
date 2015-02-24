@@ -109,6 +109,18 @@ class Journal(object):
         return data
 
     @property
+    def languages(self):
+        """
+        This method retrieves a list of possible languages that the journal
+        publishes the fulltexts.
+        This method deals with the legacy fields (v350).
+        """
+        if 'v350' in self.data:
+            langs = [i['_'] for i in self.data['v350'] if i['_'] in choices.ISO639_1_to_2.keys()]
+            if len(langs) > 1:
+                return langs
+
+    @property
     def collection_acronym(self):
         """
         This method retrieves the collection of the given journal,
