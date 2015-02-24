@@ -117,7 +117,7 @@ class Journal(object):
         """
         if 'v350' in self.data:
             langs = [i['_'] for i in self.data['v350'] if i['_'] in choices.ISO639_1_to_2.keys()]
-            if len(langs) > 1:
+            if len(langs) > 0:
                 return langs
 
     @property
