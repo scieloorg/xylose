@@ -465,11 +465,13 @@ class Article(object):
 
         if 'fulltexts' in self.data:
 
-            for lang in self.data['fulltexts']['pdf'].keys():
-                languages.add(lang)
+            if 'pdf' in self.data['fulltexts']:
+                for lang in self.data['fulltexts']['pdf'].keys():
+                    languages.add(lang)
 
-            for lang in self.data['fulltexts']['html'].keys():
-                languages.add(lang)
+            if 'html' in self.data['fulltexts']:
+                for lang in self.data['fulltexts']['html'].keys():
+                    languages.add(lang)
 
         languages.add(self.original_language(iso_format=iso_format))
 
