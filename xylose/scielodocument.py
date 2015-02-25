@@ -419,31 +419,62 @@ class Article(object):
         if 'v601' in self.data['article']:
             return [i['_'] for i in self.data['article']['v601']]
 
-    def languages(self, iso_format=None):
+    @property
+    def issue_label(self):
+        """
+        This method retrieves the issue label. A combined value that describes
+        the entire issue label. Ex: v20n2, v20spe1, etc.
+        """
+
+        if 'v4' in self.data['article']:
+            return self.data['article']['v4'][0]['_']
+
+
+    def fulltexts(self, iso_format=None):
+
+        if 'fulltexts' in self.data:
+            return self.data['fulltexts']
+
+        original_pdf = 'http://%s/pdf/%s/%s/%s.pdf' % (
+            self.scielo_domain,
+            self.journal.acronym.lower(),
+            self.issue_label,
+            self.file_code()
+        )
+        
+        ol = self.original_language(iso_format=iso_format)
+        fulltexts = {
+            'html': {
+                ol: self.html_url(language=ol)
+            },
+            'pdf': {
+                ol: original_pdf
+            }
+        }
+
+        return fulltexts
+
+    def languages(self, show_urls=False, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
-        for the given article. This method deals with the fields (v740, v601 and
-        v720).
-        v740: Original Language (must have fulltext)
-        v720: Field that extracts the fulltext languages from translations in the file system
-        v601: Field that extracts the fulltext languages from translations in the XML files
+        for the given article. This method deals with the fields (fulltexts and 
+        v40).
         """
 
-        languages = {}
+        languages = set()
 
-        if 'v740' in self.data['article']:
-            languages.setdefault(self.data['article']['v740'][0]['_'], {})
+        if 'fulltexts' in self.data:
 
-        if 'v601' in self.data['article']:
-            for language in self.data['article']['v601']:
-                languages.setdefault(language['_'], {'xml': self.html_url(language=language['_'])})
+            for lang in self.data['fulltexts']['pdf'].keys():
+                languages.add(lang)
 
-        if 'v720' in self.data['article']:
-            for language in self.data['article']['v720']:
-                reg = languages.setdefault(language['l'], {})
-                reg[language['f']] = language['u']
+            for lang in self.data['fulltexts']['html'].keys():
+                languages.add(lang)
 
-        return languages
+        languages.add(self.original_language(iso_format=iso_format))
+
+        if len(languages) > 0:
+            return [i for i in languages]
 
     @property
     def scielo_issn(self):
