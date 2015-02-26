@@ -77,7 +77,7 @@ collections = {
     'prt': ['Portugal', 'www.scielo.gpeari.mctes.pt'],
     'cri': ['Costa Rica', 'www.scielo.sa.cr'],
     'ven': ['Venezuela', 'www.scielo.org.ve'],
-    'ury': ['Uruguay', 'www.scielo.org.uy'],
+    'ury': ['Uruguay', 'www.scielo.edu.uy'],
     'per': ['Peru', 'www.scielo.org.pe'],
     'chl': ['Chile', 'www.scielo.cl'],
     'sza': ['South Africa', 'www.scielo.org.za'],
