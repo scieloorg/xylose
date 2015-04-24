@@ -275,6 +275,17 @@ class Journal(object):
             return self.data['v100'][0]['_']
 
     @property
+    def title_nlm(self):
+        """
+        This method retrieves the journal title registered in the PubMed Central
+        of the given article, if it exists.
+        This method deals with the legacy fields (421).
+        """
+
+        if 'v421' in self.data:
+            return self.data['v421'][0]['_']
+
+    @property
     def acronym(self):
         """
         This method retrieves the journal_acronym of the given article,

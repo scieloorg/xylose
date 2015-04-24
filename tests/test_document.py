@@ -503,6 +503,19 @@ class JournalTests(unittest.TestCase):
         del(journal.data['v100'])
         self.assertEqual(journal.title, None)
 
+    def test_journal_title_nlm(self):
+        self.fulldoc['title']['v421'] = [{u'_': u'Acta Limnologica Brasiliensia NLM'}]
+        
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.title_nlm, u'Acta Limnologica Brasiliensia NLM')
+
+    def test_without_journal_title_nlm(self):
+        journal = self.journal
+
+        del(journal.data['v100'])
+        self.assertEqual(journal.title_nlm, None)
+
     def test_journal_acronym(self):
         journal = self.journal
 
