@@ -788,8 +788,9 @@ class Article(object):
         This method deals with the legacy fields (14).
         """
         if 'v14' in self.data['article']:
-            if 'f' in self.data['article']['v14'][0]:
-                return self.data['article']['v14'][0]['f']
+            for item in self.data['article']['v14']:
+                if 'f' in item:
+                    return item['f']
 
     @property
     def end_page(self):
@@ -798,8 +799,9 @@ class Article(object):
         This method deals with the legacy fields (14).
         """
         if 'v14' in self.data['article']:
-            if 'l' in self.data['article']['v14'][0]:
-                return self.data['article']['v14'][0]['l']
+            for item in self.data['article']['v14']:
+                if 'l' in item:
+                    return item['l']
 
     @property
     def doi(self):
