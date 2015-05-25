@@ -792,6 +792,12 @@ class Article(object):
                 if 'f' in item:
                     return item['f']
 
+            # if nothing works until now. we will try once more. It's tested.
+
+            pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
+
+            return pages[0] or None
+
     @property
     def end_page(self):
         """
@@ -802,6 +808,12 @@ class Article(object):
             for item in self.data['article']['v14']:
                 if 'l' in item:
                     return item['l']
+
+            # if nothing works until now. we will try once more. It's tested.
+
+            pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
+
+            return pages[-1] or None
 
     @property
     def doi(self):
