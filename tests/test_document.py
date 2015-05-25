@@ -956,6 +956,22 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v14'][0]['f'])
         self.assertEqual(article.start_page, None)
 
+    def test_start_page_loaded_through_xml(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'',
+                u'l': u'122'
+            },
+            {
+                u'_': u'',
+                u'f': u'110'
+            }
+        ]
+
+        self.assertEqual(article.start_page, u'110')
+
     def test_last_page(self):
         article = self.article
 
@@ -966,6 +982,23 @@ class ArticleTests(unittest.TestCase):
 
         del(article.data['article']['v14'][0]['l'])
         self.assertEqual(article.end_page, None)
+
+    def test_end_page_loaded_through_xml(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'',
+                u'f': u'110'
+            },
+            {
+                u'_': u'',
+                u'l': u'122'
+            }
+        ]
+
+        self.assertEqual(article.end_page, u'122')
+
 
     def test_without_pages(self):
         article = self.article
