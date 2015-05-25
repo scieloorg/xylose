@@ -972,6 +972,28 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.start_page, u'110')
 
+    def test_start_page_loaded_crazy_legacy_way_1(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'110-122',
+            }
+        ]
+
+        self.assertEqual(article.start_page, u'110')
+
+    def test_start_page_loaded_crazy_legacy_way_2(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'122-110',
+            }
+        ]
+
+        self.assertEqual(article.start_page, u'110')
+
     def test_last_page(self):
         article = self.article
 
@@ -999,6 +1021,27 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.end_page, u'122')
 
+    def test_end_page_loaded_crazy_legacy_way_1(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'110-122',
+            }
+        ]
+
+        self.assertEqual(article.end_page, u'122')
+
+    def test_end_page_loaded_crazy_legacy_way_2(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'122-110',
+            }
+        ]
+
+        self.assertEqual(article.end_page, u'122')
 
     def test_without_pages(self):
         article = self.article
