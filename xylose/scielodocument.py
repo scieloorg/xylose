@@ -27,6 +27,7 @@ else:
 
 LICENSE_REGEX = re.compile(r'a.+href="(.+)"')
 LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*)/.') # Extracts the creative commons id from the url.
+DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 
 def html_decode(string):
 
@@ -820,11 +821,22 @@ class Article(object):
         """
         This method retrieves the DOI of the given article, if it exists.
         """
+        raw_doi = None
+
         if 'doi' in self.data:
-            return self.data['doi']
+            raw_doi = self.data['doi']
 
         if 'v237' in self.data['article']:
-            return self.data['article']['v237'][0]['_']
+            raw_doi = self.data['article']['v237'][0]['_']
+
+
+        if not raw_doi:
+            return None
+
+        doi = DOI_REGEX.findall(raw_doi)
+
+        if len(doi) == 1:
+            return doi[0]
 
     @property
     def publisher_id(self):

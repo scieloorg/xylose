@@ -1056,6 +1056,29 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
 
+    def test_doi_v237(self):
+        article = self.article
+
+        article.data['article']['v237'] = [{'_': u'10.1590/S2179-975X2012005000004'}]
+
+        self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
+
+
+    def test_doi_clean_1(self):
+        article = self.article
+
+        article.data['doi'] = u'http://www.crossref.org/10.1590/S2179-975X2012005000004'
+
+        self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
+
+
+    def test_doi_clean_2(self):
+        article = self.article
+
+        article.data['doi'] = u'doi: 10.4322/actalb.02203010'
+
+        self.assertEqual(article.doi, u'10.4322/actalb.02203010')
+
     def test_without_doi(self):
         article = self.article
 
