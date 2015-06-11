@@ -342,6 +342,17 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.any_issn(priority='print'), u'3333-3333')
 
+    def test_permission_t1(self):
+        self.fulldoc['title']['v540'][0] = {
+            "t": '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> Todo el contenido de la revista, excepto dónde está identificado, está bajo una <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es">Licencia Creative Commons</a>',
+            '_': "",
+            'l': "en"
+        }
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['id'], 'by')
+
     def test_permission_id(self):
 
         journal = Journal(self.fulldoc['title'])

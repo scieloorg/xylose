@@ -26,7 +26,7 @@ else:
 # --------------
 
 LICENSE_REGEX = re.compile(r'a.+href="(.+)"')
-LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*)/.') # Extracts the creative commons id from the url.
+LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?)/.') # Extracts the creative commons id from the url.
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 
 def html_decode(string):
