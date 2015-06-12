@@ -397,8 +397,16 @@ class Article(object):
     def permissions(self):
         data = None
 
-        if  'v540' in self.data:
-            for dlicense in self.data['v540']:
+        if 'license' in self.data:
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
+            data['id'] = self.data['license']
+
+            return data
+
+        if  'v540' in self.data['article']:
+            for dlicense in self.data['article']['v540']:
                 if not 't' in dlicense:
                     continue
 
