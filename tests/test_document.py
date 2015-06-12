@@ -353,6 +353,15 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.permissions['id'], 'by/3.0')
 
+    def test_permission_t2(self):
+        
+        self.fulldoc['license'] = 'by-nc/3.0'
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.permissions['id'], 'by-nc/3.0')
+        self.assertEqual(article.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
+
     def test_permission_id(self):
 
         journal = Journal(self.fulldoc['title'])
