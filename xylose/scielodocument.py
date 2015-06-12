@@ -405,6 +405,7 @@ class Article(object):
 
             return data
 
+
         if  'v540' in self.data['article']:
             for dlicense in self.data['article']['v540']:
                 if not 't' in dlicense:
