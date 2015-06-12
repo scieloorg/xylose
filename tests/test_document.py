@@ -351,13 +351,13 @@ class JournalTests(unittest.TestCase):
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.permissions['id'], 'by')
+        self.assertEqual(journal.permissions['id'], 'by/3.0')
 
     def test_permission_id(self):
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.permissions['id'], 'by-nc')
+        self.assertEqual(journal.permissions['id'], 'by-nc/3.0')
 
 
     def test_permission_url(self):

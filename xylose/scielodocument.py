@@ -25,8 +25,8 @@ else:
     html_parser = unescape
 # --------------
 
-LICENSE_REGEX = re.compile(r'a.+href="(.+)"')
-LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?)/.') # Extracts the creative commons id from the url.
+LICENSE_REGEX = re.compile(r'a.+?href="(.+?)"')
+LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the creative commons id from the url.
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 
 def html_decode(string):
@@ -90,6 +90,7 @@ class Journal(object):
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:
                     continue
+
                 license_url = LICENSE_REGEX.findall(dlicense['t'])
                 if len(license_url) == 0:
                     continue
@@ -400,6 +401,7 @@ class Article(object):
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:
                     continue
+
                 license_url = LICENSE_REGEX.findall(dlicense['t'])
                 if len(license_url) == 0:
                     continue
