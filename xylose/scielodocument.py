@@ -86,6 +86,14 @@ class Journal(object):
     def permissions(self):
         data = None
 
+        if 'v541' in self.data:
+            license = '%s/4.0' % self.data['v541'][0]['_'].lower()
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/4.0' % license
+            data['id'] = license
+            return data
+
         if  'v540' in self.data:
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:

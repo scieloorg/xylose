@@ -342,7 +342,16 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.any_issn(priority='print'), u'3333-3333')
 
+    def test_permission_t0(self):
+        self.fulldoc['title']['v541'] = [{'_': 'BY-NC'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['id'], 'by-nc/4.0')
+
     def test_permission_t1(self):
+        del(self.fulldoc['title']['v541'])
+
         self.fulldoc['title']['v540'][0] = {
             "t": '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> Todo el contenido de la revista, excepto dónde está identificado, está bajo una <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es">Licencia Creative Commons</a>',
             '_': "",
@@ -354,6 +363,7 @@ class JournalTests(unittest.TestCase):
         self.assertEqual(journal.permissions['id'], 'by/3.0')
 
     def test_permission_t2(self):
+        del(self.fulldoc['title']['v541'])
         
         self.fulldoc['license'] = 'by-nc/3.0'
 
@@ -363,6 +373,7 @@ class JournalTests(unittest.TestCase):
         self.assertEqual(article.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
 
     def test_permission_id(self):
+        del(self.fulldoc['title']['v541'])
 
         journal = Journal(self.fulldoc['title'])
 
@@ -370,18 +381,21 @@ class JournalTests(unittest.TestCase):
 
 
     def test_permission_url(self):
+        del(self.fulldoc['title']['v541'])
 
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
 
     def test_permission_text(self):
+        del(self.fulldoc['title']['v541'])
 
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution License</a>')
 
     def test_permission_without_v540(self):
+        del(self.fulldoc['title']['v541'])
 
         del(self.fulldoc['title']['v540'])
 
@@ -390,6 +404,7 @@ class JournalTests(unittest.TestCase):
         self.assertEqual(journal.permissions, None)
 
     def test_permission_without_v540_t(self):
+        del(self.fulldoc['title']['v541'])
 
         del(self.fulldoc['title']['v540'])
 
