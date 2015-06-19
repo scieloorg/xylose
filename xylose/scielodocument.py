@@ -86,6 +86,9 @@ class Journal(object):
     def permissions(self):
         data = None
 
+        if 'v541' in self.data and self.data['v541'][0]['_'].lower() == 'nd':
+            return None
+
         if 'v541' in self.data:
             license = '%s/4.0' % self.data['v541'][0]['_'].lower()
             data = {}
