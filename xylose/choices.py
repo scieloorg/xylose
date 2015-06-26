@@ -74,7 +74,7 @@ collections = {
     'sss': ['Social Sciences', 'socialsciences.scielo.org'],
     'spa': ['Health Sciences', 'www.scielosp.org'],
     'mex': ['Mexico', 'www.scielo.org.mx'],
-    'prt': ['Portugal', 'www.scielo.gpeari.mctes.pt'],
+    'prt': ['Portugal', 'www.scielo.mec.pt'],
     'cri': ['Costa Rica', 'www.scielo.sa.cr'],
     'ven': ['Venezuela', 'www.scielo.org.ve'],
     'ury': ['Uruguay', 'www.scielo.edu.uy'],
