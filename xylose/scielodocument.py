@@ -488,10 +488,30 @@ class Article(object):
 
         return fulltexts
 
-    @property
-    def body(self):
+    def original_html(self, iso_format=None):
 
-        return self.data.get('body', None)
+        fmt = iso_format or self._iso_format
+
+        for language, body in self.data.get('body', {}).items():
+            if language == self.original_language(iso_format=fmt):
+                return body
+
+    def translated_htmls(self, iso_format=None):
+
+        fmt = iso_format or self._iso_format
+
+        if not 'body' in self.data:
+            return None
+
+        translated_bodies = {}
+        for language, body in self.data.get('body', {}).items():
+            if language != self.original_language(iso_format=fmt):
+                translated_bodies[language] = body
+
+        if len(translated_bodies) == 0:
+            return None
+
+        return translated_bodies
 
     def languages(self, show_urls=False, iso_format=None):
         """

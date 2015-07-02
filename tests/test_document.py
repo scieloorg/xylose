@@ -580,6 +580,18 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(sorted(article.languages()), [u'en'])
 
+    def test_original_html_field_body(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.original_html(), u'Body EN')
+
+    def test_translated_htmls_field_body(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(sorted([k+v for k, v in article.translated_htmls().items()]), [u'esBody ES', u'ptBody PT'])
+
     def test_issue_label_field_v4(self):
 
         article = Article(self.fulldoc)

@@ -6,6 +6,11 @@
         "0720b071c3eb7d436060c75409675153",
         "4e23781ec1220fef8ca3b144ac0a005d"
     ],
+    "body": {
+        "pt": "Body PT",
+        "es": "Body ES",
+        "en": "Body EN"
+    },
     "title": {
         "v35": [
             {
