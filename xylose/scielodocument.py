@@ -488,6 +488,11 @@ class Article(object):
 
         return fulltexts
 
+    @property
+    def body(self):
+
+        return self.data.get('body', None)
+
     def languages(self, show_urls=False, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
