@@ -1471,14 +1471,17 @@ class ArticleTests(unittest.TestCase):
 
         affiliations = [
             {u'index': u'A01',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A02',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A03',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'},
             {u'index': u'A04',
+             u'country_iso_3166': u'BR',
              u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
              u'country': u'Brazil'}
         ]
@@ -1513,14 +1516,17 @@ class ArticleTests(unittest.TestCase):
 
         affiliations = [
             {u'index': u'A01',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A02',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A03',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'},
             {u'index': u'A04',
+             u'country_iso_3166': u'BR',
              u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
              u'country': u'Brazil'}
         ]
@@ -1555,15 +1561,19 @@ class ArticleTests(unittest.TestCase):
 
         affiliations = [
             {u'index': u'A01',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A02',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A03',
+             u'country_iso_3166': u'BR',
              u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
              u'country': u'Brazil'},
             {u'index': u'A04',
+             u'country_iso_3166': u'BR',
              u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
              u'country': u'Brazil'}
         ]
