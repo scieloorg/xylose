@@ -574,6 +574,27 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_session_code_field_v49(self):
+        self.fulldoc['article']['v49'] = [{'_': 'RSP10'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.session_code, 'RSP10')
+
+    def test_session_code_nd_field_v49(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.session_code, None)
+
+    def test_session_code_without_field_v49(self):
+
+        del(self.fulldoc['article']['v49'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.session_code, None)
+
     def test_languages_field_v40(self):
 
         article = Article(self.fulldoc)

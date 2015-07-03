@@ -443,6 +443,20 @@ class Article(object):
 
         return data
 
+    @property
+    def session_code(self):
+        """
+        This method retrieves the session code for the given article.
+        This method deals with the fields (v49).
+        """
+
+        session = self.data['article'].get('v49', [{'_': None}])[0]['_']
+
+        if session == 'nd':
+            return None
+
+        return session
+
     def xml_languages(self, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available in XML
