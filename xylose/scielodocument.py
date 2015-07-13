@@ -1151,7 +1151,7 @@ class Article(object):
                 if 'e' in aff:
                     affdict['email'] = aff['e']
                 if 'd' in aff:
-                    affdict['department'] = aff['d']
+                    affdict['division'] = aff['d']
 
                 affiliations.append(affdict)
 
