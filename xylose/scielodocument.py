@@ -1139,23 +1139,21 @@ class Article(object):
         if 'v70' in self.data['article']:
             for aff in self.data['article']['v70']:
                 affdict = {}
-                if '_' in aff:
-                    if len(aff['_'].strip()) > 0:
-                        affdict['institution'] = aff['_']
-                        if 'i' in aff:
-                            affdict['index'] = aff['i'].upper()
-                        else:
-                            affdict['index'] = 'nd'
-                        if 'c' in aff:
-                            affdict['addr_line'] = aff['c']
-                        if 'p' in aff:
-                            affdict['country'] = aff['p']
-                        if 'e' in aff:
-                            affdict['email'] = aff['e']
-                        if 'd' in aff:
-                            affdict['department'] = aff['d']
+                affdict['institution'] = aff.get('_', '')
+                if 'i' in aff:
+                    affdict['index'] = aff['i'].upper()
+                else:
+                    affdict['index'] = 'nd'
+                if 'c' in aff:
+                    affdict['addr_line'] = aff['c']
+                if 'p' in aff:
+                    affdict['country'] = aff['p']
+                if 'e' in aff:
+                    affdict['email'] = aff['e']
+                if 'd' in aff:
+                    affdict['department'] = aff['d']
 
-                        affiliations.append(affdict)
+                affiliations.append(affdict)
 
         if len(affiliations) == 0:
             return None

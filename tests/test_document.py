@@ -1672,7 +1672,9 @@ class ArticleTests(unittest.TestCase):
                                            u"s": u"SP",
                                            u"z": u"18052-780"}]
 
-        self.assertEqual(article.affiliations, None)
+        expected = [{'index': u'A03', 'addr_line': u'Sorocaba', 'institution': '', 'email': u'mcetra@ufscar.br', 'country': u'BRAZIL'}]
+
+        self.assertEqual(article.affiliations, expected)
 
     def test_affiliation_just_with_affiliation_name(self):
         article = self.article
