@@ -1443,7 +1443,7 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.first_author, expected_author)
 
-    def test_mixed_affiliations(self):
+    def test_mixed_affiliations_1(self):
         article = self.article
 
         article.data['article']['v240'] = [
