@@ -1477,9 +1477,11 @@ class ArticleTests(unittest.TestCase):
             }
         ]
 
-        result_index = ''.join([i['index'] for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
-        result_country = ''.join([i['country'] for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
-        result_status = ''.join([str(i['normalized']) for i in sorted(article.mixed_affiliations,  key=lambda k: k['index'])])
+        amc = article.mixed_affiliations
+
+        result_index = ''.join([i['index'] for i in sorted(amc,  key=lambda k: k['index'])])
+        result_country = ''.join([i['country'] for i in sorted(amc,  key=lambda k: k['index'])])
+        result_status = ''.join([str(i['normalized']) for i in sorted(amc,  key=lambda k: k['index'])])
 
         self.assertEqual(result_index, 'A01A02A03')
         self.assertEqual(result_country, 'BrazilBrazilUS')
@@ -1634,30 +1636,43 @@ class ArticleTests(unittest.TestCase):
 
     def test_affiliations(self):
         article = self.article
+        expected = [
+            {
+                'index': u'A01',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'email': u'caioisola@yahoo.com.br',
+                'state': u'SP',
+                'orgdiv1': u'Departamento de Ci\xeancias Biol\xf3gicas',
+                'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
+            }, {
+                'index': u'A02',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'email': u'alex_peressin@yahoo.com.br',
+                'state': u'SP',
+                'orgdiv1': u'Programa de P\xf3s-Gradua\xe7\xe3o em Diversidade Biol\xf3gica e Conserva\xe7\xe3o',
+                'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
+            }, {
+                'index': u'A03',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'email': u'mcetra@ufscar.br',
+                'state': u'SP',
+                'orgdiv1': u'Departamento de Ci\xeancias Ambientais',
+                'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
+            }, {
+                'index': u'A04',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'email': u'vbarrella@pucsp.br',
+                'state': u'SP',
+                'orgdiv1': u'Laborat\xf3rio de Ecossistemas Aqu\xe1ticos',
+                'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO'
+            }
+        ]
 
-        affiliations = [
-                        {u'index': u'A01',
-                         u'addr_line': u'Sorocaba',
-                         u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-                         u'email': u'caioisola@yahoo.com.br',
-                         u'country': u'BRAZIL'},
-                        {u'index': u'A02',
-                         u'addr_line': u'Sorocaba',
-                         u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-                         u'email': u'alex_peressin@yahoo.com.br',
-                         u'country': u'BRAZIL'},
-                        {u'index': u'A03',
-                         u'addr_line': u'Sorocaba',
-                         u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS',
-                         u'email': u'mcetra@ufscar.br',
-                         u'country': u'BRAZIL'},
-                        {u'index': u'A04',
-                         u'addr_line': u'Sorocaba',
-                         u'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO',
-                         u'email': u'vbarrella@pucsp.br',
-                         u'country': u'BRAZIL'}]
-
-        self.assertEqual(article.affiliations, affiliations)
+        self.assertEqual(article.affiliations, expected)
 
     def test_affiliation_without_affiliation_name(self):
         article = self.article
@@ -1667,12 +1682,23 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v70'] = [{u"c": u"Sorocaba",
                                            u"e": u"mcetra@ufscar.br",
                                            u"i": u"A03",
-                                           u"1": u"Departamento de Ci\u00eancias Ambientais",
+                                           u"1": u"Departamento de Ci\u00eancias Ambientais 1",
+                                           u"2": u"Departamento de Ci\u00eancias Ambientais 2",
                                            u"p": u"BRAZIL",
                                            u"s": u"SP",
                                            u"z": u"18052-780"}]
 
-        expected = [{'index': u'A03', 'addr_line': u'Sorocaba', 'institution': '', 'email': u'mcetra@ufscar.br', 'country': u'BRAZIL'}]
+        expected = [
+            {
+                'index': u'A03',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
+                'email': u'mcetra@ufscar.br', 'state': u'SP',
+                'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
+                'institution': ''
+            }
+        ]
 
         self.assertEqual(article.affiliations, expected)
 

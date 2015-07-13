@@ -1083,20 +1083,20 @@ class Article(object):
         If some document does not have all the affiliations normalized, this
         method will mix the original affiliation data with the normalized data.
         """
-        original = self.affiliations
-
         normalized = {}
-
-        if self.normalized_affiliations:
-            for aff in self.normalized_affiliations:
-                aff['normalized'] = True
-                normalized[aff['index']] = aff
 
         if self.affiliations:
             for aff in self.affiliations:
+                    normalized[aff['index']] = aff.copy()
+                    normalized[aff['index']]['normalized'] = False
+
+        if self.normalized_affiliations:
+            for aff in self.normalized_affiliations:
                 if not aff['index'] in normalized:
-                    aff['normalized'] = False
-                    normalized[aff['index']] = aff
+                    continue
+                normalized[aff['index']]['normalized'] = True
+                normalized[aff['index']]['country'] = aff['country']
+                normalized[aff['index']]['institution'] = aff['institution']
 
         return [v for i, v in normalized.items()]
 
@@ -1145,13 +1145,19 @@ class Article(object):
                 else:
                     affdict['index'] = 'nd'
                 if 'c' in aff:
-                    affdict['addr_line'] = aff['c']
+                    affdict['city'] = aff['c']
+                if 's' in aff:
+                    affdict['state'] = aff['s']
                 if 'p' in aff:
                     affdict['country'] = aff['p']
                 if 'e' in aff:
                     affdict['email'] = aff['e']
                 if 'd' in aff:
                     affdict['division'] = aff['d']
+                if '1' in aff:
+                    affdict['orgdiv1'] = aff['1']
+                if '2' in aff:
+                    affdict['orgdiv2'] = aff['2']
 
                 affiliations.append(affdict)
 
