@@ -372,6 +372,52 @@ class JournalTests(unittest.TestCase):
         self.assertEqual(article.permissions['id'], 'by-nc/3.0')
         self.assertEqual(article.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
 
+    def test_permission_t3(self):
+
+        self.fulldoc['article']['v540'] = [
+            {
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u"en"
+            },{
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'es'
+            },{
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'pt'
+            }
+        ]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.permissions['id'], 'by-nc/4.0')
+        self.assertEqual(article.permissions['url'], 'http://creativecommons.org/licenses/by-nc/4.0/')
+
+    def test_permission_t4(self):
+
+        self.fulldoc['title']['v540'] = [
+            {
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u"en"
+            },{
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'es'
+            },{
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'pt'
+            }
+        ]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.permissions['id'], 'by-nc/4.0')
+        self.assertEqual(journal.permissions['url'], 'http://creativecommons.org/licenses/by-nc/4.0/')
+
     def test_permission_id(self):
         del(self.fulldoc['title']['v541'])
 

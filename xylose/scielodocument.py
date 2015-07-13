@@ -93,7 +93,7 @@ class Journal(object):
             license = '%s/4.0' % self.data['v541'][0]['_'].lower()
             data = {}
             data['text'] = None
-            data['url'] = 'http://creativecommons.org/licenses/%s/4.0' % license
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % license
             data['id'] = license
             return data
 
