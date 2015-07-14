@@ -1095,8 +1095,8 @@ class Article(object):
                 if not aff['index'] in normalized:
                     continue
                 normalized[aff['index']]['normalized'] = True
-                normalized[aff['index']]['country'] = aff['country']
-                normalized[aff['index']]['institution'] = aff['institution']
+                normalized[aff['index']]['country'] = aff.get('country', '')
+                normalized[aff['index']]['institution'] = aff.get('institution', '')
 
         return [v for i, v in normalized.items()]
 
