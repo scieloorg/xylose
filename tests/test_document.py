@@ -3091,7 +3091,7 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.link, u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >')
         self.assertEqual(citation.comment, u'Disponible en: <ext-link ext-link-type="uri" ns0:href="&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;">&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;</ext-link>')
         self.assertEqual(citation.link_access_date, u'Visitado el: 18 Jul. 2014')
-        self.assertEqual(citation.mixed_citation, "CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.")
+        self.assertEqual(citation.mixed_citation, u"CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: <http://files.eric.ed.gov/fulltext/ED405219.pdf >. Visitado el: 18 Jul. 2014.")
 
 
     def test_citation_sample_link_without_comment(self):
@@ -3104,7 +3104,7 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.link, u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >')
         self.assertEqual(citation.comment, u'Available at: <ext-link ext-link-type="uri" ns0:href="<http://files.eric.ed.gov/fulltext/ED405219.pdf >"><http://files.eric.ed.gov/fulltext/ED405219.pdf ></ext-link>')
         self.assertEqual(citation.link_access_date, u'Visitado el: 18 Jul. 2014')
-        self.assertEqual(citation.mixed_citation, "CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.")
+        self.assertEqual(citation.mixed_citation, u"CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: <http://files.eric.ed.gov/fulltext/ED405219.pdf >. Visitado el: 18 Jul. 2014.")
 
     def test_citation_sample_congress(self):
 

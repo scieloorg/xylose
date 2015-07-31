@@ -432,7 +432,7 @@ class Article(object):
                     continue
 
                 data = {}
-                data['text'] = dlicense['t']
+                data['text'] = html_decode(dlicense['t'])
                 data['url'] = license_url[0]
                 data['id'] = license_id[0]
 
@@ -616,7 +616,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.subject_areas", DeprecationWarning)
 
-        return self.journal.subject_areas
+        return html_decode(self.journal.subject_areas)
 
     @property
     def wos_subject_areas(self):
@@ -627,7 +627,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.wos_subject_areas", DeprecationWarning)
 
-        return self.journal.wos_subject_areas
+        return html_decode(self.journal.wos_subject_areas)
 
     @property
     def wos_citation_indexes(self):
@@ -638,7 +638,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.wos_citation_index", DeprecationWarning)
 
-        return self.journal.wos_citation_indexes
+        return html_decode(self.journal.wos_citation_indexes)
 
     @property
     def publisher_name(self):
@@ -649,7 +649,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.publisher_name", DeprecationWarning)
 
-        return self.journal.publisher_name
+        return html_decode(self.journal.publisher_name)
 
     @property
     def publisher_loc(self):
@@ -660,7 +660,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.publisher_loc", DeprecationWarning)
 
-        return self.journal.publisher_loc
+        return html_decode(self.journal.publisher_loc)
 
     @property
     def journal_title(self):
@@ -671,7 +671,7 @@ class Article(object):
         """
         warnings.warn("deprecated, use journal.title", DeprecationWarning)
 
-        return self.journal.title
+        return html_decode(self.journal.title)
 
     @property
     def journal_acronym(self):
@@ -774,7 +774,7 @@ class Article(object):
         This method deals with the legacy fields (60).
         """
         if 'v60' in self.data['article']:
-            return self.data['article']['v60'][0]['_']
+            return html_decode(self.data['article']['v60'][0]['_'])
 
     @property
     def project_name(self):
@@ -783,7 +783,7 @@ class Article(object):
         This method deals with the legacy fields (59).
         """
         if 'v59' in self.data['article']:
-            return self.data['article']['v59'][0]['_']
+            return html_decode(self.data['article']['v59'][0]['_'])
 
     @property
     def project_sponsor(self):
@@ -796,9 +796,9 @@ class Article(object):
             for sponsor in self.data['article']['v58']:
                 authordict = {}
                 if '_' in sponsor:
-                    authordict['orgname'] = sponsor['_']
+                    authordict['orgname'] = html_decode(sponsor['_'])
                 if 'd' in sponsor:
-                    authordict['orgdiv'] = sponsor['d']
+                    authordict['orgdiv'] = html_decode(sponsor['d'])
 
                 sponsors.append(authordict)
 
@@ -1022,17 +1022,17 @@ class Article(object):
             for author in self.data['article']['v10']:
                 authordict = {}
                 if 's' in author:
-                    authordict['surname'] = author['s']
+                    authordict['surname'] = html_decode(author['s'])
                 else:
                     authordict['surname'] = ''
                 if 'n' in author:
-                    authordict['given_names'] = author['n']
+                    authordict['given_names'] = html_decode(author['n'])
                 else:
                     authordict['given_names'] = ''
                 if 'r' in author:
-                    authordict['role'] = author['r']
+                    authordict['role'] = html_decode(author['r'])
                 if '1' in author:
-                    authordict['xref'] = author['1'].split(' ')
+                    authordict['xref'] = html_decode(author['1'].split(' '))
 
                 authors.append(authordict)
 
@@ -1064,9 +1064,9 @@ class Article(object):
                 authordict = {}
 
                 if '_' in author:
-                    authordict['orgname'] = author['_']
+                    authordict['orgname'] = html_decode(author['_'])
                 if 'd' in author:
-                    authordict['orgdiv'] = author['d']
+                    authordict['orgdiv'] = html_decode(author['d'])
 
                 authors.append(authordict)
 
@@ -1112,7 +1112,7 @@ class Article(object):
                 affdict = {}
                 if '_' in aff:
                     if len(aff['_'].strip()) > 0:
-                        affdict['institution'] = aff['_']
+                        affdict['institution'] = html_decode(aff['_'])
                         if 'i' in aff:
                             affdict['index'] = aff['i'].upper()
                         else:
@@ -1139,25 +1139,25 @@ class Article(object):
         if 'v70' in self.data['article']:
             for aff in self.data['article']['v70']:
                 affdict = {}
-                affdict['institution'] = aff.get('_', '')
+                affdict['institution'] = html_decode(aff.get('_', ''))
                 if 'i' in aff:
-                    affdict['index'] = aff['i'].upper()
+                    affdict['index'] = html_decode(aff['i'].upper())
                 else:
                     affdict['index'] = 'nd'
                 if 'c' in aff:
-                    affdict['city'] = aff['c']
+                    affdict['city'] = html_decode(aff['c'])
                 if 's' in aff:
-                    affdict['state'] = aff['s']
+                    affdict['state'] = html_decode(aff['s'])
                 if 'p' in aff:
-                    affdict['country'] = aff['p']
+                    affdict['country'] = html_decode(aff['p'])
                 if 'e' in aff:
-                    affdict['email'] = aff['e']
+                    affdict['email'] = html_decode(aff['e'])
                 if 'd' in aff:
-                    affdict['division'] = aff['d']
+                    affdict['division'] = html_decode(aff['d'])
                 if '1' in aff:
-                    affdict['orgdiv1'] = aff['1']
+                    affdict['orgdiv1'] = html_decode(aff['1'])
                 if '2' in aff:
-                    affdict['orgdiv2'] = aff['2']
+                    affdict['orgdiv2'] = html_decode(aff['2'])
 
                 affiliations.append(affdict)
 
@@ -1240,7 +1240,7 @@ class Article(object):
                 if 'k' in keyword and 'l' in keyword:
                     language = tools.get_language(keyword['l'], fmt)
                     group = keywords.setdefault(language, [])
-                    group.append(keyword['k'])
+                    group.append(html_decode(keyword['k']))
 
         if len(keywords) == 0:
             return None
@@ -1262,7 +1262,7 @@ class Article(object):
         This method deals with the legacy fields (51).
         """
         if 'v51' in self.data['article']:
-            return self.data['article']['v51'][0]['_']
+            return html_decode(self.data['article']['v51'][0]['_'])
 
     @property
     def thesis_organization(self):
@@ -1276,9 +1276,9 @@ class Article(object):
             for organization in self.data['article']['v52']:
                 org = {}
                 if '_' in organization:
-                    org = {'name': organization['_']}
+                    org = {'name': html_decode(organization['_'])}
                 if 'd' in organization:
-                    org.update({'division': organization['d']})
+                    org.update({'division': html_decode(organization['d'])})
 
                 organizations.append(org)
 
@@ -1400,10 +1400,10 @@ class Citation(object):
         Book: Alice's Adventures in Wonderland
         """
         if self.publication_type == u'article' and 'v30' in self.data:
-            return self.data['v30'][0]['_']
+            return html_decode(self.data['v30'][0]['_'])
 
         if self.publication_type in [u'book', u'conference'] and 'v18' in self.data:
-            return self.data['v18'][0]['_']
+            return html_decode(self.data['v18'][0]['_'])
 
     @property
     def chapter_title(self):
@@ -1433,7 +1433,7 @@ class Citation(object):
     @property
     def conference_title(self):
         if self.publication_type == u'conference' and 'v12' in self.data:
-            return self.data['v12'][0]['_']
+            return html_decode(self.data['v12'][0]['_'])
 
 
     @property
@@ -1445,7 +1445,7 @@ class Citation(object):
         if self.publication_type == u'conference' and 'v53' in self.data:
             titles = []
             for item in self.data['v53']:
-                titles.append(item['_'])
+                titles.append(html_decode(item['_']))
 
             return '; '.join(titles)
 
@@ -1456,7 +1456,7 @@ class Citation(object):
         """
 
         if self.publication_type == u'link' and 'v12' in self.data:
-            return self.data['v12'][0]['_']
+            return html_decode(self.data['v12'][0]['_'])
 
     def title(self):
         """
@@ -1480,7 +1480,7 @@ class Citation(object):
         """
 
         if self.publication_type == u'conference' and 'v52' in self.data:
-            return self.data['v52'][0]['_']
+            return html_decode(self.data['v52'][0]['_'])
 
     @property
     def conference_location(self):
@@ -1490,7 +1490,7 @@ class Citation(object):
         """
 
         if self.publication_type == u'conference' and 'v56' in self.data:
-            return self.data['v56'][0]['_']
+            return html_decode(self.data['v56'][0]['_'])
 
     @property
     def link(self):
@@ -1528,7 +1528,7 @@ class Citation(object):
 
         if self.publication_type in [u'conference', u'book']:
             if 'v63' in self.data:
-                return self.data['v63'][0]['_']
+                return html_decode(self.data['v63'][0]['_'])
 
     @property
     def first_page(self):
@@ -1547,15 +1547,15 @@ class Citation(object):
 
         institutions = []
         if 'v11' in self.data:
-            institutions.append(self.data['v11'][0]['_'])
+            institutions.append(html_decode(self.data['v11'][0]['_']))
         if 'v17' in self.data:
-            institutions.append(self.data['v17'][0]['_'])
+            institutions.append(html_decode(self.data['v17'][0]['_']))
         if 'v29' in self.data:
-            institutions.append(self.data['v29'][0]['_'])
+            institutions.append(html_decode(self.data['v29'][0]['_']))
         if 'v50' in self.data:
-            institutions.append(self.data['v50'][0]['_'])
+            institutions.append(html_decode(self.data['v50'][0]['_']))
         if 'v58' in self.data:
-            institutions.append(self.data['v58'][0]['_'])
+            institutions.append(html_decode(self.data['v58'][0]['_']))
 
         if len(institutions) > 0:
             return institutions
@@ -1581,7 +1581,7 @@ class Citation(object):
         if self.publication_type in [u'article', u'book'] and 'v11' in self.data:
             if 'v11' in self.data:
                 for institution in self.data['v11']:
-                    institutions.append(self.data['v11'][0]['_'])
+                    institutions.append(html_decode(self.data['v11'][0]['_']))
 
         if len(institutions) > 0:
             return institutions
@@ -1596,7 +1596,7 @@ class Citation(object):
         if self.publication_type == u'book' and 'v17' in self.data:
             if 'v17' in self.data:
                 for institution in self.data['v17']:
-                    institutions.append(self.data['v17'][0]['_'])
+                    institutions.append(html_decode(self.data['v17'][0]['_']))
 
         if len(institutions) > 0:
             return institutions
@@ -1609,7 +1609,7 @@ class Citation(object):
         sponsors = []
         if 'v58' in self.data:
             for sponsor in self.data['v58']:
-                sponsors.append(self.data['v58'][0]['_'])
+                sponsors.append(html_decode(self.data['v58'][0]['_']))
 
         if len(sponsors) > 0:
             return sponsors
@@ -1623,7 +1623,7 @@ class Citation(object):
         editors = []
         if 'v29' in self.data:
             for editor in self.data['v29']:
-                editors.append(self.data['v29'][0]['_'])
+                editors.append(html_decode(self.data['v29'][0]['_']))
 
         if len(editors) > 0:
             return editors
@@ -1638,7 +1638,7 @@ class Citation(object):
         institutions = []
         if 'v50' in self.data:
             for institution in self.data['v50']:
-                institutions.append(self.data['v50'][0]['_'])
+                institutions.append(html_decode(self.data['v50'][0]['_']))
 
         if len(institutions) > 0:
             return institutions
@@ -1659,7 +1659,7 @@ class Citation(object):
     @property
     def mixed_citation(self):
         if 'v704' in self.data:
-            return self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', '')
+            return html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
 
     @property
     def link_access_date(self):
@@ -1720,7 +1720,7 @@ class Citation(object):
         """
 
         if self.publication_type in u'article' and 'v33' in self.data:
-            return html_decode(html_decode(self.data['v33'][0]['_']))
+            return html_decode(html_decode(html_decode(self.data['v33'][0]['_'])))
 
     @property
     def issue_part(self):
@@ -1730,7 +1730,7 @@ class Citation(object):
         """
 
         if self.publication_type in u'article' and 'v34' in self.data:
-            return html_decode(self.data['v34'][0]['_'])
+            return html_decode(html_decode(self.data['v34'][0]['_']))
 
     @property
     def doi(self):
@@ -1753,9 +1753,9 @@ class Citation(object):
             for author in self.data['v10']:
                 authordict = {}
                 if 's' in author:
-                    authordict['surname'] = author['s']
+                    authordict['surname'] = html_decode(author['s'])
                 if 'n' in author:
-                    authordict['given_names'] = author['n']
+                    authordict['given_names'] = html_decode(author['n'])
                 if 's' in author or 'n' in author:
                     authors.append(authordict)
 
@@ -1774,9 +1774,9 @@ class Citation(object):
             for author in self.data['v16']:
                 authordict = {}
                 if 's' in author:
-                    authordict['surname'] = author['s']
+                    authordict['surname'] = html_decode(author['s'])
                 if 'n' in author:
-                    authordict['given_names'] = author['n']
+                    authordict['given_names'] = html_decode(author['n'])
                 if 's' in author or 'n' in author:
                     authors.append(authordict)
 
@@ -1813,7 +1813,7 @@ class Citation(object):
         This method retrieves the publisher name, if it exists.
         """
         if 'v62' in self.data:
-            return self.data['v62'][0]['_']
+            return html_decode(self.data['v62'][0]['_'])
 
     @property
     def publisher_address(self):
@@ -1822,12 +1822,12 @@ class Citation(object):
         """
         address = []
         if 'v66' in self.data:
-            address.append(self.data['v66'][0]['_'])
+            address.append(html_decode(self.data['v66'][0]['_']))
             if 'e' in self.data['v66'][0]:
-                address.append(self.data['v66'][0]['e'])
+                address.append(html_decode(self.data['v66'][0]['e']))
 
         if 'v67' in self.data:
-            address.append(self.data['v67'][0]['_'])
+            address.append(html_decode(self.data['v67'][0]['_']))
 
         if len(address) > 0:
             return"; ".join(address)
