@@ -444,18 +444,15 @@ class Article(object):
         return data
 
     @property
-    def session_code(self):
+    def section(self):
         """
-        This method retrieves the session code for the given article.
-        This method deals with the fields (v49).
+        This method retrieves the section code for the given article.
+        This method deals with the fields (section).
         """
 
-        session = self.data['article'].get('v49', [{'_': None}])[0]['_']
+        if 'section' in self.data['article']:
 
-        if session == 'nd':
-            return None
-
-        return session
+            return self.data['article']['section']
 
     def xml_languages(self, iso_format=None):
         """

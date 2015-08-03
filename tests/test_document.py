@@ -620,26 +620,26 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
-    def test_session_code_field_v49(self):
-        self.fulldoc['article']['v49'] = [{'_': 'RSP10'}]
+    def test_section_field_v49(self):
+        self.fulldoc['article']['section'] = {u'en': u'label en', u'pt': u'label pt'}
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.session_code, 'RSP10')
+        self.assertEqual(sorted(article.section.keys()), [u'en', u'pt'])
 
-    def test_session_code_nd_field_v49(self):
+    def test_section_nd_field_v49(self):
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.session_code, None)
+        self.assertEqual(article.section, None)
 
-    def test_session_code_without_field_v49(self):
+    def test_section_without_field_v49(self):
 
         del(self.fulldoc['article']['v49'])
 
         article = Article(self.fulldoc)
 
-        self.assertEqual(article.session_code, None)
+        self.assertEqual(article.section, None)
 
     def test_languages_field_v40(self):
 
