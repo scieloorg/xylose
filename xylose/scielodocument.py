@@ -443,6 +443,20 @@ class Article(object):
 
         return data
 
+    def original_section(self, iso_format=None):
+
+        if not 'section' in self.data['article']:
+            return None
+        
+        return self.data['article']['section'].get(self.original_language(iso_format), None)
+
+    def translated_section(self, iso_format=None):
+        
+        if not 'section' in self.data['article']:
+            return None
+
+        return {k:v for k, v in self.data['article']['section'].items() if k != self.original_language(iso_format)}
+
     @property
     def section(self):
         """

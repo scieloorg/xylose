@@ -620,6 +620,20 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_original_section_field_v49(self):
+        self.fulldoc['article']['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.original_section(), u'label en')
+
+    def test_translated_section_field_v49(self):
+        self.fulldoc['article']['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(sorted([k+v for k, v in article.translated_section().items()]), [u'eslabel es', 'ptlabel pt'])
+
     def test_section_field_v49(self):
         self.fulldoc['article']['section'] = {u'en': u'label en', u'pt': u'label pt'}
 
