@@ -445,17 +445,17 @@ class Article(object):
 
     def original_section(self, iso_format=None):
 
-        if not 'section' in self.data['article']:
+        if not 'section' in self.data:
             return None
         
-        return self.data['article']['section'].get(self.original_language(iso_format), None)
+        return self.data['section'].get(self.original_language(iso_format), None)
 
     def translated_section(self, iso_format=None):
         
-        if not 'section' in self.data['article']:
+        if not 'section' in self.data:
             return None
 
-        return {k:v for k, v in self.data['article']['section'].items() if k != self.original_language(iso_format)}
+        return {k:v for k, v in self.data['section'].items() if k != self.original_language(iso_format)}
 
     @property
     def section(self):
@@ -464,9 +464,9 @@ class Article(object):
         This method deals with the fields (section).
         """
 
-        if 'section' in self.data['article']:
+        if 'section' in self.data:
 
-            return self.data['article']['section']
+            return self.data['section']
 
     def xml_languages(self, iso_format=None):
         """
