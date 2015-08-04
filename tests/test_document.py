@@ -655,6 +655,27 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.section, None)
 
+    def test_secion_code_field_v49(self):
+        self.fulldoc['article']['v49'] = [{'_': 'RSP10'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.section_code, 'RSP10')
+
+    def test_section_code_nd_field_v49(self):
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.section_code, None)
+
+    def test_section_code_without_field_v49(self):
+
+        del(self.fulldoc['article']['v49'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.section_code, None)
+
     def test_languages_field_v40(self):
 
         article = Article(self.fulldoc)

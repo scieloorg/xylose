@@ -468,6 +468,20 @@ class Article(object):
 
             return self.data['section']
 
+    @property
+    def section_code(self):
+        """
+        This method retrieves the section code for the given article.
+        This method deals with the fields (v49).
+        """
+
+        section = self.data['article'].get('v49', [{'_': None}])[0]['_']
+
+        if section == 'nd':
+            return None
+
+        return section
+
     def xml_languages(self, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available in XML
