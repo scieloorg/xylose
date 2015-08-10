@@ -1744,7 +1744,7 @@ class ArticleTests(unittest.TestCase):
 
         article.data['article']['v70'] = [{u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"}]
 
-        expected = [{u'index': u'nd', u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'}]
+        expected = [{u'index': u'', u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'}]
 
         self.assertEqual(article.affiliations, expected)
 

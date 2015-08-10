@@ -989,7 +989,7 @@ class Article(object):
                     language = tools.get_language(title['l'], fmt)
                     if language != self.original_language(iso_format=fmt):
                         trans_titles.setdefault(
-                            language,
+                            html_decode(language),
                             html_decode(title['_'])
                         )
 
@@ -1027,7 +1027,7 @@ class Article(object):
                     language = tools.get_language(abstract['l'], fmt)
                     if language != self.original_language(iso_format=fmt):
                         trans_abstracts.setdefault(
-                            language,
+                            html_decode(language),
                             html_decode(abstract['a'])
                         )
 
@@ -1141,7 +1141,7 @@ class Article(object):
                         if 'i' in aff:
                             affdict['index'] = aff['i'].upper()
                         else:
-                            affdict['index'] = 'nd'
+                            affdict['index'] = ''
                         if 'p' in aff and aff['p'] in choices.ISO_3166:
                             affdict['country'] = choices.ISO_3166[aff['p']]
                             if aff['p'] in choices.ISO_3166:
@@ -1168,7 +1168,7 @@ class Article(object):
                 if 'i' in aff:
                     affdict['index'] = html_decode(aff['i'].upper())
                 else:
-                    affdict['index'] = 'nd'
+                    affdict['index'] = ''
                 if 'c' in aff:
                     affdict['city'] = html_decode(aff['c'])
                 if 's' in aff:
@@ -1264,7 +1264,7 @@ class Article(object):
             for keyword in self.data['article']['v85']:
                 if 'k' in keyword and 'l' in keyword:
                     language = tools.get_language(keyword['l'], fmt)
-                    group = keywords.setdefault(language, [])
+                    group = keywords.setdefault(html_decode(language), [])
                     group.append(html_decode(keyword['k']))
 
         if len(keywords) == 0:
