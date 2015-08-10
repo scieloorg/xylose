@@ -29,10 +29,18 @@ LICENSE_REGEX = re.compile(r'a.+?href="(.+?)"')
 LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the creative commons id from the url.
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 
+def remove_control_characters(data):
+    return "".join(ch for ch in data if unicodedata.category(ch)[0] != "C")
+
 def html_decode(string):
 
     try:
-        return html_parser(string)
+        string = html_parser(string)
+    except:
+        return string
+
+    try:
+        return remove_control_characters(string)
     except:
         return string
 
