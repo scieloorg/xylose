@@ -1367,10 +1367,7 @@ class Citation(object):
         """
 
         if 'v514' in self.data:
-            if not 'f' in self.data['v514'][0]:
-                return None
-
-            return self.data['v514'][0]['f']
+            return self.data['v514'][0].get('f', None)
 
         if not 'v14' in self.data:
             return None
@@ -1385,10 +1382,7 @@ class Citation(object):
         """
 
         if 'v514' in self.data:
-            if not 'l' in self.data['v514'][0]:
-                return None
-
-            return self.data['v514'][0]['l']
+            return self.data['v514'][0].get('l', None)
 
         if not 'v14' in self.data:
             return None
@@ -1399,6 +1393,18 @@ class Citation(object):
             return None
 
         return splited[1]
+
+    @property
+    def elocation(self):
+        """
+        This method retrieves the end page of the citation.
+        This method deals with the legacy fields (514 and 14).
+        """
+
+        if not 'v14' in self.data:
+            return None
+
+        return self.data['v14'][0].get('l', None)
 
     @property
     def pages(self):
