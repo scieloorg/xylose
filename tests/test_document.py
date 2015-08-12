@@ -620,6 +620,11 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
+    def test_is_ahead(self):
+        article = self.article
+        
+        self.assertTrue(article.is_ahead_of_print)
+
     def test_original_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
 
