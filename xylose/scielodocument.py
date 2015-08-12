@@ -413,6 +413,11 @@ class Article(object):
         return self._journal
 
     @property
+    def order(self):
+
+        return self.data['article'].get('v121', [{'_': None}])[0]['_']
+
+    @property
     def permissions(self):
         data = None
 

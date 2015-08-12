@@ -625,6 +625,19 @@ class ArticleTests(unittest.TestCase):
         
         self.assertFalse(article.is_ahead_of_print)
 
+    def test_order(self):
+
+        article = self.article
+
+        self.assertEqual(article.order, '02')
+
+    def test_without_order(self):
+
+        article = self.article
+
+        del(article.data['article']['v121'])
+
+        self.assertEqual(article.order, None)
 
     def test_is_ahead(self):
 
