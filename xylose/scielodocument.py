@@ -455,10 +455,9 @@ class Article(object):
     def is_ahead_of_print(self):
 
         if 'ahead' in self.issue.lower():
-
             return True
 
-        else False
+        return False
 
     def original_section(self, iso_format=None):
 

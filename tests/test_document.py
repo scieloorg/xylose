@@ -623,6 +623,15 @@ class ArticleTests(unittest.TestCase):
     def test_is_ahead(self):
         article = self.article
         
+        self.assertFalse(article.is_ahead_of_print)
+
+
+    def test_is_ahead(self):
+
+        article = self.article
+
+        article.data['article']['v32'][0]['_'] = 'AHEAD'
+
         self.assertTrue(article.is_ahead_of_print)
 
     def test_original_section_field_v49(self):
