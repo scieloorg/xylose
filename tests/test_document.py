@@ -1105,6 +1105,21 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v14'][0]['f'])
         self.assertEqual(article.start_page, None)
 
+    def test_e_location(self):
+        article = self.article
+
+        article.data['article']['v14'][0] = {'e': 'eloc1'}
+
+        self.assertEqual(article.elocation, 'eloc1')
+
+    def test_without_e_location(self):
+        article = self.article
+
+        del(article.data['article']['v14'])
+
+        self.assertEqual(article.elocation, None)
+
+
     def test_start_page_loaded_through_xml(self):
         article = self.article
 
@@ -2993,6 +3008,24 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.publisher_address, None)
+
+    def test_elocation_14(self):
+        json_citation = {}
+
+        json_citation['v14'] = [{u'e': u'eloc1'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.elocation, u'eloc1')
+
+    def test_elocation_514(self):
+        json_citation = {}
+
+        json_citation['v514'] = [{u'e': u'eloc2'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.elocation, u'eloc2')
 
     def test_start_page_14(self):
         json_citation = {}

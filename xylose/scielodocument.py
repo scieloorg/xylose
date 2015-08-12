@@ -911,6 +911,19 @@ class Article(object):
             return pages[-1] or None
 
     @property
+    def elocation(self):
+        """
+        This method retrieves the e-location of the given article.
+        This method deals with the legacy fields (14).
+        """
+
+        if not 'v14' in self.data['article']:
+            return None
+
+        return self.data['article']['v14'][0].get('e', None)
+
+
+    @property
     def doi(self):
         """
         This method retrieves the DOI of the given article, if it exists.
@@ -1397,14 +1410,17 @@ class Citation(object):
     @property
     def elocation(self):
         """
-        This method retrieves the end page of the citation.
+        This method retrieves the e-location of the citation.
         This method deals with the legacy fields (514 and 14).
         """
+
+        if 'v514' in self.data:
+            return self.data['v514'][0].get('e', None)
 
         if not 'v14' in self.data:
             return None
 
-        return self.data['v14'][0].get('l', None)
+        return self.data['v14'][0].get('e', None)
 
     @property
     def pages(self):
