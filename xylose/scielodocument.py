@@ -459,7 +459,7 @@ class Article(object):
     @property
     def is_ahead_of_print(self):
 
-        if 'ahead' in self.issue.lower():
+        if self.issue and 'ahead' in self.issue.lower():
             return True
 
         return False
