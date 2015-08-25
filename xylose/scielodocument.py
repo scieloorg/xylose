@@ -1006,7 +1006,11 @@ class Article(object):
                 if 'l' in title:
                     language = tools.get_language(title['l'], fmt)
                     if language == self.original_language(iso_format=fmt):
-                        return html_decode(title['_'])
+                        t = title.get('_', '').strip()
+                        if not t:
+                            t = title.get('t', '').strip()
+
+                        return html_decode(t)
 
     def translated_titles(self, iso_format=None):
         """
@@ -1022,9 +1026,13 @@ class Article(object):
                 if 'l' in title:
                     language = tools.get_language(title['l'], fmt)
                     if language != self.original_language(iso_format=fmt):
+                        t = title.get('_', '').strip()
+                        if not t:
+                            t = title.get('t', '').strip()
+
                         trans_titles.setdefault(
                             html_decode(language),
-                            html_decode(title['_'])
+                            html_decode(t)
                         )
 
         if len(trans_titles) == 0:

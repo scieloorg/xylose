@@ -1310,6 +1310,15 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v12'])
         self.assertEqual(article.original_title(iso_format=None), None)
 
+    def test_original_title_subfield_t(self):
+        article = self.article
+
+        del(article.data['article']['v12'])
+
+        article.data['article']['v12'] = [{u'_': '', u't': u'article title 1', u'l': u'en'}]
+
+        self.assertEqual(article.original_title(iso_format=None), u'article title 1')
+
     def test_original_title_without_language_defined(self):
         article = self.article
 
