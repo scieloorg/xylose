@@ -98,7 +98,10 @@ class Journal(object):
             return None
 
         if 'v541' in self.data:
-            license = '%s/4.0' % self.data['v541'][0]['_'].lower()
+            if len(self.data['v541'][0]['_'].lower().split('/')) == 1:
+                license = '%s/4.0' % self.data['v541'][0]['_'].lower()
+            else:
+                license = self.data['v541'][0]['_'].lower()
             data = {}
             data['text'] = None
             data['url'] = 'http://creativecommons.org/licenses/%s/' % license
