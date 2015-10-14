@@ -82,7 +82,16 @@ collections = {
     'chl': ['Chile', 'www.scielo.cl'],
     'sza': ['South Africa', 'www.scielo.org.za'],
     'bol': ['Bolivia', 'www.scielo.org.bo'],
-    'par': ['Paraguay' 'scielo.iics.una.py']
+    'pry': ['Paraguay', 'scielo.iics.una.py'],
+    'psi': ['PEPSIC', 'pepsic.bvsalud.org'],
+    'ppg': ['PPEGEO', 'ppegeo.igc.usp.br'],
+    'rve': ['RevOdonto', 'revodonto.bvsalud.org'],
+    'edc': ['Educa', 'educa.fcc.org.br'],
+    'inv': [u'Inovação', 'inovacao.scielo.br'],
+    'cic': [u'Ciência e Cultura', 'cienciaecultura.bvs.br'],
+    'cci': [u'ComCiência', 'comciencia.scielo.br'],
+    'wid': ['West Indians', 'caribbean.scielo.org'],
+    'pro': ['Proceedings', 'www.proceedings.scielo.br']
 }
 
 ISO_3166 = {
