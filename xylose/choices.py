@@ -72,7 +72,7 @@ collections = {
     'esp': ['Spain', 'scielo.isciii.es'],
     'col': ['Colombia', 'www.scielo.org.co'],
     'sss': ['Social Sciences', 'socialsciences.scielo.org'],
-    'spa': ['Health Sciences', 'www.scielosp.org'],
+    'spa': ['Public Health', 'www.scielosp.org'],
     'mex': ['Mexico', 'www.scielo.org.mx'],
     'prt': ['Portugal', 'www.scielo.mec.pt'],
     'cri': ['Costa Rica', 'www.scielo.sa.cr'],
