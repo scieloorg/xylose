@@ -57,7 +57,7 @@ article_types = {
     'oa': 'research-article',
     'pr': 'press-release',
     'pv': 'editorial',
-    'rc': 'review-article',
+    'rc': 'book-review',
     'rn': 'brief-report',
     'ra': 'review-article',
     'sc': 'rapid-communication',
