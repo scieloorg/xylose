@@ -337,7 +337,7 @@ class Journal(object):
 
             history.append(
                 (
-                    tools.get_publication_date(item['a']),
+                    tools.get_date(item['a']),
                     choices.journal_status.get(item['b'].lower(), 'inprogress')
                 )
             )
@@ -345,7 +345,7 @@ class Journal(object):
             if 'c' in item and 'd' in item:
                 history.append(
                     (
-                        tools.get_publication_date(item['c']),
+                        tools.get_date(item['c']),
                         choices.journal_status.get(item['d'].lower(), 'inprogress')
                     )
                 )
@@ -374,7 +374,7 @@ class Journal(object):
         This method deals with the legacy fields (940).
         """
 
-        return tools.get_publication_date(self.data['v940'][0]['_'])
+        return tools.get_date(self.data['v940'][0]['_'])
 
     @property
     def update_date(self):
@@ -383,7 +383,7 @@ class Journal(object):
         This method deals with the legacy fields (941).
         """
 
-        return tools.get_publication_date(self.data['v941'][0]['_'])
+        return tools.get_date(self.data['v941'][0]['_'])
 
 class Article(object):
 
@@ -765,7 +765,7 @@ class Article(object):
         This method deals with the legacy fields (65).
         """
 
-        return tools.get_publication_date(self.data['article']['v65'][0]['_'])
+        return tools.get_date(self.data['article']['v65'][0]['_'])
 
     @property
     def processing_date(self):
@@ -773,8 +773,41 @@ class Article(object):
         This method retrieves the processing date of the given article, if it exists.
         This method deals with the legacy fields (91).
         """
+        warnings.warn("deprecated, use article.processing_date", DeprecationWarning)
 
-        return tools.get_publication_date(self.data['article']['v91'][0]['_'])
+        return tools.get_date(self.data['article']['v91'][0]['_'])
+
+    @property
+    def update_date(self):
+        """
+        This method retrieves the update date of the given article, if it exists.
+        If not it will retrieve de update date.
+        This method deals with the legacy fields (93) and new field updated_at.
+        """
+
+        updated_at = self.data.get(
+            'updated_at', 
+            self.data['article'].get('v93', [{'_': None}])[0]['_']
+        )
+
+        if not updated_at:
+            return self.creation_date
+
+        return tools.get_date(updated_at)
+
+    @property
+    def creation_date(self):
+        """
+        This method retrieves the processing date of the given article, if it exists.
+        This method deals with the legacy fields (91) and new field created_at.
+        """
+
+        created_at = self.data.get(
+            'created_at', 
+            self.data['article'].get('v91', [{'_': None}])[0]['_']
+        )
+
+        return tools.get_date(created_at)
 
     @property
     def receive_date(self):
@@ -783,7 +816,7 @@ class Article(object):
         This method deals with the legacy fields (112).
         """
         if 'v112' in self.data['article']:
-            return tools.get_publication_date(self.data['article']['v112'][0]['_'])
+            return tools.get_date(self.data['article']['v112'][0]['_'])
         return None
 
     @property
@@ -793,7 +826,7 @@ class Article(object):
         This method deals with the legacy fields (114).
         """
         if 'v114' in self.data['article']:
-            return tools.get_publication_date(self.data['article']['v114'][0]['_'])
+            return tools.get_date(self.data['article']['v114'][0]['_'])
         return None
 
     @property
@@ -803,7 +836,7 @@ class Article(object):
         This method deals with the legacy fields (116).
         """
         if 'v116' in self.data['article']:
-            return tools.get_publication_date(self.data['article']['v116'][0]['_'])
+            return tools.get_date(self.data['article']['v116'][0]['_'])
         return None
 
     @property
@@ -813,7 +846,7 @@ class Article(object):
         This method deals with the legacy fields (223).
         """
         if 'v223' in self.data['article']:
-            return tools.get_publication_date(self.data['article']['v223'][0]['_'])
+            return tools.get_date(self.data['article']['v223'][0]['_'])
         return None
 
     @property
@@ -1587,16 +1620,16 @@ class Citation(object):
         """
 
         if self.publication_type == u'link' and 'v110' in self.data:
-            return tools.get_publication_date(self.data['v110'][0]['_'])
+            return tools.get_date(self.data['v110'][0]['_'])
 
         if self.publication_type == u'thesis' and 'v45' in self.data:
-            return tools.get_publication_date(self.data['v45'][0]['_'])
+            return tools.get_date(self.data['v45'][0]['_'])
 
         if self.publication_type == u'conference' and 'v55' in self.data:
-            return tools.get_publication_date(self.data['v55'][0]['_'])
+            return tools.get_date(self.data['v55'][0]['_'])
 
         if 'v65' in self.data:
-            return tools.get_publication_date(self.data['v65'][0]['_'])
+            return tools.get_date(self.data['v65'][0]['_'])
 
     @property
     def edition(self):

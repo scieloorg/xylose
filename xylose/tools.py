@@ -12,7 +12,7 @@ def get_language(language, iso_format):
     return language
 
 
-def get_publication_date(date):
+def get_date(date):
     pub_date = [date[0:4]]
 
     months = range(1,13)

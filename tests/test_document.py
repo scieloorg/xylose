@@ -39,49 +39,49 @@ class ToolsTests(unittest.TestCase):
 
         self.assertEqual(language, u'#undefined xx#')
 
-    def test_get_publication_date_year_month_day(self):
+    def test_get_date_year_month_day(self):
 
-        date = tools.get_publication_date('20120102')
+        date = tools.get_date('20120102')
         self.assertEqual(date, '2012-01-02')
 
-    def test_get_publication_date_year_month(self):
+    def test_get_date_year_month(self):
 
-        date = tools.get_publication_date('20120100')
+        date = tools.get_date('20120100')
         self.assertEqual(date, '2012-01')
 
-    def test_get_publication_date_year(self):
+    def test_get_date_year(self):
 
-        date = tools.get_publication_date('20120000')
+        date = tools.get_date('20120000')
         self.assertEqual(date, '2012')
 
-    def test_get_publication_date_year_day(self):
+    def test_get_date_year_day(self):
 
-        date = tools.get_publication_date('20120001')
+        date = tools.get_date('20120001')
         self.assertEqual(date, '2012')
 
-    def test_get_publication_date_wrong_day(self):
+    def test_get_date_wrong_day(self):
 
-        date = tools.get_publication_date('201201')
+        date = tools.get_date('201201')
         self.assertEqual(date, '2012-01')
 
-    def test_get_publication_date_wrong_day_month(self):
+    def test_get_date_wrong_day_month(self):
 
-        date = tools.get_publication_date('2012')
+        date = tools.get_date('2012')
         self.assertEqual(date, '2012')
 
-    def test_get_publication_date_wrong_day_not_int(self):
+    def test_get_date_wrong_day_not_int(self):
 
-        date = tools.get_publication_date('201201xx')
+        date = tools.get_date('201201xx')
         self.assertEqual(date, '2012-01')
 
-    def test_get_publication_date_wrong_day_month_not_int(self):
+    def test_get_date_wrong_day_month_not_int(self):
 
-        date = tools.get_publication_date('2012xxxx')
+        date = tools.get_date('2012xxxx')
         self.assertEqual(date, '2012')
 
-    def test_get_publication_date_wrong_month_not_int(self):
+    def test_get_date_wrong_month_not_int(self):
 
-        date = tools.get_publication_date('2012xx01')
+        date = tools.get_date('2012xx01')
         self.assertEqual(date, '2012')
 
 
@@ -990,6 +990,51 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v91'])
         with self.assertRaises(KeyError):
             article.processing_date
+
+    def test_creation_date_1(self):
+        article = self.article
+
+        article.data['created_at'] = '20120110'
+        article.data['article']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.creation_date, '2012-01-10')
+
+    def test_creation_date_2(self):
+        article = self.article
+
+        article.data['created_at'] = '20120110'
+        del(article.data['article']['v91'])
+        self.assertEqual(article.creation_date, '2012-01-10')
+
+    def test_update_date(self):
+        article = self.article
+
+        article.data['updated_at'] = '20120110'
+        self.assertEqual(article.update_date, '2012-01-10')
+
+    def test_update_date_1(self):
+        article = self.article
+
+        article.data['updated_at'] = '20120110'
+        article.data['article']['v93'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.update_date, '2012-01-10')
+
+    def test_update_date_2(self):
+        article = self.article
+
+        article.data['article']['v93'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.update_date, '2012-04-19')
+
+    def test_update_date_3(self):
+        article = self.article
+
+        article.data['article']['v91'] = [{u'_': u'20120418'}]
+        self.assertEqual(article.update_date, '2012-04-18')
+
+    def test_creation_date(self):
+        article = self.article
+
+        article.data['article']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.creation_date, '2012-04-19')
 
     def test_receive_date(self):
         article = self.article
