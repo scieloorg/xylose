@@ -782,32 +782,32 @@ class Article(object):
         """
         This method retrieves the update date of the given article, if it exists.
         If not it will retrieve de update date.
-        This method deals with the legacy fields (93) and new field updated_at.
+        This method deals with the legacy fields (91) and new field updated_at.
         """
 
         updated_at = self.data.get(
             'updated_at', 
-            self.data['article'].get('v93', [{'_': None}])[0]['_']
+            self.data['article'].get('v91', [{'_': None}])[0]['_']
         )
 
         if not updated_at:
             return self.creation_date
 
-        return tools.get_date(updated_at)
+        return tools.get_date(updated_at) if updated_at else None
 
     @property
     def creation_date(self):
         """
         This method retrieves the processing date of the given article, if it exists.
-        This method deals with the legacy fields (91) and new field created_at.
+        This method deals with the legacy fields (93) and new field created_at.
         """
 
         created_at = self.data.get(
             'created_at', 
-            self.data['article'].get('v91', [{'_': None}])[0]['_']
+            self.data['article'].get('v93', [{'_': None}])[0]['_']
         )
 
-        return tools.get_date(created_at)
+        return tools.get_date(created_at) if created_at else None
 
     @property
     def receive_date(self):
