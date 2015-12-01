@@ -1200,6 +1200,7 @@ class Article(object):
                 normalized[aff['index']]['normalized'] = True
                 normalized[aff['index']]['country'] = aff.get('country', '')
                 normalized[aff['index']]['institution'] = aff.get('institution', '')
+                normalized[aff['index']]['state'] = aff.get('state', '')
 
         return [v for i, v in normalized.items()]
 
@@ -1216,14 +1217,19 @@ class Article(object):
                 if '_' in aff:
                     if len(aff['_'].strip()) > 0:
                         affdict['institution'] = html_decode(aff['_'])
+
                         if 'i' in aff:
                             affdict['index'] = aff['i'].upper()
                         else:
                             affdict['index'] = ''
+
                         if 'p' in aff and aff['p'] in choices.ISO_3166:
                             affdict['country'] = choices.ISO_3166[aff['p']]
                             if aff['p'] in choices.ISO_3166:
                                 affdict['country_iso_3166'] = aff['p']
+
+                        if 's' in aff:
+                            affdict['state'] = aff['s']
 
                         affiliations.append(affdict)
 

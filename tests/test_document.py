@@ -1585,6 +1585,7 @@ class ArticleTests(unittest.TestCase):
             {
                 u"i": u"A02",
                 u"p": u"BR",
+                u"s": u"São Paulo",
                 u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
             }
         ]
@@ -1598,24 +1599,28 @@ class ArticleTests(unittest.TestCase):
             {
                 u"i": u"A02",
                 u"p": u"BRAZIL",
+                u"s": u"SP",
                 u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
             },
             {
                 u"i": u"A03",
                 u"p": u"US",
+                u"s": u"São Paulo",
                 u"_": u"University of Florida Not Normalized"
             }
         ]
 
         amc = article.mixed_affiliations
 
-        result_index = ''.join([i['index'] for i in sorted(amc,  key=lambda k: k['index'])])
-        result_country = ''.join([i['country'] for i in sorted(amc,  key=lambda k: k['index'])])
-        result_status = ''.join([str(i['normalized']) for i in sorted(amc,  key=lambda k: k['index'])])
+        result_index = u''.join([i['index'] for i in sorted(amc,  key=lambda k: k['index'])])
+        result_country = u''.join([i['country'] for i in sorted(amc,  key=lambda k: k['index'])])
+        result_status = u''.join([str(i['normalized']) for i in sorted(amc,  key=lambda k: k['index'])])
+        result_state = u''.join([i['state'] for i in sorted(amc,  key=lambda k: k['index'])])
 
-        self.assertEqual(result_index, 'A01A02A03')
-        self.assertEqual(result_country, 'BrazilBrazilUS')
-        self.assertEqual(result_status, 'TrueTrueFalse')
+        self.assertEqual(result_index, u'A01A02A03')
+        self.assertEqual(result_country, u'BrazilBrazilUS')
+        self.assertEqual(result_status, u'TrueTrueFalse')
+        self.assertEqual(result_state, u'São PauloSão Paulo')
 
     def test_without_normalized_affiliations(self):
         article = self.article
