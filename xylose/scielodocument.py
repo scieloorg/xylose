@@ -775,7 +775,10 @@ class Article(object):
         """
         warnings.warn("deprecated, use article.processing_date", DeprecationWarning)
 
-        pdate = self.data['article'].get('v91', [{'_': None}])[0]['_']
+        pdate = self.data.get(
+            'processing_date',
+            self.data['article'].get('v91', [{'_': None}])[0]['_']
+        )
 
         return tools.get_date(pdate) if pdate else None
 
@@ -800,7 +803,7 @@ class Article(object):
     @property
     def creation_date(self):
         """
-        This method retrieves the processing date of the given article, if it exists.
+        This method retrieves the creation_date date of the given article, if it exists.
         This method deals with the legacy fields (93) and new field created_at.
         """
 
