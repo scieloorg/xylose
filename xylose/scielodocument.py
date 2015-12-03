@@ -775,7 +775,9 @@ class Article(object):
         """
         warnings.warn("deprecated, use article.processing_date", DeprecationWarning)
 
-        return tools.get_date(self.data['article']['v91'][0]['_'])
+        pdate = self.data['article'].get('v91', [{'_': None}])[0]['_']
+
+        return tools.get_date(pdate) if pdate else None
 
     @property
     def update_date(self):

@@ -16,7 +16,7 @@ def get_date(date):
     pub_date = [date[0:4]]
 
     months = range(1,13)
-    days = range(1,31)
+    days = range(1,32)
 
     try:
         month = int(date[4:6])

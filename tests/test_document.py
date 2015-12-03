@@ -39,6 +39,11 @@ class ToolsTests(unittest.TestCase):
 
         self.assertEqual(language, u'#undefined xx#')
 
+    def test_get_date_year_month_day_31(self):
+
+        date = tools.get_date('20120331')
+        self.assertEqual(date, '2012-03-31')
+
     def test_get_date_year_month_day(self):
 
         date = tools.get_date('20120102')
@@ -988,8 +993,8 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['article']['v91'])
-        with self.assertRaises(KeyError):
-            article.processing_date
+        
+        self.assertEqual(article.processing_date, None)
 
     def test_creation_date(self):
         article = self.article
