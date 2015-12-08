@@ -791,8 +791,8 @@ class Article(object):
 
         pdate = self.data.get(
             'processing_date',
-            self.data['article'].get('v91', [{'_': None}])[0]['_']
-        )
+            self.data['article'].get('v91', [{'_': ''}])[0]['_']
+        ).replace('-','')
 
         return tools.get_date(pdate) if pdate else None
 

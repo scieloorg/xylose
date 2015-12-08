@@ -1008,6 +1008,14 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v91'] = [{u'_': u'20120419'}]
         self.assertEqual(article.processing_date, '2012-04-19')
 
+    def test_processing_date_1(self):
+        article = self.article
+
+        article.data['processing_date'] = u'2012-04-19'
+
+        article.data['article']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(article.processing_date, '2012-04-19')
+
     def test_without_processing_date(self):
         article = self.article
 
