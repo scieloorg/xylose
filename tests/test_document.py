@@ -1029,29 +1029,30 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v93'] = [{u'_': u'20120419'}]
         self.assertEqual(article.creation_date, '2012-04-19')
 
+
     def test_creation_date_1(self):
         article = self.article
 
-        article.data['created_at'] = '20120110'
+        article.data['created_at'] = '2012-01-10'
         article.data['article']['v93'] = [{u'_': u'20120419'}]
         self.assertEqual(article.creation_date, '2012-01-10')
 
     def test_creation_date_2(self):
         article = self.article
 
-        article.data['created_at'] = '20120110'
+        article.data['created_at'] = '2012-01-10'
         self.assertEqual(article.creation_date, '2012-01-10')
 
     def test_update_date(self):
         article = self.article
 
-        article.data['updated_at'] = '20120110'
+        article.data['updated_at'] = '2012-01-10'
         self.assertEqual(article.update_date, '2012-01-10')
 
     def test_update_date_1(self):
         article = self.article
 
-        article.data['updated_at'] = '20120110'
+        article.data['updated_at'] = '2012-01-10'
         article.data['article']['v91'] = [{u'_': u'20120419'}]
         self.assertEqual(article.update_date, '2012-01-10')
 

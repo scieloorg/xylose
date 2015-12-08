@@ -806,8 +806,8 @@ class Article(object):
 
         updated_at = self.data.get(
             'updated_at', 
-            self.data['article'].get('v91', [{'_': None}])[0]['_']
-        )
+            self.data['article'].get('v91', [{'_': ''}])[0]['_']
+        ).replace('-','')
 
         if not updated_at:
             return self.creation_date
@@ -823,8 +823,8 @@ class Article(object):
 
         created_at = self.data.get(
             'created_at', 
-            self.data['article'].get('v93', [{'_': None}])[0]['_']
-        )
+            self.data['article'].get('v93', [{'_': ''}])[0]['_']
+        ).replace('-','')
 
         return tools.get_date(created_at) if created_at else None
 
