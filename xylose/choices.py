@@ -73,6 +73,7 @@ periodicity = {
     u'F': u'Semiannual (twice a year)',
     u'A': u'Annual',
     u'K': u'Irregular (know to be so)',
+    u'Z': u'Other frequencies'
 }
 
 collections = {
