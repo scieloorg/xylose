@@ -97,6 +97,25 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+    def test_without_periodicity(self):
+        journal = self.journal
+
+        del(journal.data['v380'])
+
+        self.assertEqual(journal.periodicity, None)
+
+    def test_periodicity(self):
+        journal = self.journal
+
+        self.assertEqual(journal.periodicity, 'Quaterly')
+
+    def test_periodicity_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v380'][0]['_'] = 'XXX'
+
+        self.assertEqual(journal.periodicity, 'XXX')
+
     def test_journal(self):
         journal = self.journal
         self.assertTrue(isinstance(journal, Journal))

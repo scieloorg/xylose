@@ -65,6 +65,16 @@ article_types = {
     'up': 'undefined'
 }
 
+periodicity = {
+    u'M': u'Monthly',
+    u'B': u'Bimonthly (every two months)',
+    u'Q': u'Quaterly',
+    u'T': u'Three times a year',
+    u'F': u'Semiannual (twice a year)',
+    u'A': u'Annual',
+    u'K': u'Irregular (know to be so)',
+}
+
 collections = {
     'scl': ['Brazil', 'www.scielo.br'],
     'arg': ['Argentina', 'www.scielo.org.ar'],

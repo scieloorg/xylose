@@ -321,6 +321,20 @@ class Journal(object):
             return self.data['v68'][0]['_'].lower()
 
     @property
+    def periodicity(self):
+        """
+        This method retrieves the journal_acronym of the given article,
+        if it exists.
+        This method deals with the legacy fields (380).
+        """
+
+        per = self.data.get('v380', [{'_': None}])[0]['_']
+
+        per = per.upper() if per else None
+
+        return choices.periodicity.get(per, per)
+
+    @property
     def status_history(self):
         """
         This method retrieves the journal status of the given journal,
