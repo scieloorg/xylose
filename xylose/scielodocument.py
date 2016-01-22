@@ -949,17 +949,27 @@ class Article(object):
         """
         This method retrieves the star page of the given article, if it exists.
         This method deals with the legacy fields (14).
+
+        Este metodo atende as seguinte variancias de dados do legado:
+        {'v14': [{'f': 10, 'l': 12}]}
+        {'v14': [{'f': 10}, {'l': 12}]}
         """
-        if 'v14' in self.data['article']:
-            for item in self.data['article']['v14']:
-                if 'f' in item:
-                    return item['f']
 
-            # if nothing works until now. we will try once more. It's tested.
+        for item in self.data['article'].get('v14', [{}]):
+            if 'f' in item and item['f'].replace('0', '') != '':
+                return item['f']
 
-            pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
+        data = self.data['article'].get('v14', [{}])[0].get('f', '')
 
-            return pages[0] or None
+        if data.replace('0', '') != '':
+            return data
+
+        # if nothing works until now. we will try once more. It's tested.
+
+        #pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
+        pages = sorted(self.data['article'].get('v14', [{}])[0].get('_', '').split('-'))
+
+        return pages[0] if pages[0].replace('0', '') != '' else None
 
     @property
     def end_page(self):
@@ -967,29 +977,29 @@ class Article(object):
         This method retrieves the end page of the given article, if it exists.
         This method deals with the legacy fields (14).
         """
-        if 'v14' in self.data['article']:
-            for item in self.data['article']['v14']:
-                if 'l' in item:
-                    return item['l']
 
-            # if nothing works until now. we will try once more. It's tested.
+        for item in self.data['article'].get('v14', [{}]):
+            if 'l' in item and item['l'].replace('0', '') != '':
+                return item['l']
 
-            pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
+        # if nothing works until now. we will try once more. It's tested.
 
-            return pages[-1] or None
+        pages = sorted(self.data['article'].get('v14', [{}])[0].get('_', '').split('-'))
+
+        return pages[-1] if pages[-1].replace('0', '') != '' else None
 
     @property
     def elocation(self):
         """
         This method retrieves the e-location of the given article.
         This method deals with the legacy fields (14).
+        {'v14': [{'f': 10, 'l': 12, 'e': 'eloc'}]}
+        {'v14': [{'f': 10}, {'l': 12}, {'e': 'eloc'}]}
         """
 
-        if not 'v14' in self.data['article']:
-            return None
-
-        return self.data['article']['v14'][0].get('e', None)
-
+        for item in self.data['article'].get('v14', [{}]):
+            if 'e' in item and item['e'].replace('0', '') != '':
+                return item['e']
 
     @property
     def doi(self):
