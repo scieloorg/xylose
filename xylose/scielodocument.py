@@ -792,9 +792,12 @@ class Article(object):
         pdate = self.data.get(
             'processing_date',
             self.data['article'].get('v91', [{'_': ''}])[0]['_']
-        ).replace('-','')
+        )
 
-        return tools.get_date(pdate) if pdate else None
+        if not pdate:
+            return None
+
+        return tools.get_date(pdate.replace('-','')) if pdate else None
 
     @property
     def update_date(self):
