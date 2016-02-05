@@ -345,14 +345,15 @@ class Journal(object):
         history = []
 
         if not 'v51' in self.data:
-            return [(self.creation_date, choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress'))]
+            return [(self.creation_date, choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress'), '')]
 
         for item in self.data['v51']:
 
             history.append(
                 (
                     tools.get_date(item['a']),
-                    choices.journal_status.get(item['b'].lower(), 'inprogress')
+                    choices.journal_status.get(item['b'].lower(), 'inprogress'),
+                    ''
                 )
             )
 
@@ -360,7 +361,8 @@ class Journal(object):
                 history.append(
                     (
                         tools.get_date(item['c']),
-                        choices.journal_status.get(item['d'].lower(), 'inprogress')
+                        choices.journal_status.get(item['d'].lower(), 'inprogress'),
+                        item.get('e', 'suspended-by-committee') if item['d'].lower() == 's' else ''
                     )
                 )
 
