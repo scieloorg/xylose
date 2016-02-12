@@ -76,6 +76,17 @@ periodicity = {
     u'Z': u'Other frequencies'
 }
 
+periodicity_in_months = {
+    u'M': u'12',
+    u'B': u'6',
+    u'Q': u'4',
+    u'T': u'3',
+    u'F': u'2',
+    u'A': u'1',
+    u'K': u'undefined',
+    u'Z': u'undefined'
+}
+
 collections = {
     'scl': ['Brazil', 'www.scielo.br'],
     'arg': ['Argentina', 'www.scielo.org.ar'],
