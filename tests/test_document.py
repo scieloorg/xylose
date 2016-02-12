@@ -97,6 +97,26 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+
+    def test_without_periodicity_in_months(self):
+        journal = self.journal
+
+        del(journal.data['v380'])
+
+        self.assertEqual(journal.periodicity_in_months, None)
+
+    def test_periodicity_in_months(self):
+        journal = self.journal
+
+        self.assertEqual(journal.periodicity_in_months, '4')
+
+    def test_periodicity_in_months_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v380'][0]['_'] = 'XXX'
+
+        self.assertEqual(journal.periodicity_in_months, 'XXX')
+
     def test_without_periodicity(self):
         journal = self.journal
 
