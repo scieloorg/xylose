@@ -623,10 +623,46 @@ class JournalTests(unittest.TestCase):
 
     def test_journal_title_nlm(self):
         self.fulldoc['title']['v421'] = [{u'_': u'Acta Limnologica Brasiliensia NLM'}]
-        
+
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.title_nlm, u'Acta Limnologica Brasiliensia NLM')
+
+    def test_journal_fulltitle(self):
+        self.fulldoc['title']['v100'] = [{u'_': u'Title'}]
+        self.fulldoc['title']['v110'] = [{u'_': u'SubTitle'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.fulltitle, u'Title - SubTitle')
+
+    def test_journal_fulltitle_without_title(self):
+        del(self.fulldoc['title']['v100'])
+        self.fulldoc['title']['v110'] = [{u'_': u'SubTitle'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.fulltitle, u'SubTitle')
+
+    def test_journal_fulltitle_without_subtitle(self):
+        self.fulldoc['title']['v100'] = [{u'_': u'Title'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.fulltitle, u'Title')
+
+    def test_journal_subtitle(self):
+        self.fulldoc['title']['v110'] = [{u'_': u'SubTitle'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subtitle, u'SubTitle')
+
+    def test_journal_without_subtitle(self):
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subtitle, None)
 
     def test_without_journal_title_nlm(self):
         journal = self.journal
