@@ -802,9 +802,9 @@ class Article(object):
     def data_model_version(self, fullpath=False):
         """
         This method retrieves the document version
-        This method deals with the legacy fields (601).
+        This method deals with the legacy fields (120).
         """
-        if 'v601' in self.data['article']:
+        if 'xml' in self.data['article'].get('v120', [{'_': ''}])[0]['_'].lower():
             return 'xml'
 
         return 'html'
