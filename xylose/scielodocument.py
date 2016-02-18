@@ -69,8 +69,17 @@ class Journal(object):
         """
         This method creates an object level attributes (print_issn and/or
         electronic issn), according to the given metadata.
-        This method deal with the legacy datamodel fields (935, 400, 35) where:
+        This method deal with the legacy datamodel fields (935, 400, 35, 435) where:
         """
+
+        if 'v435' in self.data:
+            for item in self.data['v435']:
+                if 't' in item and item['t'] == 'PRINT':
+                    self.print_issn = item['_']
+                if 't' in item and item['t'] == 'ONLIN':
+                    self.electronic_issn = item['_']
+            return None
+
         if not 'v35' in self.data:
             return None
 
