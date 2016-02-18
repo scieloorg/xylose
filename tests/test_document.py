@@ -284,6 +284,19 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.update_date, '2012-08-24')
 
+    def test_load_issn_with_v435(self):
+        self.fulldoc['title']['v35'] = [{u'_': u'PRINT'}]
+        self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
+        self.fulldoc['title']['v435'] = [
+            {u'_': u'0000-0000', 't': 'ONLIN'},
+            {u'_': u'9999-9999', 't': 'PRINT'}
+        ]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.print_issn, u'9999-9999')
+        self.assertEqual(journal.electronic_issn, u'0000-0000')
+
     def test_load_issn_with_v935_without_v35(self):
         del(self.fulldoc['title']['v35'])
         self.fulldoc['title']['v400'] = [{u'_': u'2222-2222'}]
