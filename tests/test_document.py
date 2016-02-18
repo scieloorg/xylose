@@ -985,6 +985,27 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.file_code(), '0034-8910-rsp-47-04-0675')
 
+    def test_data_model_version_html(self):
+        del(self.fulldoc['article']['v120'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.data_model_version, u'html')
+
+    def test_data_model_version_html_1(self):
+        self.fulldoc['article']['v120'] = [{'_': '4.0'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.data_model_version, u'html')
+
+    def test_data_model_version_xml(self):
+        self.fulldoc['article']['v120'] = [{'_': 'XML_1.0'}]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.data_model_version, u'xml')
+
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
 
