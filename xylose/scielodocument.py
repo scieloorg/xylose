@@ -200,8 +200,17 @@ class Journal(object):
         """
         This method creates an object level attributes (print_issn and/or
         electronic issn), according to the given metadata.
-        This method deal with the legacy datamodel fields (935, 400, 35) where:
+        This method deal with the legacy datamodel fields (935, 400, 35, 435) where:
         """
+
+        if 'v435' in self.data:
+            for item in self.data['v435']:
+                if 't' in item and item['t'] == 'PRINT':
+                    self.print_issn = item['_']
+                if 't' in item and item['t'] == 'ONLIN':
+                    self.electronic_issn = item['_']
+            return None
+
         if not 'v35' in self.data:
             return None
 
@@ -326,10 +335,8 @@ class Journal(object):
         This method retrieves the original language of the given article.
         This method deals with the legacy fields (v400).
         """
-        if not 'v400' in self.data:
-            return None
 
-        return self.data['v400'][0]['_']
+        return self.data.get('v400', [{'_': None}])[0]['_']
 
     def url(self, language='en'):
         """
@@ -367,15 +374,6 @@ class Journal(object):
             return [area['_'] for area in self.data['v854']]
 
     @property
-    def abbreviated_title(self):
-        """
-        This method retrieves the journal abbreviated title of the given article, if it exists.
-        This method deals with the legacy fields (150).
-        """
-        if 'v150' in self.data:
-            return self.data['v150'][0]['_']
-
-    @property
     def wos_citation_indexes(self):
         """
         This method retrieves the Wob of Sciences Citation Indexes of the given
@@ -404,8 +402,7 @@ class Journal(object):
         This method deals with the legacy fields (480).
         """
 
-        if 'v480' in self.data:
-            return self.data['v480'][0]['_']
+        return self.data.get('v480', [{'_': None}])[0]['_']
 
     @property
     def publisher_loc(self):
@@ -415,8 +412,7 @@ class Journal(object):
         This method deals with the legacy fields (490).
         """
 
-        if 'v490' in self.data:
-            return self.data['v490'][0]['_']
+        return self.data.get('v490', [{'_': None}])[0]['_']
 
     @property
     def title(self):
@@ -426,8 +422,30 @@ class Journal(object):
         This method deals with the legacy fields (100).
         """
 
-        if 'v100' in self.data:
-            return self.data['v100'][0]['_']
+        return self.data.get('v100', [{'_': None}])[0]['_']
+
+    @property
+    def subtitle(self):
+        """
+        This method retrieves the journal subtitle.
+        This method deals with the legacy fields (v110).
+        """
+
+        return self.data.get('v110', [{'_': None}])[0]['_']
+
+    @property
+    def fulltitle(self):
+        """
+        This method retrieves the join of the journal title plus the subtitle.
+        This method deals with the legacy fields (v100, v110).
+        """
+
+        data = []
+
+        data.append(self.title)
+        data.append(self.subtitle)
+
+        return ' - '.join([i for i in data if i])
 
     @property
     def title_nlm(self):
@@ -437,8 +455,25 @@ class Journal(object):
         This method deals with the legacy fields (421).
         """
 
-        if 'v421' in self.data:
-            return self.data['v421'][0]['_']
+        return self.data.get('v421', [{'_': None}])[0]['_']
+
+    @property
+    def abbreviated_title(self):
+        """
+        This method retrieves the journal abbreviated title of the given article, if it exists.
+        This method deals with the legacy fields (150).
+        """
+
+        return self.data.get('v150', [{'_': None}])[0]['_']
+
+    @property
+    def abbreviated_iso_title(self):
+        """
+        This method retrieves the journal abbreviated title of the given article, if it exists.
+        This method deals with the legacy fields (151).
+        """
+
+        return self.data.get('v151', [{'_': None}])[0]['_']
 
     @property
     def acronym(self):
@@ -448,8 +483,7 @@ class Journal(object):
         This method deals with the legacy fields (68).
         """
 
-        if 'v68' in self.data:
-            return self.data['v68'][0]['_'].lower()
+        return self.data.get('v68', [{'_': None}])[0]['_']
 
     @property
     def periodicity(self):
@@ -466,6 +500,20 @@ class Journal(object):
         return choices.periodicity.get(per, per)
 
     @property
+    def periodicity_in_months(self):
+        """
+        This method retrieves the journal_acronym of the given article,
+        if it exists.
+        This method deals with the legacy fields (380).
+        """
+
+        per = self.data.get('v380', [{'_': None}])[0]['_']
+
+        per = per.upper() if per else None
+
+        return choices.periodicity_in_months.get(per, per)
+
+    @property
     def status_history(self):
         """
         This method retrieves the journal status of the given journal,
@@ -476,14 +524,15 @@ class Journal(object):
         history = []
 
         if not 'v51' in self.data:
-            return [(self.creation_date, choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress'))]
+            return [(self.creation_date, choices.journal_status.get(self.data['v50'][0]['_'].lower(), 'inprogress'), '')]
 
         for item in self.data['v51']:
 
             history.append(
                 (
                     tools.get_date(item['a']),
-                    choices.journal_status.get(item['b'].lower(), 'inprogress')
+                    choices.journal_status.get(item['b'].lower(), 'inprogress'),
+                    ''
                 )
             )
 
@@ -491,7 +540,8 @@ class Journal(object):
                 history.append(
                     (
                         tools.get_date(item['c']),
-                        choices.journal_status.get(item['d'].lower(), 'inprogress')
+                        choices.journal_status.get(item['d'].lower(), 'inprogress'),
+                        item.get('e', 'suspended-by-committee') if item['d'].lower() == 's' else ''
                     )
                 )
 
@@ -801,9 +851,9 @@ class Article(object):
     def data_model_version(self, fullpath=False):
         """
         This method retrieves the document version
-        This method deals with the legacy fields (601).
+        This method deals with the legacy fields (120).
         """
-        if 'v601' in self.data['article']:
+        if 'xml' in self.data['article'].get('v120', [{'_': ''}])[0]['_'].lower():
             return 'xml'
 
         return 'html'
