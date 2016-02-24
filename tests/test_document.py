@@ -166,6 +166,11 @@ class IssueTests(unittest.TestCase):
 
         self.assertTrue(self.issue.url, '')
 
+    def test_collection_acronym(self):
+
+        self.assertTrue(self.issue.url, '')
+
+
 class JournalTests(unittest.TestCase):
 
     def setUp(self):

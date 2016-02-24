@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name="xylose",
-    version='1.0.0',
+    version='1.0.1',
     description="A SciELO library to abstract a JSON data structure that is a product of the ISIS2JSON conversion using the ISIS2JSON type 3 data model.",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",

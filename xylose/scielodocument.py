@@ -81,10 +81,34 @@ class Issue(object):
         return self.data['article']['v880'][0]['_'][1:18]
 
     @property
+    def collection_acronym(self):
+        """
+        This method retrieves the collection of the given article,
+        if it exists.
+        The subject areas are based on the journal subject areas.
+        This method deals with the legacy fields (v992) and the
+        new field (collection), the field collection is priorized.
+        """
+        if 'collection' in self.data:
+            return self.data['collection']
+
+        if 'v992' in self.data['article']:
+            if isinstance(self.data['article']['v992'], list):
+                return self.data['article']['v992'][0]['_']
+            else:
+                return self.data['article']['v992']
+
+        if 'v992' in self.data['title']:
+            if isinstance(self.data['title']['v992'], list):
+                return self.data['title']['v992'][0]['_']
+            else:
+                return self.data['title']['v992']
+
+    @property
     def scielo_domain(self):
         """
-        This method retrieves the collection domains of the given journal, if it exists.
-        This method deals with the legacy fields (690).
+        This method retrieves the collection domains of the given article, if it exists.
+        This method deals with the legacy fields (69, 690).
         """
 
         if self.collection_acronym:
@@ -93,8 +117,10 @@ class Issue(object):
                 [u'Undefined: %s' % self.collection_acronym, None]
             )[1] or None
 
-        if 'v690' in self.data:
-            return self.data['v690'][0]['_'].replace('http://', '')
+        if 'v690' in self.data['title']:
+            return self.data['title']['v690'][0]['_'].replace('http://', '')
+        elif 'v69' in self.data['article']:
+            return self.data['article']['v69'][0]['_'].replace('http://', '')
 
     @property
     def order(self):
