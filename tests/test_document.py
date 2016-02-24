@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citation, Journal, html_decode
+from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode
 from xylose import tools
 
 
@@ -90,6 +90,82 @@ class ToolsTests(unittest.TestCase):
         self.assertEqual(date, '2012')
 
 
+class IssueTests(unittest.TestCase):
+
+    def setUp(self):
+        path = os.path.dirname(os.path.realpath(__file__))
+        self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
+        self.issue = Issue(self.fulldoc)
+
+    def test_order(self):
+
+        self.assertEqual(self.issue.order, '3')
+
+    def test_issue_label_field_v4(self):
+
+        self.assertEqual(self.issue.label, u'v23n3')
+
+    def test_issue_label_without_field_v4(self):
+
+        del(self.fulldoc['article']['v4'])
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(self.issue.label, None)
+
+    def test_volume(self):
+
+        self.assertEqual(self.issue.volume, u'23')
+
+    def test_without_volume(self):
+
+        del(self.issue.data['article']['v31'])
+
+        self.assertEqual(self.issue.volume, None)
+
+    def test_issue(self):
+
+        self.assertEqual(self.issue.number, u'3')
+
+    def test_without_issue(self):
+
+        del(self.issue.data['article']['v32'])
+
+        self.assertEqual(self.issue.number, None)
+
+    def test_supplement_volume(self):
+
+        self.issue.data['article']['v131'] = [{u'_': u'test_suppl_volume'}]
+        self.assertEqual(self.issue.supplement_volume, u'test_suppl_volume')
+
+    def test_without_supplement_volume(self):
+
+        self.assertEqual(self.issue.supplement_volume, None)
+
+    def test_supplement_number(self):
+
+        self.issue.data['article']['v132'] = [{u'_': u'test_suppl_issue'}]
+
+        self.assertEqual(self.issue.supplement_number, u'test_suppl_issue')
+
+    def test_without_suplement_number(self):
+
+        self.assertEqual(self.issue.supplement_number, None)
+
+    def test_is_ahead(self):
+
+        self.assertFalse(self.issue.is_ahead_of_print)
+
+    def test_is_ahead_1(self):
+
+        self.issue.data['article']['v32'][0]['_'] = 'AHEAD'
+
+        self.assertTrue(self.issue.is_ahead_of_print)
+
+    def test_issue_url(self):
+
+        self.assertTrue(self.issue.url, '')
+
 class JournalTests(unittest.TestCase):
 
     def setUp(self):
@@ -131,7 +207,6 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(sorted(journal.languages), [u'en', u'pt'])
-
 
     def test_languages_without_v350(self):
         del(self.fulldoc['title']['v350'])
@@ -644,11 +719,6 @@ class ArticleTests(unittest.TestCase):
         article = self.article
         self.assertTrue(isinstance(article, Article))
 
-    def test_is_ahead(self):
-        article = self.article
-        
-        self.assertFalse(article.is_ahead_of_print)
-
     def test_order(self):
 
         article = self.article
@@ -662,14 +732,6 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v121'])
 
         self.assertEqual(article.order, None)
-
-    def test_is_ahead(self):
-
-        article = self.article
-
-        article.data['article']['v32'][0]['_'] = 'AHEAD'
-
-        self.assertTrue(article.is_ahead_of_print)
 
     def test_original_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
@@ -745,20 +807,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(sorted([k+v for k, v in article.translated_htmls().items()]), [u'esBody ES', u'ptBody PT'])
 
-    def test_issue_label_field_v4(self):
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.issue_label, u'v23n3')
-
-
-    def test_issue_label_without_field_v4(self):
-
-        del(self.fulldoc['article']['v4'])
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(article.issue_label, None)
 
     def test_fulltexts_field_fulltexts(self):
 
@@ -1152,51 +1200,6 @@ class ArticleTests(unittest.TestCase):
     def test_without_project_sponsor(self):
         del(self.fulldoc['article']['v58'])
         self.assertEqual(self.article.project_sponsor, None)
-
-    def test_volume(self):
-        article = self.article
-
-        self.assertEqual(article.volume, u'23')
-
-    def test_without_volume(self):
-        article = self.article
-
-        del(article.data['article']['v31'])
-        self.assertEqual(article.volume, None)
-
-    def test_issue(self):
-        article = self.article
-
-        self.assertEqual(article.issue, u'3')
-
-    def test_without_issue(self):
-        article = self.article
-
-        del(article.data['article']['v32'])
-        self.assertEqual(article.issue, None)
-
-    def test_supplement_volume(self):
-        article = self.article
-
-        article.data['article']['v131'] = [{u'_': u'test_suppl_volume'}]
-        self.assertEqual(article.supplement_volume, u'test_suppl_volume')
-
-    def test_without_supplement_volume(self):
-        article = self.article
-
-        self.assertEqual(article.supplement_volume, None)
-
-    def test_supplement_issue(self):
-        article = self.article
-
-        article.data['article']['v132'] = [{u'_': u'test_suppl_issue'}]
-
-        self.assertEqual(article.supplement_issue, u'test_suppl_issue')
-
-    def test_without_suplement_issue(self):
-        article = self.article
-
-        self.assertEqual(article.supplement_issue, None)
 
     def test_start_page(self):
         article = self.article

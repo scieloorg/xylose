@@ -29,8 +29,10 @@ LICENSE_REGEX = re.compile(r'a.+?href="(.+?)"')
 LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the creative commons id from the url.
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 
+
 def remove_control_characters(data):
     return "".join(ch for ch in data if unicodedata.category(ch)[0] != "C")
+
 
 def html_decode(string):
 
@@ -43,6 +45,135 @@ def html_decode(string):
         return remove_control_characters(string)
     except:
         return string
+
+
+class Issue(object):
+
+    def __init__(self, data, iso_format=None):
+        """
+        Create an Issue object given a isis2json type 3 SciELO document.
+
+        Keyword arguments:
+        iso_format -- the language iso format for methods that retrieve content
+        identified by language.
+        ['iso 639-2', 'iso 639-1', None]
+        """
+        if not iso_format in allowed_formats:
+            raise ValueError('Language format not allowed ({0})'.format(iso_format))
+
+        self._iso_format = iso_format
+        self.data = data
+
+    @property
+    def journal(self):
+
+        if 'title' in self.data:
+            self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+
+        return self._journal
+
+    @property
+    def publisher_id(self):
+        """
+        This method retrieves the publisher id of the given issue, if it exists.
+        This method deals with the legacy fields (880).
+        """
+        return self.data['article']['v880'][0]['_'][1:18]
+
+    @property
+    def scielo_domain(self):
+        """
+        This method retrieves the collection domains of the given journal, if it exists.
+        This method deals with the legacy fields (690).
+        """
+
+        if self.collection_acronym:
+            return choices.collections.get(
+                self.collection_acronym,
+                [u'Undefined: %s' % self.collection_acronym, None]
+            )[1] or None
+
+        if 'v690' in self.data:
+            return self.data['v690'][0]['_'].replace('http://', '')
+
+    @property
+    def order(self):
+        """
+        This method retrieves the issue order of the given article.
+        This method deals with the fields (v880).
+        """
+
+        pid = self.data.get('article', {}).get('v880', [{'_': None}])[0]['_']
+
+        if not pid:
+            return None
+
+        return str(int(pid[14:18]))
+
+    @property
+    def label(self):
+        """
+        This method retrieves the issue label. A combined value that describes
+        the entire issue label. Ex: v20n2, v20spe1, etc.
+        """
+
+        if 'v4' in self.data['article']:
+            return self.data['article']['v4'][0]['_']
+
+    @property
+    def volume(self):
+        """
+        This method retrieves the issue volume of the given article, if it exists.
+        This method deals with the legacy fields (31).
+        """
+        if 'v31' in self.data['article']:
+            return self.data['article']['v31'][0]['_']
+
+    @property
+    def number(self):
+        """
+        This method retrieves the issue number of the given article, if it exists.
+        This method deals with the legacy fields (32).
+        """
+        if 'v32' in self.data['article']:
+            return self.data['article']['v32'][0]['_']
+
+    @property
+    def supplement_volume(self):
+        """
+        This method retrieves the supplement of volume of the given article, if it exists.
+        This method deals with the legacy fields (131).
+        """
+        if 'v131' in self.data['article']:
+            return self.data['article']['v131'][0]['_']
+
+    @property
+    def supplement_number(self):
+        """
+        This method retrieves the supplement number of the given article, if it exists.
+        This method deals with the legacy fields (132).
+        """
+        if 'v132' in self.data['article']:
+            return self.data['article']['v132'][0]['_']
+
+    @property
+    def is_ahead_of_print(self):
+
+        if self.number and 'ahead' in self.number.lower():
+            return True
+
+        return False
+
+    def url(self, language='en'):
+        """
+        This method retrieves the issue url of the given article.
+        """
+        if self.scielo_domain:
+            return "http://{0}/scielo.php?script=sci_issuetoc&pid={1}&lng={2}".format(
+                self.scielo_domain,
+                self.publisher_id,
+                language
+            )
 
 
 class Journal(object):
@@ -399,6 +530,7 @@ class Journal(object):
 
         return tools.get_date(self.data['v941'][0]['_'])
 
+
 class Article(object):
 
     def __init__(self, data, iso_format=None):
@@ -419,7 +551,15 @@ class Article(object):
         self.print_issn = None
         self.electronic_issn = None
         self._journal = None
+        self._issue = None
         self._citations = None
+
+    @property
+    def issue(self):
+
+        self._issue = self._issue or Issue(self.data)
+
+        return self._issue
 
     @property
     def journal(self):
@@ -446,8 +586,7 @@ class Article(object):
 
             return data
 
-
-        if  'v540' in self.data['article']:
+        if 'v540' in self.data['article']:
             for dlicense in self.data['article']['v540']:
                 if not 't' in dlicense:
                     continue
@@ -476,24 +615,23 @@ class Article(object):
     @property
     def is_ahead_of_print(self):
 
-        if self.issue and 'ahead' in self.issue.lower():
-            return True
+        warnings.warn("deprecated, use issue.is_ahead_of_print", DeprecationWarning)
 
-        return False
+        return self.issue.is_ahead_of_print
 
     def original_section(self, iso_format=None):
 
         if not 'section' in self.data:
             return None
-        
+
         return self.data['section'].get(self.original_language(iso_format), None)
 
     def translated_section(self, iso_format=None):
-        
+
         if not 'section' in self.data:
             return None
 
-        return {k:v for k, v in self.data['section'].items() if k != self.original_language(iso_format)}
+        return {k: v for k, v in self.data['section'].items() if k != self.original_language(iso_format)}
 
     @property
     def section(self):
@@ -537,9 +675,9 @@ class Article(object):
         the entire issue label. Ex: v20n2, v20spe1, etc.
         """
 
-        if 'v4' in self.data['article']:
-            return self.data['article']['v4'][0]['_']
+        warnings.warn("deprecated, use issue.label", DeprecationWarning)
 
+        return self.issue.label
 
     def fulltexts(self, iso_format=None):
 
@@ -614,16 +752,6 @@ class Article(object):
         if len(languages) > 0:
             return [i for i in languages]
 
-    @property
-    def scielo_issn(self):
-        """
-        This method retrieves the issn used as id in SciELO.
-        This method deals with the legacy fields (v400).
-        """
-        warnings.warn("deprecated, use journal.scielo_issn", DeprecationWarning)
-
-        return self.journal.scielo_issn
-
     def original_language(self, iso_format=None):
         """
         This method retrieves the original language of the given article.
@@ -670,84 +798,6 @@ class Article(object):
                 return self.data['title']['v992']
 
     @property
-    def subject_areas(self):
-        """
-        This method retrieves the subject areas of the given article,
-        if it exists.
-        The subject areas are based on the journal subject areas.
-        This method deals with the legacy fields (441).
-        """
-        warnings.warn("deprecated, use journal.subject_areas", DeprecationWarning)
-
-        return html_decode(self.journal.subject_areas)
-
-    @property
-    def wos_subject_areas(self):
-        """
-        This method retrieves the Wob of Sciences subject areas of the given
-        journal, if it exists.
-        This method deals with the legacy fields (854).
-        """
-        warnings.warn("deprecated, use journal.wos_subject_areas", DeprecationWarning)
-
-        return html_decode(self.journal.wos_subject_areas)
-
-    @property
-    def wos_citation_indexes(self):
-        """
-        This method retrieves the Wob of Sciences Citation Indexes of the given
-        journal, if it exists.
-        This method deals with the legacy fields (851).
-        """
-        warnings.warn("deprecated, use journal.wos_citation_index", DeprecationWarning)
-
-        return html_decode(self.journal.wos_citation_indexes)
-
-    @property
-    def publisher_name(self):
-        """
-        This method retrieves the publisher name of the given article,
-        if it exists.
-        This method deals with the legacy fields (480).
-        """
-        warnings.warn("deprecated, use journal.publisher_name", DeprecationWarning)
-
-        return html_decode(self.journal.publisher_name)
-
-    @property
-    def publisher_loc(self):
-        """
-        This method retrieves the publisher localization of the given article,
-        if it exists.
-        This method deals with the legacy fields (490).
-        """
-        warnings.warn("deprecated, use journal.publisher_loc", DeprecationWarning)
-
-        return html_decode(self.journal.publisher_loc)
-
-    @property
-    def journal_title(self):
-        """
-        This method retrieves the journal_title of the given article,
-        if it exists.
-        This method deals with the legacy fields (100).
-        """
-        warnings.warn("deprecated, use journal.title", DeprecationWarning)
-
-        return html_decode(self.journal.title)
-
-    @property
-    def journal_acronym(self):
-        """
-        This method retrieves the journal_acronym of the given article,
-        if it exists.
-        This method deals with the legacy fields (68).
-        """
-        warnings.warn("deprecated, use journal.acronym", DeprecationWarning)
-
-        return self.journal.acronym
-
-    @property
     def data_model_version(self, fullpath=False):
         """
         This method retrieves the document version
@@ -770,7 +820,7 @@ class Article(object):
         if 'v702' in self.data['article']:
             splited = self.data['article']['v702'][0]['_'].replace('/', '\\').split('\\')
             filename = splited[-1].split('.')[0]
-            return filename            
+            return filename
 
     @property
     def publication_date(self):
@@ -787,7 +837,6 @@ class Article(object):
         This method retrieves the processing date of the given article, if it exists.
         This method deals with the legacy fields (91).
         """
-        warnings.warn("deprecated, use article.processing_date", DeprecationWarning)
 
         pdate = self.data.get(
             'processing_date',
@@ -797,7 +846,7 @@ class Article(object):
         if not pdate:
             return None
 
-        return tools.get_date(pdate.replace('-','')) if pdate else None
+        return tools.get_date(pdate.replace('-', '')) if pdate else None
 
     @property
     def update_date(self):
@@ -808,9 +857,9 @@ class Article(object):
         """
 
         updated_at = self.data.get(
-            'updated_at', 
+            'updated_at',
             self.data['article'].get('v91', [{'_': ''}])[0]['_']
-        ).replace('-','')
+        ).replace('-', '')
 
         if not updated_at:
             return self.creation_date
@@ -825,9 +874,9 @@ class Article(object):
         """
 
         created_at = self.data.get(
-            'created_at', 
+            'created_at',
             self.data['article'].get('v93', [{'_': ''}])[0]['_']
-        ).replace('-','')
+        ).replace('-', '')
 
         return tools.get_date(created_at) if created_at else None
 
@@ -910,42 +959,6 @@ class Article(object):
             return None
 
         return sponsors
-
-    @property
-    def volume(self):
-        """
-        This method retrieves the issue volume of the given article, if it exists.
-        This method deals with the legacy fields (31).
-        """
-        if 'v31' in self.data['article']:
-            return self.data['article']['v31'][0]['_']
-
-    @property
-    def issue(self):
-        """
-        This method retrieves the issue number of the given article, if it exists.
-        This method deals with the legacy fields (32).
-        """
-        if 'v32' in self.data['article']:
-            return self.data['article']['v32'][0]['_']
-
-    @property
-    def supplement_volume(self):
-        """
-        This method retrieves the supplement of volume of the given article, if it exists.
-        This method deals with the legacy fields (131).
-        """
-        if 'v131' in self.data['article']:
-            return self.data['article']['v131'][0]['_']
-
-    @property
-    def supplement_issue(self):
-        """
-        This method retrieves the supplement number of the given article, if it exists.
-        This method deals with the legacy fields (132).
-        """
-        if 'v132' in self.data['article']:
-            return self.data['article']['v132'][0]['_']
 
     @property
     def start_page(self):
@@ -1033,17 +1046,6 @@ class Article(object):
         This method deals with the legacy fields (880).
         """
         return self.data['article']['v880'][0]['_']
-
-    @property
-    def journal_abbreviated_title(self):
-        """
-        This method retrieves the journal abbreviated title of the given article, if it exists.
-        This method deals with the legacy fields (30).
-        """
-
-        warnings.warn("deprecated, use journal.abbreviated_title", DeprecationWarning)
-
-        return self.journal.abbreviated_title
 
     @property
     def document_type(self):
@@ -1359,14 +1361,6 @@ class Article(object):
                 self.publisher_id[0:18],
                 language
             )
-
-    def journal_url(self, language='en'):
-        """
-        This method retrieves the journal url of the given article.
-        """
-        warnings.warn("deprecated, use journal.url", DeprecationWarning)
-
-        return self.journal.url(language=language)
 
     def keywords(self, iso_format=None):
         """
