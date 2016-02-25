@@ -1309,6 +1309,7 @@ class Article(object):
                     continue
                 normalized[aff['index']]['normalized'] = True
                 normalized[aff['index']]['country'] = aff.get('country', '')
+                normalized[aff['index']]['country_iso_3166'] = aff.get('country_iso_3166', '')
                 normalized[aff['index']]['institution'] = aff.get('institution', '')
                 normalized[aff['index']]['state'] = aff.get('state', '')
 
@@ -1335,8 +1336,7 @@ class Article(object):
 
                         if 'p' in aff and aff['p'] in choices.ISO_3166:
                             affdict['country'] = choices.ISO_3166[aff['p']]
-                            if aff['p'] in choices.ISO_3166:
-                                affdict['country_iso_3166'] = aff['p']
+                            affdict['country_iso_3166'] = aff['p']
 
                         if 's' in aff:
                             affdict['state'] = aff['s']
@@ -1369,6 +1369,9 @@ class Article(object):
                     affdict['state'] = html_decode(aff['s'])
                 if 'p' in aff:
                     affdict['country'] = html_decode(aff['p'])
+                if 'p' in aff and 'q' in aff and aff['p'] in choices.ISO_3166:
+                    affdict['country'] = choices.ISO_3166[aff['p']]
+                    affdict['country_iso_3166'] = aff['p']
                 if 'e' in aff:
                     affdict['email'] = html_decode(aff['e'])
                 if 'd' in aff:

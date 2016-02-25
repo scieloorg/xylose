@@ -1751,6 +1751,13 @@ class ArticleTests(unittest.TestCase):
                 u"p": u"US",
                 u"s": u"São Paulo",
                 u"_": u"University of Florida Not Normalized"
+            },
+            {
+                u"i": u"A04",
+                u"q": u"Mexico",
+                u"p": u"MX",
+                u"s": u"Yucatán",
+                u"_": u"Secretaría de Salud de Yucatán"
             }
         ]
 
@@ -1758,13 +1765,15 @@ class ArticleTests(unittest.TestCase):
 
         result_index = u''.join([i['index'] for i in sorted(amc,  key=lambda k: k['index'])])
         result_country = u''.join([i['country'] for i in sorted(amc,  key=lambda k: k['index'])])
+        result_country_iso = u''.join([i['country_iso_3166'] for i in sorted(amc,  key=lambda k: k['index']) if 'country_iso_3166' in i])
         result_status = u''.join([str(i['normalized']) for i in sorted(amc,  key=lambda k: k['index'])])
         result_state = u''.join([i['state'] for i in sorted(amc,  key=lambda k: k['index'])])
 
-        self.assertEqual(result_index, u'A01A02A03')
-        self.assertEqual(result_country, u'BrazilBrazilUS')
-        self.assertEqual(result_status, u'TrueTrueFalse')
-        self.assertEqual(result_state, u'São PauloSão Paulo')
+        self.assertEqual(result_index, u'A01A02A03A04')
+        self.assertEqual(result_country, u'BrazilBrazilUSMexico')
+        self.assertEqual(result_country_iso, u'BRBRMX')
+        self.assertEqual(result_status, u'TrueTrueFalseFalse')
+        self.assertEqual(result_state, u'São PauloSão PauloYucatán')
 
     def test_without_normalized_affiliations(self):
         article = self.article
@@ -1989,6 +1998,41 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v70'] = [{u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"}]
 
         expected = [{u'index': u'', u'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'}]
+
+        self.assertEqual(article.affiliations, expected)
+
+    def test_affiliation_with_country_iso_3166(self):
+
+        article = self.article
+
+        del(article.data['article']['v70'])
+
+        article.data['article']['v70'] = [
+            {
+                u"1": u"Escuela Nacional de Enfermería y Obstetricia",
+                u"2": u"División de Estudios de Posgrado e Investigación",
+                u"q": u"Mexico",
+                u"c": u"México",
+                u"i": u"A01",
+                u"l": u"a",
+                u"p": u"MX",
+                u"s": u"D.F.",
+                u"_": u"Universidad Nacional Autónoma de México"
+           }
+        ]
+
+        expected = [
+            {
+                'index': u'A01',
+                'city': u'México',
+                'state': u'D.F.',
+                'country': u'Mexico',
+                'country_iso_3166': u'MX',
+                'orgdiv1': u'Escuela Nacional de Enfermería y Obstetricia',
+                'orgdiv2': u'División de Estudios de Posgrado e Investigación',
+                'institution': u'Universidad Nacional Autónoma de México'
+            }
+        ]
 
         self.assertEqual(article.affiliations, expected)
 
