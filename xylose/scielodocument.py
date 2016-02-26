@@ -81,7 +81,7 @@ class Issue(object):
         This method retrieves the publisher id of the given issue, if it exists.
         This method deals with the legacy fields (880).
         """
-        return self.data['issue']['v880'][0]['_'][1:18]
+        return self.data['issue']['v880'][0]['_']
 
     @property
     def collection_acronym(self):
