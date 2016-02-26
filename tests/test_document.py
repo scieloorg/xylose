@@ -95,23 +95,15 @@ class IssueTests(unittest.TestCase):
     def setUp(self):
         path = os.path.dirname(os.path.realpath(__file__))
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
-        self.issue = Issue(self.fulldoc)
+        self.issue = Issue(self.fulldoc['article'])
 
     def test_order(self):
 
         self.assertEqual(self.issue.order, '3')
 
-    def test_issue_label_field_v4(self):
+    def test_issue_label(self):
 
         self.assertEqual(self.issue.label, u'v23n3')
-
-    def test_issue_label_without_field_v4(self):
-
-        del(self.fulldoc['article']['v4'])
-
-        article = Article(self.fulldoc)
-
-        self.assertEqual(self.issue.label, None)
 
     def test_volume(self):
 
@@ -119,7 +111,7 @@ class IssueTests(unittest.TestCase):
 
     def test_without_volume(self):
 
-        del(self.issue.data['article']['v31'])
+        del(self.issue.data['v31'])
 
         self.assertEqual(self.issue.volume, None)
 
@@ -129,13 +121,13 @@ class IssueTests(unittest.TestCase):
 
     def test_without_issue(self):
 
-        del(self.issue.data['article']['v32'])
+        del(self.issue.data['v32'])
 
         self.assertEqual(self.issue.number, None)
 
     def test_supplement_volume(self):
 
-        self.issue.data['article']['v131'] = [{u'_': u'test_suppl_volume'}]
+        self.issue.data['v131'] = [{u'_': u'test_suppl_volume'}]
         self.assertEqual(self.issue.supplement_volume, u'test_suppl_volume')
 
     def test_without_supplement_volume(self):
@@ -144,7 +136,7 @@ class IssueTests(unittest.TestCase):
 
     def test_supplement_number(self):
 
-        self.issue.data['article']['v132'] = [{u'_': u'test_suppl_issue'}]
+        self.issue.data['v132'] = [{u'_': u'test_suppl_issue'}]
 
         self.assertEqual(self.issue.supplement_number, u'test_suppl_issue')
 
@@ -158,7 +150,7 @@ class IssueTests(unittest.TestCase):
 
     def test_is_ahead_1(self):
 
-        self.issue.data['article']['v32'][0]['_'] = 'AHEAD'
+        self.issue.data['v32'][0]['_'] = 'AHEAD'
 
         self.assertTrue(self.issue.is_ahead_of_print)
 
@@ -177,7 +169,6 @@ class JournalTests(unittest.TestCase):
         path = os.path.dirname(os.path.realpath(__file__))
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
-
 
     def test_without_periodicity_in_months(self):
         journal = self.journal

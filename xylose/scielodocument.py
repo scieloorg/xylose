@@ -28,6 +28,8 @@ else:
 LICENSE_REGEX = re.compile(r'a.+?href="(.+?)"')
 LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the creative commons id from the url.
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
+SUPPLBEG_REGEX = re.compile(r'^0 ')
+SUPPLEND_REGEX = re.compile(r' 0$')
 
 
 def remove_control_characters(data):
@@ -62,6 +64,7 @@ class Issue(object):
             raise ValueError('Language format not allowed ({0})'.format(iso_format))
 
         self._iso_format = iso_format
+        self._journal = None
         self.data = data
 
     @property
@@ -78,7 +81,7 @@ class Issue(object):
         This method retrieves the publisher id of the given issue, if it exists.
         This method deals with the legacy fields (880).
         """
-        return self.data['article']['v880'][0]['_'][1:18]
+        return self.data['v880'][0]['_'][1:18]
 
     @property
     def collection_acronym(self):
@@ -92,11 +95,11 @@ class Issue(object):
         if 'collection' in self.data:
             return self.data['collection']
 
-        if 'v992' in self.data['article']:
-            if isinstance(self.data['article']['v992'], list):
-                return self.data['article']['v992'][0]['_']
+        if 'v992' in self.data:
+            if isinstance(self.data['v992'], list):
+                return self.data['v992'][0]['_']
             else:
-                return self.data['article']['v992']
+                return self.data['v992']
 
         if 'v992' in self.data['title']:
             if isinstance(self.data['title']['v992'], list):
@@ -119,8 +122,8 @@ class Issue(object):
 
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
-        elif 'v69' in self.data['article']:
-            return self.data['article']['v69'][0]['_'].replace('http://', '')
+        elif 'v69' in self.data:
+            return self.data['v69'][0]['_'].replace('http://', '')
 
     @property
     def order(self):
@@ -129,12 +132,21 @@ class Issue(object):
         This method deals with the fields (v880).
         """
 
-        pid = self.data.get('article', {}).get('v880', [{'_': None}])[0]['_']
+        pid = self.data.get('v880', [{'_': None}])[0]['_']
 
         if not pid:
             return None
 
         return str(int(pid[14:18]))
+
+    @property
+    def type(self):
+        """
+        This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special'].
+        """
+
+        if 'v4' in self.data:
+            return self.data['v4'][0]['_']
 
     @property
     def label(self):
@@ -143,8 +155,25 @@ class Issue(object):
         the entire issue label. Ex: v20n2, v20spe1, etc.
         """
 
-        if 'v4' in self.data['article']:
-            return self.data['article']['v4'][0]['_']
+        label = ''
+        label_issue = self.number
+        label_volume = self.volume
+        label_suppl_issue = ' suppl %s' % self.supplement_number if self.supplement_number else ''
+
+        if label_suppl_issue:
+            label_issue += label_suppl_issue
+
+        label_suppl_volume = ' suppl %s' % self.supplement_volume if self.supplement_volume else ''
+
+        if label_suppl_volume:
+            label_issue += label_suppl_volume
+
+        label_issue = SUPPLBEG_REGEX.sub('', label_issue)
+        label_issue = SUPPLEND_REGEX.sub('', label_issue)
+
+        label += ''.join(['v'+label_volume, 'n'+label_issue])
+
+        return label
 
     @property
     def volume(self):
@@ -152,8 +181,8 @@ class Issue(object):
         This method retrieves the issue volume of the given article, if it exists.
         This method deals with the legacy fields (31).
         """
-        if 'v31' in self.data['article']:
-            return self.data['article']['v31'][0]['_']
+        if 'v31' in self.data:
+            return self.data['v31'][0]['_']
 
     @property
     def number(self):
@@ -161,8 +190,8 @@ class Issue(object):
         This method retrieves the issue number of the given article, if it exists.
         This method deals with the legacy fields (32).
         """
-        if 'v32' in self.data['article']:
-            return self.data['article']['v32'][0]['_']
+        if 'v32' in self.data:
+            return self.data['v32'][0]['_']
 
     @property
     def supplement_volume(self):
@@ -170,8 +199,8 @@ class Issue(object):
         This method retrieves the supplement of volume of the given article, if it exists.
         This method deals with the legacy fields (131).
         """
-        if 'v131' in self.data['article']:
-            return self.data['article']['v131'][0]['_']
+        if 'v131' in self.data:
+            return self.data['v131'][0]['_']
 
     @property
     def supplement_number(self):
@@ -179,8 +208,8 @@ class Issue(object):
         This method retrieves the supplement number of the given article, if it exists.
         This method deals with the legacy fields (132).
         """
-        if 'v132' in self.data['article']:
-            return self.data['article']['v132'][0]['_']
+        if 'v132' in self.data:
+            return self.data['v132'][0]['_']
 
     @property
     def is_ahead_of_print(self):
@@ -633,7 +662,7 @@ class Article(object):
     @property
     def issue(self):
 
-        self._issue = self._issue or Issue(self.data)
+        self._issue = self._issue or Issue(self.data['article'])
 
         return self._issue
 
@@ -755,6 +784,16 @@ class Article(object):
 
         return self.issue.label
 
+    @property
+    def assets_code(self):
+        """
+        This method retrieves the issue label available in the field v4. The
+        path to the document assets is build with this code.
+        ex: /pdf/[journal_acronym]/[assets_code]/[file_code]
+        """
+
+        return self.data['article'].get('v4', [{'_': None}])[0]['_']
+
     def fulltexts(self, iso_format=None):
 
         if 'fulltexts' in self.data:
@@ -763,10 +802,10 @@ class Article(object):
         original_pdf = 'http://%s/pdf/%s/%s/%s.pdf' % (
             self.scielo_domain,
             self.journal.acronym.lower(),
-            self.issue_label,
+            self.assets_code,
             self.file_code()
         )
-        
+
         ol = self.original_language(iso_format=iso_format)
         fulltexts = {
             'html': {
