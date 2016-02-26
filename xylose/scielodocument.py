@@ -145,8 +145,27 @@ class Issue(object):
         This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special'].
         """
 
-        if 'v4' in self.data:
-            return self.data['v4'][0]['_']
+        label = ''.join([
+            self.data['issue'].get('v31', [{'_': ''}])[0]['_'],
+            self.data['issue'].get('v32', [{'_': ''}])[0]['_'],
+            self.data['issue'].get('v131', [{'_': ''}])[0]['_'],
+            self.data['issue'].get('v132', [{'_': ''}])[0]['_'],
+            self.data['issue'].get('v41', [{'_': ''}])[0]['_'],
+        ]).lower()
+
+        if 'ahead' in label:
+            return 'ahead'
+
+        if 'v131' in self.data['issue'] or 'v132' in self.data['issue']:
+            return 'supplement'
+
+        if 'suppl' in label:
+            return 'supplement'
+
+        if 'spe' in label:
+            return 'special'
+
+        return 'regular'
 
     @property
     def label(self):
@@ -243,6 +262,23 @@ class Issue(object):
             return (tools.get_date(pdate))
 
         return None
+
+    @property
+    def processing_date(self):
+        """
+        This method retrieves the processing date of the given issue, if it exists.
+        This method deals with the legacy fields (91).
+        """
+
+        pdate = self.data.get(
+            'processing_date',
+            self.data['issue'].get('v91', [{'_': ''}])[0]['_']
+        )
+
+        if not pdate:
+            return None
+
+        return tools.get_date(pdate.replace('-', '')) if pdate else None
 
 
 class Journal(object):

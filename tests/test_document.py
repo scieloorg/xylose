@@ -97,6 +97,60 @@ class IssueTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
         self.issue = Issue(self.fulldoc)
 
+    def test_type_regular(self):
+        issue = self.issue
+
+        self.assertEqual(issue.type, 'regular')
+
+    def test_type_supplement_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v131'] = [{'_': '3'}]
+
+        self.assertEqual(issue.type, 'supplement')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v132'] = [{'_': '3'}]
+
+        self.assertEqual(issue.type, 'supplement')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v32'] = [{'_': 'spe 1'}]
+
+        self.assertEqual(issue.type, 'special')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v32'] = [{'_': 'ahead'}]
+
+        self.assertEqual(issue.type, 'ahead')
+
+    def test_processing_date(self):
+        issue = self.issue
+
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.processing_date, '2012-04-19')
+
+    def test_processing_date_1(self):
+        issue = self.issue
+
+        issue.data['processing_date'] = u'2012-04-19'
+
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.processing_date, '2012-04-19')
+
+    def test_without_processing_date(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v91'])
+        
+        self.assertEqual(issue.processing_date, None)
+
     def test_order(self):
 
         self.assertEqual(self.issue.order, '3')
