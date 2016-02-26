@@ -712,7 +712,8 @@ class Article(object):
     @property
     def issue(self):
 
-        self._issue = self._issue or Issue(self.data['article'])
+        if 'issue' in self.data:
+            self._issue = self._issue or Issue(self.data['issue'], iso_format=self._iso_format)
 
         return self._issue
 
