@@ -81,7 +81,7 @@ class Issue(object):
         This method retrieves the publisher id of the given issue, if it exists.
         This method deals with the legacy fields (880).
         """
-        return self.data['v880'][0]['_'][1:18]
+        return self.data['issue']['v880'][0]['_'][1:18]
 
     @property
     def collection_acronym(self):
@@ -95,11 +95,11 @@ class Issue(object):
         if 'collection' in self.data:
             return self.data['collection']
 
-        if 'v992' in self.data:
-            if isinstance(self.data['v992'], list):
-                return self.data['v992'][0]['_']
+        if 'v992' in self.data['issue']:
+            if isinstance(self.data['issue']['v992'], list):
+                return self.data['issue']['v992'][0]['_']
             else:
-                return self.data['v992']
+                return self.data['issue']['v992']
 
         if 'v992' in self.data['title']:
             if isinstance(self.data['title']['v992'], list):
@@ -122,8 +122,8 @@ class Issue(object):
 
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
-        elif 'v69' in self.data:
-            return self.data['v69'][0]['_'].replace('http://', '')
+        elif 'v69' in self.data['title']:
+            return self.data['title']['v69'][0]['_'].replace('http://', '')
 
     @property
     def order(self):
@@ -132,7 +132,7 @@ class Issue(object):
         This method deals with the fields (v880).
         """
 
-        pid = self.data.get('v880', [{'_': None}])[0]['_']
+        pid = self.data['issue'].get('v880', [{'_': None}])[0]['_']
 
         if not pid:
             return None
@@ -181,8 +181,8 @@ class Issue(object):
         This method retrieves the issue volume of the given article, if it exists.
         This method deals with the legacy fields (31).
         """
-        if 'v31' in self.data:
-            return self.data['v31'][0]['_']
+        if 'v31' in self.data['issue']:
+            return self.data['issue']['v31'][0]['_']
 
     @property
     def number(self):
@@ -190,8 +190,8 @@ class Issue(object):
         This method retrieves the issue number of the given article, if it exists.
         This method deals with the legacy fields (32).
         """
-        if 'v32' in self.data:
-            return self.data['v32'][0]['_']
+        if 'v32' in self.data['issue']:
+            return self.data['issue']['v32'][0]['_']
 
     @property
     def supplement_volume(self):
@@ -199,8 +199,8 @@ class Issue(object):
         This method retrieves the supplement of volume of the given article, if it exists.
         This method deals with the legacy fields (131).
         """
-        if 'v131' in self.data:
-            return self.data['v131'][0]['_']
+        if 'v131' in self.data['issue']:
+            return self.data['issue']['v131'][0]['_']
 
     @property
     def supplement_number(self):
@@ -208,8 +208,8 @@ class Issue(object):
         This method retrieves the supplement number of the given article, if it exists.
         This method deals with the legacy fields (132).
         """
-        if 'v132' in self.data:
-            return self.data['v132'][0]['_']
+        if 'v132' in self.data['issue']:
+            return self.data['issue']['v132'][0]['_']
 
     @property
     def is_ahead_of_print(self):
