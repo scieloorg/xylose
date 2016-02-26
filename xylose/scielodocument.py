@@ -178,7 +178,7 @@ class Issue(object):
     @property
     def volume(self):
         """
-        This method retrieves the issue volume of the given article, if it exists.
+        This method retrieves the issue volume of the given issue, if it exists.
         This method deals with the legacy fields (31).
         """
         if 'v31' in self.data['issue']:
@@ -187,7 +187,7 @@ class Issue(object):
     @property
     def number(self):
         """
-        This method retrieves the issue number of the given article, if it exists.
+        This method retrieves the issue number of the given issue, if it exists.
         This method deals with the legacy fields (32).
         """
         if 'v32' in self.data['issue']:
@@ -196,7 +196,7 @@ class Issue(object):
     @property
     def supplement_volume(self):
         """
-        This method retrieves the supplement of volume of the given article, if it exists.
+        This method retrieves the supplement of volume of the given issue, if it exists.
         This method deals with the legacy fields (131).
         """
         if 'v131' in self.data['issue']:
@@ -205,7 +205,7 @@ class Issue(object):
     @property
     def supplement_number(self):
         """
-        This method retrieves the supplement number of the given article, if it exists.
+        This method retrieves the supplement number of the given issue, if it exists.
         This method deals with the legacy fields (132).
         """
         if 'v132' in self.data['issue']:
@@ -221,7 +221,7 @@ class Issue(object):
 
     def url(self, language='en'):
         """
-        This method retrieves the issue url of the given article.
+        This method retrieves the issue url of the given issue.
         """
         if self.scielo_domain:
             return "http://{0}/scielo.php?script=sci_issuetoc&pid={1}&lng={2}".format(
@@ -229,6 +229,20 @@ class Issue(object):
                 self.publisher_id,
                 language
             )
+
+    @property
+    def publication_date(self):
+        """
+        This method retrieves the publication date of the given issue, if it exists.
+        This method deals with the legacy fields (65).
+        """
+
+        pdate = self.data['issue'].get('v65',[{'_': None}])[0]['_']
+
+        if pdate:
+            return (tools.get_date(pdate))
+
+        return None
 
 
 class Journal(object):

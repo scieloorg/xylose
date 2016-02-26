@@ -115,6 +115,16 @@ class IssueTests(unittest.TestCase):
 
         self.assertEqual(self.issue.volume, None)
 
+    def test_publication_date(self):
+
+        self.assertEqual(self.issue.publication_date, u'2001-12')
+
+    def test_without_publication_date(self):
+
+        del(self.issue.data['issue']['v65'])
+
+        self.assertEqual(self.issue.publication_date, None)
+
     def test_issue(self):
 
         self.assertEqual(self.issue.number, u'3')
