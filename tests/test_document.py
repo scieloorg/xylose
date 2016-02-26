@@ -94,8 +94,62 @@ class IssueTests(unittest.TestCase):
 
     def setUp(self):
         path = os.path.dirname(os.path.realpath(__file__))
-        self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
-        self.issue = Issue(self.fulldoc['article'])
+        self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
+        self.issue = Issue(self.fulldoc)
+
+    def test_type_regular(self):
+        issue = self.issue
+
+        self.assertEqual(issue.type, 'regular')
+
+    def test_type_supplement_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v131'] = [{'_': '3'}]
+
+        self.assertEqual(issue.type, 'supplement')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v132'] = [{'_': '3'}]
+
+        self.assertEqual(issue.type, 'supplement')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v32'] = [{'_': 'spe 1'}]
+
+        self.assertEqual(issue.type, 'special')
+
+    def test_type_supplement_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v32'] = [{'_': 'ahead'}]
+
+        self.assertEqual(issue.type, 'ahead')
+
+    def test_processing_date(self):
+        issue = self.issue
+
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.processing_date, '2012-04-19')
+
+    def test_processing_date_1(self):
+        issue = self.issue
+
+        issue.data['processing_date'] = u'2012-04-19'
+
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.processing_date, '2012-04-19')
+
+    def test_without_processing_date(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v91'])
+        
+        self.assertEqual(issue.processing_date, None)
 
     def test_order(self):
 
@@ -103,17 +157,27 @@ class IssueTests(unittest.TestCase):
 
     def test_issue_label(self):
 
-        self.assertEqual(self.issue.label, u'v23n3')
+        self.assertEqual(self.issue.label, u'v19n3')
 
     def test_volume(self):
 
-        self.assertEqual(self.issue.volume, u'23')
+        self.assertEqual(self.issue.volume, u'19')
 
     def test_without_volume(self):
 
-        del(self.issue.data['v31'])
+        del(self.issue.data['issue']['v31'])
 
         self.assertEqual(self.issue.volume, None)
+
+    def test_publication_date(self):
+
+        self.assertEqual(self.issue.publication_date, u'2001-12')
+
+    def test_without_publication_date(self):
+
+        del(self.issue.data['issue']['v65'])
+
+        self.assertEqual(self.issue.publication_date, None)
 
     def test_issue(self):
 
@@ -121,13 +185,13 @@ class IssueTests(unittest.TestCase):
 
     def test_without_issue(self):
 
-        del(self.issue.data['v32'])
+        del(self.issue.data['issue']['v32'])
 
         self.assertEqual(self.issue.number, None)
 
     def test_supplement_volume(self):
 
-        self.issue.data['v131'] = [{u'_': u'test_suppl_volume'}]
+        self.issue.data['issue']['v131'] = [{u'_': u'test_suppl_volume'}]
         self.assertEqual(self.issue.supplement_volume, u'test_suppl_volume')
 
     def test_without_supplement_volume(self):
@@ -136,7 +200,7 @@ class IssueTests(unittest.TestCase):
 
     def test_supplement_number(self):
 
-        self.issue.data['v132'] = [{u'_': u'test_suppl_issue'}]
+        self.issue.data['issue']['v132'] = [{u'_': u'test_suppl_issue'}]
 
         self.assertEqual(self.issue.supplement_number, u'test_suppl_issue')
 
@@ -150,7 +214,7 @@ class IssueTests(unittest.TestCase):
 
     def test_is_ahead_1(self):
 
-        self.issue.data['v32'][0]['_'] = 'AHEAD'
+        self.issue.data['issue']['v32'][0]['_'] = 'AHEAD'
 
         self.assertTrue(self.issue.is_ahead_of_print)
 

@@ -1,0 +1,488 @@
+{
+    "issue": {
+        "v30": [
+            {
+                "_": "Planta daninha"
+            }
+        ],
+        "v31": [
+            {
+                "_": "19"
+            }
+        ],
+        "v32": [
+            {
+                "_": "3"
+            }
+        ],
+        "v999": [
+            {
+                "_": "../bases-work/pd/pd"
+            }
+        ],
+        "v36": [
+            {
+                "_": "20013"
+            }
+        ],
+        "v991": [
+            {
+                "_": "1"
+            }
+        ],
+        "v992": [
+            {
+                "_": "scl"
+            }
+        ],
+        "v151": [
+            {
+                "_": "Planta daninha"
+            }
+        ],
+        "v930": [
+            {
+                "_": "PD"
+            }
+        ],
+        "v880": [
+            {
+                "_": "0100-835820010003"
+            }
+        ],
+        "v480": [
+            {
+                "_": "Sociedade Brasileira da Ci\u00eancia das Plantas Daninhas"
+            }
+        ],
+        "v35": [
+            {
+                "_": "0100-8358"
+            }
+        ],
+        "v130": [
+            {
+                "_": "Planta Daninha"
+            }
+        ],
+        "v117": [
+            {
+                "_": "nbr6023"
+            }
+        ],
+        "v43": [
+            {
+                "a": "2001",
+                "c": "Vi\u00e7osa",
+                "m": "sept./dic.",
+                "l": "es",
+                "n": "no.3",
+                "t": "Planta daninha",
+                "v": "vol.19",
+                "_": ""
+            },
+            {
+                "a": "2001",
+                "c": "Vi\u00e7osa",
+                "m": "set./dez.",
+                "l": "pt",
+                "n": "no.3",
+                "t": "Planta daninha",
+                "v": "vol.19",
+                "_": ""
+            },
+            {
+                "a": "2001",
+                "c": "Vi\u00e7osa",
+                "m": "Sept./Dec.",
+                "l": "en",
+                "n": "no.3",
+                "t": "Planta daninha",
+                "v": "vol.19",
+                "_": ""
+            }
+        ],
+        "v42": [
+            {
+                "_": "1"
+            }
+        ],
+        "v49": [
+            {
+                "c": "PD010",
+                "l": "pt",
+                "_": "",
+                "t": "Artigos"
+            },
+            {
+                "c": "PD010",
+                "l": "en",
+                "_": "",
+                "t": "Articles"
+            }
+        ],
+        "v48": [
+            {
+                "h": "Sumario",
+                "l": "es",
+                "_": ""
+            },
+            {
+                "h": "Sum\u00e1rio",
+                "l": "pt",
+                "_": ""
+            },
+            {
+                "h": "Table of Contents",
+                "l": "en",
+                "_": ""
+            }
+        ],
+        "v65": [
+            {
+                "_": "20011200"
+            }
+        ],
+        "v85": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v6": [
+            {
+                "_": "037"
+            }
+        ],
+        "v122": [
+            {
+                "_": "19"
+            }
+        ],
+        "v701": [
+            {
+                "_": "1"
+            }
+        ],
+        "v700": [
+            {
+                "_": "0"
+            }
+        ],
+        "v706": [
+            {
+                "_": "i"
+            }
+        ],
+        "v91": [
+            {
+                "_": "20091005"
+            }
+        ],
+        "v200": [
+            {
+                "_": "0"
+            }
+        ]
+    },
+    "title": {
+        "v35": [
+            {
+                "_": "ONLIN"
+            }
+        ],
+        "v6": [
+            {
+                "_": "c"
+            }
+        ],
+        "v10": [
+            {
+                "_": "br1.1"
+            }
+        ],
+        "v935": [
+            {
+                "_": "1806-9681"
+            }
+        ],
+        "v992": [
+            {
+                "_": "scl"
+            }
+        ],
+        "v150": [
+            {
+                "_": "Planta daninha"
+            }
+        ],
+        "v151": [
+            {
+                "_": "Planta daninha"
+            }
+        ],
+        "v930": [
+            {
+                "_": "PD"
+            }
+        ],
+        "v440": [
+            {
+                "_": "HERBICIDAS, CONTROLE DE ERVAS DANINHAS, TECNOLOGIA AGRICOLA"
+            }
+        ],
+        "v441": [
+            {
+                "_": "Agricultural Sciences"
+            }
+        ],
+        "v950": [
+            {
+                "_": "MMM"
+            }
+        ],
+        "v951": [
+            {
+                "_": "MMM"
+            }
+        ],
+        "v480": [
+            {
+                "_": "Sociedade Brasileira da Ci\u00eancia das Plantas Daninhas"
+            }
+        ],
+        "v400": [
+            {
+                "_": "0100-8358"
+            }
+        ],
+        "v350": [
+            {
+                "_": "es"
+            },
+            {
+                "_": "en"
+            },
+            {
+                "_": "pt"
+            }
+        ],
+        "v117": [
+            {
+                "_": "nbr6023"
+            }
+        ],
+        "v699": [
+            {
+                "_": "undefined"
+            }
+        ],
+        "v310": [
+            {
+                "_": "BR"
+            }
+        ],
+        "v330": [
+            {
+                "_": "CT"
+            }
+        ],
+        "v85": [
+            {
+                "_": "nd"
+            }
+        ],
+        "v692": [
+            {
+                "_": "http://submission.scielo.br/index.php/pd/login"
+            }
+        ],
+        "v691": [
+            {
+                "_": "100000000000000000000000"
+            }
+        ],
+        "v854": [
+            {
+                "_": "PLANT SCIENCES"
+            }
+        ],
+        "v20": [
+            {
+                "_": "056386-2"
+            }
+        ],
+        "v851": [
+            {
+                "_": "SCIE"
+            }
+        ],
+        "v490": [
+            {
+                "_": "Vi\u00e7osa"
+            }
+        ],
+        "v68": [
+            {
+                "_": "pd"
+            }
+        ],
+        "v67": [
+            {
+                "_": "na"
+            }
+        ],
+        "v66": [
+            {
+                "_": "art"
+            }
+        ],
+        "v65": [
+            {
+                "_": "<hr>"
+            }
+        ],
+        "v64": [
+            {
+                "_": "rpdaninha@gmail.com"
+            }
+        ],
+        "v63": [
+            {
+                "_": "Departamento de Fitotecnia - DFT"
+            },
+            {
+                "_": "Universidade Federal de Vi\u00e7osa - UFV"
+            },
+            {
+                "_": "36570-000 - Vi\u00e7osa-MG - Brasil"
+            },
+            {
+                "_": "Tel./Fax::(+55 31) 3899-2611"
+            }
+        ],
+        "v62": [
+            {
+                "_": "Sociedade Brasileira da Ci\u00eancia das Plantas Daninhas"
+            }
+        ],
+        "v450": [
+            {
+                "_": "CAB e AGRICOLA"
+            },
+            {
+                "_": "ISI"
+            }
+        ],
+        "v140": [
+            {
+                "_": "CNPq e Sociedade Brasileira da Ci\u00eancia das Plantas Daninhas"
+            }
+        ],
+        "v380": [
+            {
+                "_": "Q"
+            }
+        ],
+        "v901": [
+            {
+                "l": "es",
+                "_": "Se destina a la publicaci\u00f3n de art\u00edculos t\u00e9cnico-cient\u00edficos y revisiones bibliogr\u00e1ficas originales de naturaleza cr\u00edtica sobre Biolog\u00eda, Fisiolog\u00eda, controle, valores nutriceuticos y fitodescontaminantes, herbicidas, reguladores de crecimiento, desfollonantes, desecantes, tecnolog\u00eda de aplicaci\u00f3n y asuntos correlatos."
+            },
+            {
+                "l": "pt",
+                "_": "Destina-se \u00e0 publica\u00e7\u00e3o de artigos t\u00e9cnico-cient\u00edficos e revis\u00f5es bibliogr\u00e1ficas originais de natureza cr\u00edtica sobre Biologia e manejo de plantas daninhas e \u00e1reas correlatas."
+            },
+            {
+                "l": "en",
+                "_": "To publish technical-scientific articles, technical notes and review articles of a critical nature in the field of Biology, Physiology, pharmaceutical control and plant-decontaminating values, herbicides, growth regulators, defoliants, desiccants, application technology and similar issues."
+            }
+        ],
+        "v943": [
+            {
+                "_": "20160108"
+            }
+        ],
+        "v942": [
+            {
+                "_": "20040420"
+            }
+        ],
+        "v941": [
+            {
+                "_": "20151208"
+            }
+        ],
+        "v940": [
+            {
+                "_": "20040420"
+            }
+        ],
+        "v320": [
+            {
+                "_": "MG"
+            }
+        ],
+        "v340": [
+            {
+                "_": "B"
+            }
+        ],
+        "v435": [
+            {
+                "t": "PRINT",
+                "_": "0100-8358"
+            },
+            {
+                "t": "ONLIN",
+                "_": "1806-9681"
+            }
+        ],
+        "v541": [
+            {
+                "_": "BY"
+            }
+        ],
+        "v5": [
+            {
+                "_": "S"
+            }
+        ],
+        "v100": [
+            {
+                "_": "Planta Daninha"
+            }
+        ],
+        "v50": [
+            {
+                "_": "C"
+            }
+        ],
+        "v51": [
+            {
+                "a": "20040420",
+                "b": "C",
+                "_": ""
+            }
+        ],
+        "v360": [
+            {
+                "_": "en"
+            }
+        ],
+        "v301": [
+            {
+                "_": "1978"
+            }
+        ],
+        "v303": [
+            {
+                "_": "1"
+            }
+        ],
+        "v302": [
+            {
+                "_": "1"
+            }
+        ]
+    }
+}
