@@ -392,28 +392,35 @@ ISO_3166 = {
 }
 
 journal_status = {
-    'c': 'current',
-    'd': 'deceased',
-    '?': 'inprogress',
-    'p': 'inprogress',
-    's': 'suspended'
+    'c': u'current',
+    'd': u'deceased',
+    '?': u'inprogress',
+    'p': u'inprogress',
+    's': u'suspended'
 }
 
+journal_standard = {
+    u'iso690': u'iso 690/87 - international standard',
+    u'nbr6023': u'nbr 6023/89 - associação nacional',
+    u'other': u'other standard',
+    u'vancouv': u'the vancouver group - uniform',
+    u'apa': u'American Psychological Association'
+}
 
+journal_ctrl_vocabulary = {
+    u'decs': u'Health Sciences Descriptors',
+    u'nd': u'No Descriptor'
+}
 
+journal_publication_level = {
+    u'DI', u'Divulgation',
+    u'CT', u'Scientific Technical'
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+journal_title_category = {
+    u'paralleltitle', u'Parallel Title',
+    u'other', u'Other',
+    u'abbrev_scopus', u'Scopus (abbreviated)',
+    u'abbrev_wos', u'Web of Science (abbreviated)',
+    u'abbrev_nlm', u'National Library of Medicine (abbreviated)',
+}

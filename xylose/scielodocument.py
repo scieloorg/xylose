@@ -378,6 +378,30 @@ class Journal(object):
         return data
 
     @property
+    def controlled_vocabulary(self):
+
+        cv = self.data.get('v85', [{'_': None}])[0]['_']
+
+        cv = cv.lower() if cv else None
+
+        if cv is None:
+            return None
+
+        return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
+
+    @property
+    def editorial_standard(self):
+
+        es = self.data.get('v117', [{'_': None}])[0]['_']
+
+        es = es.lower() if es else None
+
+        if es is None:
+            return None
+
+        return (es, choices.journal_standard.get(es, es))
+
+    @property
     def submission_url(self):
         """
         This method retrieves the submission system url of the given journal
@@ -821,7 +845,6 @@ class Journal(object):
 
         return missions
 
-
     @property
     def copyright(self):
         """
@@ -829,6 +852,7 @@ class Journal(object):
         if it exists.
         """
         return self.data.get('v62', [{'_': None}])[0]['_']
+
 
 class Article(object):
 

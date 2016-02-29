@@ -265,6 +265,44 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, 'XXX')
 
+    def test_without_ctrl_vocabulary(self):
+        journal = self.journal
+
+        del(journal.data['v85'])
+
+        self.assertEqual(journal.controlled_vocabulary, None)
+
+    def test_ctrl_vocabulary(self):
+        journal = self.journal
+
+        self.assertEqual(journal.controlled_vocabulary, ('nd', 'No Descriptor'))
+
+    def test_ctrl_vocabulary_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v85'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.controlled_vocabulary, ('xxx', 'xxx'))
+
+    def test_without_standard(self):
+        journal = self.journal
+
+        del(journal.data['v117'])
+
+        self.assertEqual(journal.editorial_standard, None)
+
+    def test_standard(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editorial_standard, ('other', 'other standard'))
+
+    def test_standard_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v117'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.editorial_standard, ('xxx', 'xxx'))
+
     def test_without_periodicity(self):
         journal = self.journal
 
