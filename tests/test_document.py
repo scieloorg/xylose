@@ -241,6 +241,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, None)
 
+    def test_submission_url(self):
+        journal = self.journal
+
+        journal.data['v692'] = [{'_': 'http://www.submision.org/'}]
+
+        self.assertEqual(journal.submission_url, 'http://www.submision.org/')
+
+    def test_submission_url(self):
+        journal = self.journal
+
+        self.assertEqual(journal.submission_url, None)
+
     def test_periodicity_in_months(self):
         journal = self.journal
 
@@ -263,14 +275,14 @@ class JournalTests(unittest.TestCase):
     def test_periodicity(self):
         journal = self.journal
 
-        self.assertEqual(journal.periodicity, 'Quaterly')
+        self.assertEqual(journal.periodicity, ('Q', 'Quaterly'))
 
     def test_periodicity_out_of_choices(self):
         journal = self.journal
 
         journal.data['v380'][0]['_'] = 'XXX'
 
-        self.assertEqual(journal.periodicity, 'XXX')
+        self.assertEqual(journal.periodicity, ('XXX', 'XXX'))
 
     def test_journal(self):
         journal = self.journal

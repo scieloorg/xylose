@@ -353,7 +353,7 @@ class Journal(object):
             data['id'] = license
             return data
 
-        if  'v540' in self.data:
+        if 'v540' in self.data:
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:
                     continue
@@ -378,9 +378,18 @@ class Journal(object):
         return data
 
     @property
+    def submission_url(self):
+        """
+        This method retrieves the submission system url of the given journal
+        This method deals with the legacy field (v692).
+        """
+
+        return self.data.get('v692', [{'_': None}])[0]['_']
+
+    @property
     def cnn_code(self):
         """
-        This method retrieves the cnn_code of the journal, not considering only
+        This method retrieves the cnn_code of the journal
         This method deals with the legacy field (v20).
         """
 
@@ -699,7 +708,10 @@ class Journal(object):
 
         per = per.upper() if per else None
 
-        return choices.periodicity.get(per, per)
+        if per is None:
+            return None
+
+        return (per, choices.periodicity.get(per, per))
 
     @property
     def periodicity_in_months(self):
