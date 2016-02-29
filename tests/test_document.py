@@ -396,7 +396,6 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.status_history, [(u'2014-08-05', 'current', ''), (u'2014-08-05', 'inprogress', '')])
 
-
     def test_current_status_lots_of_changes_study_case_1(self):
 
         v51 = [
@@ -569,7 +568,7 @@ class JournalTests(unittest.TestCase):
 
     def test_permission_t2(self):
         del(self.fulldoc['title']['v541'])
-        
+
         self.fulldoc['license'] = 'by-nc/3.0'
 
         article = Article(self.fulldoc)
@@ -629,7 +628,6 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.permissions['id'], 'by-nc/3.0')
-
 
     def test_permission_url(self):
         del(self.fulldoc['title']['v541'])
@@ -948,6 +946,19 @@ class JournalTests(unittest.TestCase):
 
         del(journal.data['v68'])
         self.assertEqual(journal.acronym, None)
+
+    def test_journal_copyright(self):
+        journal = self.journal
+
+        self.assertEqual(journal.copyright,
+            u'Associa\u00e7\u00e3o Brasileira de Limnologia')
+
+    def test_journal_copyright_without_copyright(self):
+        journal = self.journal
+
+        del(journal.data['v62'])
+
+        self.assertIsNone(journal.copyright)
 
 
 class ArticleTests(unittest.TestCase):
@@ -1331,7 +1342,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['article']['v91'])
-        
+
         self.assertEqual(article.processing_date, None)
 
     def test_creation_date(self):
