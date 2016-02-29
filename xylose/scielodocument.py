@@ -423,6 +423,15 @@ class Journal(object):
         return self.data.get('v692', [{'_': None}])[0]['_']
 
     @property
+    def secs_code(self):
+        """
+        This method retrieves the secs_code of the journal
+        This method deals with the legacy field (v37).
+        """
+
+        return self.data.get('v37', [{'_': None}])[0]['_']
+
+    @property
     def cnn_code(self):
         """
         This method retrieves the cnn_code of the journal

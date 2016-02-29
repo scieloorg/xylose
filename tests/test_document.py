@@ -303,6 +303,17 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.controlled_vocabulary, ('xxx', 'xxx'))
 
+    def test_without_secs_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.secs_code, None)
+
+    def test_secs_code(self):
+        journal = self.journal
+
+        journal.data['v37'] = [{'_': 'secs_code'}]
+        self.assertEqual(journal.secs_code, 'secs_code')
+
     def test_without_standard(self):
         journal = self.journal
 
