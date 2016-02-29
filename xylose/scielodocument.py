@@ -707,6 +707,9 @@ class Journal(object):
             if 'l' in mission and '_' in mission:
                 missions[mission['l']] = mission['_']
 
+        if not missions:
+            return None
+
         return missions
 
 

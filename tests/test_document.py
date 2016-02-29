@@ -885,6 +885,14 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.mission, expected)
 
+    def test_journal_mission_without_mission_text_and_language(self):
+        self.fulldoc['title']['v901'] = [{"l": "es"},
+                                         {"_": "any text"}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertIsNone(journal.mission)
+
 
 class ArticleTests(unittest.TestCase):
 
