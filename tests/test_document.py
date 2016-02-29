@@ -148,7 +148,7 @@ class IssueTests(unittest.TestCase):
         issue = self.issue
 
         del(issue.data['issue']['v91'])
-        
+
         self.assertEqual(issue.processing_date, None)
 
     def test_order(self):
@@ -396,7 +396,6 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.status_history, [(u'2014-08-05', 'current', ''), (u'2014-08-05', 'inprogress', '')])
 
-
     def test_current_status_lots_of_changes_study_case_1(self):
 
         v51 = [
@@ -569,7 +568,7 @@ class JournalTests(unittest.TestCase):
 
     def test_permission_t2(self):
         del(self.fulldoc['title']['v541'])
-        
+
         self.fulldoc['license'] = 'by-nc/3.0'
 
         article = Article(self.fulldoc)
@@ -629,7 +628,6 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.permissions['id'], 'by-nc/3.0')
-
 
     def test_permission_url(self):
         del(self.fulldoc['title']['v541'])
@@ -849,6 +847,52 @@ class JournalTests(unittest.TestCase):
         del(journal.data['v68'])
         self.assertEqual(journal.acronym, None)
 
+    def test_journal_mission(self):
+        journal = self.journal
+
+        expected = {
+                "es": u"El Acta Limnologica Brasiliensia es la revista oficial de la Asociaci\u00f3n Brasile\u00f1a de Limnolog\u00eda (ABLimno) cuyo obetivo es publicar trabajos originales en Limnolog\u00eda, incluyendo los aspectos f\u00edsicos, qu\u00edmicos y biol\u00f3gicos de la Ciencia Ecolog\u00eda de Aguas Continentales.",
+                "pt": u"A Acta Limnologica Brasiliensia \u00e9 uma revista cient\u00edfica publicada pela Associa\u00e7\u00e3o Brasileira de Limnologia (ABLimno) que publica artigos originais que contribuem para o desenvolvimento cient\u00edfico da Limnologia.",
+                "en": u"Acta Limnologica Brasiliensia is a journal published by the Associa\u00e7\u00e3o Brasileira de Limnologia (Brazilian Association of Limnology) that publishes original articles in Limnology comprises physical, chemical and biological aspects of fresh water ecosystems."
+                }
+
+        self.assertEqual(journal.mission, expected)
+
+    def test_journal_mission_without_mission(self):
+        journal = self.journal
+
+        del(journal.data['v901'])
+
+        self.assertIsNone(journal.mission)
+
+    def test_journal_mission_without_language_key(self):
+        self.fulldoc['title']['v901'] = [{"l": "es", "_": "any text"},
+                                         {"_": "any text"}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        expected = {'es': "any text"}
+
+        self.assertEqual(journal.mission, expected)
+
+    def test_journal_mission_without_mission_text(self):
+        self.fulldoc['title']['v901'] = [{"l": "es"},
+                                         {"l": "es", "_": "any text"}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        expected = {'es': "any text"}
+
+        self.assertEqual(journal.mission, expected)
+
+    def test_journal_mission_without_mission_text_and_language(self):
+        self.fulldoc['title']['v901'] = [{"l": "es"},
+                                         {"_": "any text"}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertIsNone(journal.mission)
+
 
 class ArticleTests(unittest.TestCase):
 
@@ -948,7 +992,6 @@ class ArticleTests(unittest.TestCase):
         article = Article(self.fulldoc)
 
         self.assertEqual(sorted([k+v for k, v in article.translated_htmls().items()]), [u'esBody ES', u'ptBody PT'])
-
 
     def test_fulltexts_field_fulltexts(self):
 
@@ -1231,7 +1274,7 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         del(article.data['article']['v91'])
-        
+
         self.assertEqual(article.processing_date, None)
 
     def test_creation_date(self):
