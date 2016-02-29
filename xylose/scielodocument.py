@@ -353,7 +353,7 @@ class Journal(object):
             data['id'] = license
             return data
 
-        if  'v540' in self.data:
+        if 'v540' in self.data:
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:
                     continue
@@ -376,6 +376,90 @@ class Journal(object):
                     break
 
         return data
+
+    @property
+    def submission_url(self):
+        """
+        This method retrieves the submission system url of the given journal
+        This method deals with the legacy field (v692).
+        """
+
+        return self.data.get('v692', [{'_': None}])[0]['_']
+
+    @property
+    def cnn_code(self):
+        """
+        This method retrieves the cnn_code of the journal
+        This method deals with the legacy field (v20).
+        """
+
+        return self.data.get('v20', [{'_': None}])[0]['_']
+
+    @property
+    def first_year(self):
+        """
+        This method retrieves the first year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v301).
+        """
+
+        return self.data.get('v301', [{'_': None}])[0]['_']
+
+    @property
+    def first_volume(self):
+        """
+        This method retrieves the first volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v302).
+        """
+
+        return self.data.get('v302', [{'_': None}])[0]['_']
+
+    @property
+    def first_number(self):
+        """
+        This method retrieves the first number of the journal, not considering
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v303).
+        """
+
+        return self.data.get('v303', [{'_': None}])[0]['_']
+
+    @property
+    def last_year(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v304).
+        """
+
+        return self.data.get('v304', [{'_': None}])[0]['_']
+
+    @property
+    def last_volume(self):
+        """
+        This method retrieves the last volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v305).
+        """
+
+        return self.data.get('v305', [{'_': None}])[0]['_']
+
+    @property
+    def last_number(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v306).
+        """
+
+        return self.data.get('v306', [{'_': None}])[0]['_']
 
     @property
     def languages(self):
@@ -456,9 +540,31 @@ class Journal(object):
             )
 
     @property
+    def subject_descriptors(self):
+        """
+        This method retrieves the subject descriptors of the given journal,
+        if it exists.
+        This method deals with the legacy fields (441).
+        """
+
+        if 'v440' in self.data:
+            return [area['_'] for area in self.data['v440']]
+
+    @property
+    def index_coverage(self):
+        """
+        This method retrieves the index coverage of the given
+        journal, if it exists.
+        This method deals with the legacy fields (450).
+        """
+
+        if 'v450' in self.data:
+            return [area['_'] for area in self.data['v450']]
+
+    @property
     def subject_areas(self):
         """
-        This method retrieves the subject areas of the given article,
+        This method retrieves the subject areas of the given journal,
         if it exists.
         The subject areas are based on the journal subject areas.
         This method deals with the legacy fields (441).
@@ -602,7 +708,10 @@ class Journal(object):
 
         per = per.upper() if per else None
 
-        return choices.periodicity.get(per, per)
+        if per is None:
+            return None
+
+        return (per, choices.periodicity.get(per, per))
 
     @property
     def periodicity_in_months(self):
@@ -731,6 +840,14 @@ class Journal(object):
 
         return (country_code, country_name)
 
+
+    @property
+    def copyright(self):
+        """
+        This method retrieves the journal copyright of the given journal,
+        if it exists.
+        """
+        return self.data.get('v62', [{'_': None}])[0]['_']
 
 class Article(object):
 

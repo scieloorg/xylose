@@ -241,6 +241,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, None)
 
+    def test_submission_url(self):
+        journal = self.journal
+
+        journal.data['v692'] = [{'_': 'http://www.submision.org/'}]
+
+        self.assertEqual(journal.submission_url, 'http://www.submision.org/')
+
+    def test_submission_url(self):
+        journal = self.journal
+
+        self.assertEqual(journal.submission_url, None)
+
     def test_periodicity_in_months(self):
         journal = self.journal
 
@@ -263,14 +275,14 @@ class JournalTests(unittest.TestCase):
     def test_periodicity(self):
         journal = self.journal
 
-        self.assertEqual(journal.periodicity, 'Quaterly')
+        self.assertEqual(journal.periodicity, ('Q', 'Quaterly'))
 
     def test_periodicity_out_of_choices(self):
         journal = self.journal
 
         journal.data['v380'][0]['_'] = 'XXX'
 
-        self.assertEqual(journal.periodicity, 'XXX')
+        self.assertEqual(journal.periodicity, ('XXX', 'XXX'))
 
     def test_journal(self):
         journal = self.journal
@@ -683,6 +695,78 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.collection_acronym, u'scl')
 
+    def test_first_year(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_year, '1986')
+
+    def test_first_year_1(self):
+        journal = self.journal
+
+        del(journal.data['v301'])
+
+        self.assertEqual(journal.first_year, None)
+
+    def test_first_volume(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_volume, '1')
+
+    def test_first_volume_1(self):
+        journal = self.journal
+
+        del(journal.data['v302'])
+
+        self.assertEqual(journal.first_volume, None)
+
+    def test_first_number(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_number, '1')
+
+    def test_first_number_1(self):
+        journal = self.journal
+
+        del(journal.data['v303'])
+
+        self.assertEqual(journal.first_number, None)
+
+    def test_last_year(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': '2000'}]
+
+        self.assertEqual(journal.last_year, '2000')
+
+    def test_last_year_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_year, None)
+
+    def test_last_volume(self):
+        journal = self.journal
+
+        journal.data['v305'] = [{'_': '10'}]
+
+        self.assertEqual(journal.last_volume, '10')
+
+    def test_last_volume_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_volume, None)
+
+    def test_last_number(self):
+        journal = self.journal
+
+        journal.data['v306'] = [{'_': '30'}]
+
+        self.assertEqual(journal.last_number, '30')
+
+    def test_last_number_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_number, None)
+
     def test_without_journal_url(self):
         journal = self.journal
 
@@ -690,12 +774,52 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.url(), None)
 
+    def test_cnn_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.cnn_code, '083639-7')
+
+    def test_last_cnn_code_1(self):
+        journal = self.journal
+
+        del(journal.data['v20'])
+
+        self.assertEqual(journal.cnn_code, None)
+
     def test_journal_url(self):
         journal = self.journal
 
         expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X&lng=en"
 
         self.assertEqual(journal.url(), expected)
+
+    def test_subject_index_coverage(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(
+            sorted(journal.index_coverage),
+            sorted([u'ASFA - Aquatic Sciences and Fisheries Abstracts']))
+
+    def test_without_index_coverage(self):
+        del(self.fulldoc['title']['v450'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.index_coverage, None)
+
+    def test_subject_descriptors(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(
+            sorted(journal.subject_descriptors),
+            sorted([u'ECOLOGIA DE ECOSSISTEMAS', u'ECOLOGIA']))
+
+    def test_without_subject_descriptors(self):
+        del(self.fulldoc['title']['v440'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subject_descriptors, None)
 
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
@@ -913,6 +1037,19 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.publisher_country)
 
+
+    def test_journal_copyright(self):
+        journal = self.journal
+
+        self.assertEqual(journal.copyright,
+            u'Associa\u00e7\u00e3o Brasileira de Limnologia')
+
+    def test_journal_copyright_without_copyright(self):
+        journal = self.journal
+
+        del(journal.data['v62'])
+
+        self.assertIsNone(journal.copyright)
 
 class ArticleTests(unittest.TestCase):
 
