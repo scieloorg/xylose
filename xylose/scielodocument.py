@@ -378,6 +378,15 @@ class Journal(object):
         return data
 
     @property
+    def cnn_code(self):
+        """
+        This method retrieves the cnn_code of the journal, not considering only
+        This method deals with the legacy field (v20).
+        """
+
+        return self.data.get('v20', [{'_': None}])[0]['_']
+
+    @property
     def first_year(self):
         """
         This method retrieves the first year of the journal, not considering only

@@ -762,6 +762,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.url(), None)
 
+    def test_cnn_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.cnn_code, '083639-7')
+
+    def test_last_cnn_code_1(self):
+        journal = self.journal
+
+        del(journal.data['v20'])
+
+        self.assertEqual(journal.cnn_code, None)
+
     def test_journal_url(self):
         journal = self.journal
 
