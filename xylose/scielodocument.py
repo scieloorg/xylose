@@ -822,6 +822,14 @@ class Journal(object):
         return missions
 
 
+    @property
+    def copyright(self):
+        """
+        This method retrieves the journal copyright of the given journal,
+        if it exists.
+        """
+        return self.data.get('v62', [{'_': None}])[0]['_']
+
 class Article(object):
 
     def __init__(self, data, iso_format=None):
