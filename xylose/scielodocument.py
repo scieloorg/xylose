@@ -378,6 +378,72 @@ class Journal(object):
         return data
 
     @property
+    def first_year(self):
+        """
+        This method retrieves the first year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v301).
+        """
+
+        return self.data.get('v301', [{'_': None}])[0]['_']
+
+    @property
+    def first_volume(self):
+        """
+        This method retrieves the first volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v302).
+        """
+
+        return self.data.get('v302', [{'_': None}])[0]['_']
+
+    @property
+    def first_number(self):
+        """
+        This method retrieves the first number of the journal, not considering
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v303).
+        """
+
+        return self.data.get('v303', [{'_': None}])[0]['_']
+
+    @property
+    def last_year(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v304).
+        """
+
+        return self.data.get('v304', [{'_': None}])[0]['_']
+
+    @property
+    def last_volume(self):
+        """
+        This method retrieves the last volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v305).
+        """
+
+        return self.data.get('v305', [{'_': None}])[0]['_']
+
+    @property
+    def last_number(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v306).
+        """
+
+        return self.data.get('v306', [{'_': None}])[0]['_']
+
+    @property
     def languages(self):
         """
         This method retrieves a list of possible languages that the journal

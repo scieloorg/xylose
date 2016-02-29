@@ -685,6 +685,78 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.collection_acronym, u'scl')
 
+    def test_first_year(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_year, '1986')
+
+    def test_first_year_1(self):
+        journal = self.journal
+
+        del(journal.data['v301'])
+
+        self.assertEqual(journal.first_year, None)
+
+    def test_first_volume(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_volume, '1')
+
+    def test_first_volume_1(self):
+        journal = self.journal
+
+        del(journal.data['v302'])
+
+        self.assertEqual(journal.first_volume, None)
+
+    def test_first_number(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_number, '1')
+
+    def test_first_number_1(self):
+        journal = self.journal
+
+        del(journal.data['v303'])
+
+        self.assertEqual(journal.first_number, None)
+
+    def test_last_year(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': '2000'}]
+
+        self.assertEqual(journal.last_year, '2000')
+
+    def test_last_year_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_year, None)
+
+    def test_last_volume(self):
+        journal = self.journal
+
+        journal.data['v305'] = [{'_': '10'}]
+
+        self.assertEqual(journal.last_volume, '10')
+
+    def test_last_volume_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_volume, None)
+
+    def test_last_number(self):
+        journal = self.journal
+
+        journal.data['v306'] = [{'_': '30'}]
+
+        self.assertEqual(journal.last_number, '30')
+
+    def test_last_number_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_number, None)
+
     def test_without_journal_url(self):
         journal = self.journal
 
