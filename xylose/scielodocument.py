@@ -60,7 +60,7 @@ class Issue(object):
         identified by language.
         ['iso 639-2', 'iso 639-1', None]
         """
-        if not iso_format in allowed_formats:
+        if iso_format not in allowed_formats:
             raise ValueError('Language format not allowed ({0})'.format(iso_format))
 
         self._iso_format = iso_format
@@ -685,6 +685,30 @@ class Journal(object):
 
         return tools.get_date(self.data['v941'][0]['_'])
 
+    @property
+    def mission(self):
+        """
+        This method retrieves the mission of journal.
+        This method deals with the legacy fields (901).
+
+        Return a dict list this:
+            {
+            "es": "La missión es..",
+            "pt": "A missão é.. ",
+            "en": "The mission is"
+            }
+
+        """
+        if 'v901' not in self.data:
+            return None
+
+        missions = {}
+        for mission in self.data.get('v901', []):
+            if 'l' in mission and '_' in mission:
+                missions[mission['l']] = mission['_']
+
+        return missions
+
 
 class Article(object):
 
@@ -897,7 +921,7 @@ class Article(object):
     def languages(self, show_urls=False, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
-        for the given article. This method deals with the fields (fulltexts and 
+        for the given article. This method deals with the fields (fulltexts and
         v40).
         """
 
