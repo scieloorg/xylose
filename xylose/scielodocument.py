@@ -456,9 +456,20 @@ class Journal(object):
             )
 
     @property
+    def subject_descriptors(self):
+        """
+        This method retrieves the subject descriptors of the given journal,
+        if it exists.
+        This method deals with the legacy fields (441).
+        """
+
+        if 'v440' in self.data:
+            return [area['_'] for area in self.data['v440']]
+
+    @property
     def subject_areas(self):
         """
-        This method retrieves the subject areas of the given article,
+        This method retrieves the subject areas of the given journal,
         if it exists.
         The subject areas are based on the journal subject areas.
         This method deals with the legacy fields (441).

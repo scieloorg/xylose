@@ -148,7 +148,7 @@ class IssueTests(unittest.TestCase):
         issue = self.issue
 
         del(issue.data['issue']['v91'])
-        
+
         self.assertEqual(issue.processing_date, None)
 
     def test_order(self):
@@ -698,6 +698,22 @@ class JournalTests(unittest.TestCase):
         expected = u"http://www.scielo.br/scielo.php?script=sci_serial&pid=2179-975X&lng=en"
 
         self.assertEqual(journal.url(), expected)
+
+    def test_subject_descriptors(self):
+        #self.fulldoc['title']['v440'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(
+            sorted(journal.subject_descriptors),
+            sorted([u'ECOLOGIA DE ECOSSISTEMAS', u'ECOLOGIA']))
+
+    def test_without_subject_descriptors(self):
+        del(self.fulldoc['title']['v440'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.subject_descriptors, None)
 
     def test_wos_subject_areas(self):
         self.fulldoc['title']['v854'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
