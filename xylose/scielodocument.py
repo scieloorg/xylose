@@ -691,7 +691,7 @@ class Journal(object):
         This method retrieves the mission of journal.
         This method deals with the legacy fields (901).
 
-        Return a dict liket this:
+        Return a dict like this:
             {
             "es": "La missión es..",
             "pt": "A missão é.. ",
