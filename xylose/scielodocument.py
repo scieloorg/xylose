@@ -467,6 +467,17 @@ class Journal(object):
             return [area['_'] for area in self.data['v440']]
 
     @property
+    def index_coverage(self):
+        """
+        This method retrieves the index coverage of the given
+        journal, if it exists.
+        This method deals with the legacy fields (450).
+        """
+
+        if 'v450' in self.data:
+            return [area['_'] for area in self.data['v450']]
+
+    @property
     def subject_areas(self):
         """
         This method retrieves the subject areas of the given journal,

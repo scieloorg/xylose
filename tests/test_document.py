@@ -699,9 +699,21 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.url(), expected)
 
-    def test_subject_descriptors(self):
-        #self.fulldoc['title']['v440'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
+    def test_subject_index_coverage(self):
+        journal = Journal(self.fulldoc['title'])
 
+        self.assertEqual(
+            sorted(journal.index_coverage),
+            sorted([u'ASFA - Aquatic Sciences and Fisheries Abstracts']))
+
+    def test_without_index_coverage(self):
+        del(self.fulldoc['title']['v450'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.index_coverage, None)
+
+    def test_subject_descriptors(self):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(
