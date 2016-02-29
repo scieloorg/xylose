@@ -378,6 +378,18 @@ class Journal(object):
         return data
 
     @property
+    def publication_level(self):
+
+        pl = self.data.get('v330', [{'_': None}])[0]['_']
+
+        pl = pl.upper() if pl else None
+
+        if pl is None:
+            return None
+
+        return (pl, choices.journal_publication_level.get(pl, pl))
+
+    @property
     def controlled_vocabulary(self):
 
         cv = self.data.get('v85', [{'_': None}])[0]['_']

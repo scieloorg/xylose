@@ -413,14 +413,14 @@ journal_ctrl_vocabulary = {
 }
 
 journal_publication_level = {
-    u'DI', u'Divulgation',
-    u'CT', u'Scientific Technical'
+    u'DI': u'Divulgation',
+    u'CT': u'Scientific Technical'
 }
 
 journal_title_category = {
-    u'paralleltitle', u'Parallel Title',
-    u'other', u'Other',
-    u'abbrev_scopus', u'Scopus (abbreviated)',
-    u'abbrev_wos', u'Web of Science (abbreviated)',
-    u'abbrev_nlm', u'National Library of Medicine (abbreviated)',
+    u'paralleltitle': u'Parallel Title',
+    u'other': u'Other',
+    u'abbrev_scopus': u'Scopus (abbreviated)',
+    u'abbrev_wos': u'Web of Science (abbreviated)',
+    u'abbrev_nlm': u'National Library of Medicine (abbreviated)',
 }

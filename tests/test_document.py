@@ -265,6 +265,25 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, 'XXX')
 
+    def test_without_plevel(self):
+        journal = self.journal
+
+        del(journal.data['v330'])
+
+        self.assertEqual(journal.publication_level, None)
+
+    def test_plevel(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publication_level, (u'CT', u'Scientific Technical'))
+
+    def test_plevel_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v330'][0]['_'] = 'XXX'
+
+        self.assertEqual(journal.publication_level, ('XXX', 'XXX'))
+
     def test_without_ctrl_vocabulary(self):
         journal = self.journal
 
