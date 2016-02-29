@@ -685,6 +685,17 @@ class Journal(object):
 
         return tools.get_date(self.data['v941'][0]['_'])
 
+    @property
+    def copyright(self):
+        """
+        This method retrieves the journal status of the given journal,
+        if it exists.
+        """
+        if 'v62' not in self.data:
+            return None
+
+        return self.data.get('v62')[0]['_']
+
 
 class Article(object):
 
@@ -897,7 +908,7 @@ class Article(object):
     def languages(self, show_urls=False, iso_format=None):
         """
         This method retrieves the languages of the fulltext versions available
-        for the given article. This method deals with the fields (fulltexts and 
+        for the given article. This method deals with the fields (fulltexts and
         v40).
         """
 
