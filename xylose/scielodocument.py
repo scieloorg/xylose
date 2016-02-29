@@ -688,13 +688,10 @@ class Journal(object):
     @property
     def copyright(self):
         """
-        This method retrieves the journal status of the given journal,
+        This method retrieves the journal copyright of the given journal,
         if it exists.
         """
-        if 'v62' not in self.data:
-            return None
-
-        return self.data.get('v62')[0]['_']
+        return self.data.get('v62', [{'_': None}])[0]['_']
 
 
 class Article(object):
