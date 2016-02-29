@@ -175,8 +175,8 @@ class Issue(object):
         """
 
         label = ''
-        label_issue = self.number
-        label_volume = self.volume
+        label_issue = self.number or ''
+        label_volume = self.volume or ''
         label_suppl_issue = ' suppl %s' % self.supplement_number if self.supplement_number else ''
 
         if label_suppl_issue:
