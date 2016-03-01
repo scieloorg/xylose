@@ -1165,19 +1165,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.publisher_country)
 
-
-    def test_journal_copyright(self):
+    def test_journal_copyrighter(self):
         journal = self.journal
 
-        self.assertEqual(journal.copyright,
+        self.assertEqual(journal.copyrighter,
             u'Associa\u00e7\u00e3o Brasileira de Limnologia')
 
-    def test_journal_copyright_without_copyright(self):
+    def test_journal_copyrighter_without_copyright(self):
         journal = self.journal
 
         del(journal.data['v62'])
 
-        self.assertIsNone(journal.copyright)
+        self.assertIsNone(journal.copyrighter)
 
     def test_journal_other_titles(self):
         journal = self.journal

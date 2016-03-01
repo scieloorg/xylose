@@ -387,7 +387,7 @@ class Journal(object):
         if not 'v63' in self.data:
             return None
 
-        
+
         return ', '.join([i['_'] for i in self.data.get('v63') if '_' in i and i['_'] != ''])
 
     @property
@@ -934,10 +934,12 @@ class Journal(object):
         return (country_code, country_name)
 
     @property
-    def copyright(self):
+    def copyrighter(self):
         """
-        This method retrieves the journal copyright of the given journal,
+        This method retrieves the journal copyrighter of the given journal,
         if it exists.
+
+        This method deals with the legacy fields (v62).
         """
         return self.data.get('v62', [{'_': None}])[0]['_']
 
