@@ -234,6 +234,30 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+    def test_editor_email(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editor_email, u'actalb@rc.unesp.br')
+
+    def test_editor_email_without_data(self):
+        journal = self.journal
+
+        del(journal.data['v64'])
+
+        self.assertIsNone(journal.editor_email)
+
+    def test_editor_address(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editor_address, u'Av. 24 A, 1515, 13506-900 Rio Claro-SP/Brasil, Tel.:(55 19)3526 9107')
+
+    def test_editor_address_without_data(self):
+        journal = self.journal
+
+        del(journal.data['v63'])
+
+        self.assertIsNone(journal.editor_address)
+
     def test_in_scie(self):
         journal = self.journal
 

@@ -378,6 +378,28 @@ class Journal(object):
         return data
 
     @property
+    def editor_address(self):
+        """
+        This method retrieve the editor address
+        This method deals with the field (v63)
+        """
+
+        if not 'v63' in self.data:
+            return None
+
+        
+        return ', '.join([i['_'] for i in self.data.get('v63') if '_' in i and i['_'] != ''])
+
+    @property
+    def editor_email(self):
+        """
+        This method retrieve the editor address
+        This method deals with the field (v63)
+        """
+
+        return self.data.get('v64', [{'_': None}])[0]['_']
+
+    @property
     def is_indexed_in_scie(self):
         """
         This method indicates if the given journal is indexed at SCIE
