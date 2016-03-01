@@ -874,6 +874,21 @@ class Journal(object):
         """
         return self.data.get('v62', [{'_': None}])[0]['_']
 
+    @property
+    def sponsors(self):
+        """
+        This method retrieves the journal sponsors of the given journal,
+        if it exists.
+
+        There method clean empty 140 field.
+        """
+        if 'v140' not in self.data:
+            return None
+
+        sponsors = self.data.get('v140')
+
+        return [sponsor['_'] for sponsor in sponsors if sponsor['_'] != ""]
+
 
 class Article(object):
 
