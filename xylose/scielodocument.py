@@ -887,7 +887,7 @@ class Journal(object):
 
         sponsors = self.data.get('v140')
 
-        return [sponsor['_'] for sponsor in sponsors if sponsor['_'] != ""]
+        return [sponsor['_'] for sponsor in sponsors if '_' in sponsor and sponsor['_'] != ""]
 
 
 class Article(object):
