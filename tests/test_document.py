@@ -234,6 +234,42 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+    def test_in_scie(self):
+        journal = self.journal
+
+        journal.data['v851'] = [{'_': 'SCIE'}]
+
+        self.assertTrue(journal.is_indexed_in_scie)
+
+    def test_in_scie(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_scie)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        journal.data['v852'] = [{'_': 'SSCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ssci)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ssci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        journal.data['v853'] = [{'_': 'A&HCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ahci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ahci)
+
     def test_without_periodicity_in_months(self):
         journal = self.journal
 
@@ -1084,6 +1120,27 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertIsNone(journal.mission)
+
+    def test_journal_publisher_country(self):
+        journal = self.journal
+
+        expected = ('BR', 'Brazil')
+
+        self.assertEqual(journal.publisher_country, expected)
+
+    def test_journal_publisher_country_without_country(self):
+        journal = self.journal
+
+        del(journal.data['v310'])
+
+        self.assertIsNone(journal.publisher_country)
+
+    def test_journal_publisher_country_not_findable_code(self):
+        self.fulldoc['title']['v310'] = [{"_": "BRX"}]
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertIsNone(journal.publisher_country)
+
 
     def test_journal_copyright(self):
         journal = self.journal

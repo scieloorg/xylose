@@ -378,6 +378,33 @@ class Journal(object):
         return data
 
     @property
+    def is_indexed_in_scie(self):
+        """
+        This method indicates if the given journal is indexed at SCIE
+        This method deals with the field (v851)
+        """
+
+        return True if self.data.get('v851', [{'_': None}])[0]['_'] else False
+
+    @property
+    def is_indexed_in_ssci(self):
+        """
+        This method indicates if the given journal is indexed at SSCI
+        This method deals with the field (v852)
+        """
+
+        return True if self.data.get('v852', [{'_': None}])[0]['_'] else False
+
+    @property
+    def is_indexed_in_ahci(self):
+        """
+        This method indicates if the given journal is indexed at SCIE
+        This method deals with the field (v853)
+        """
+
+        return True if self.data.get('v853', [{'_': None}])[0]['_'] else False
+
+    @property
     def publication_level(self):
 
         pl = self.data.get('v330', [{'_': None}])[0]['_']
@@ -865,6 +892,24 @@ class Journal(object):
             return None
 
         return missions
+
+    @property
+    def publisher_country(self):
+        """
+        This method retrieves the publisher country of journal.
+        This method return a tuple: ('US', u'United States'), otherwise
+        return None.
+        """
+        if 'v310' not in self.data:
+            return None
+
+        country_code = self.data.get('v310', [{'_': None}])[0]['_']
+        country_name = choices.ISO_3166.get(country_code, None)
+
+        if not country_code or not country_name:
+            return None
+
+        return (country_code, country_name)
 
     @property
     def copyright(self):
