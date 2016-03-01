@@ -234,6 +234,42 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+    def test_in_scie(self):
+        journal = self.journal
+
+        journal.data['v851'] = [{'_': 'SCIE'}]
+
+        self.assertTrue(journal.is_indexed_in_scie)
+
+    def test_in_scie(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_scie)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        journal.data['v852'] = [{'_': 'SSCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ssci)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ssci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        journal.data['v853'] = [{'_': 'A&HCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ahci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ahci)
+
     def test_without_periodicity_in_months(self):
         journal = self.journal
 
