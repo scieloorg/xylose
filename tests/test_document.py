@@ -1021,7 +1021,7 @@ class JournalTests(unittest.TestCase):
     def test_publisher_name(self):
         journal = self.journal
 
-        self.assertEqual(journal.publisher_name, u'Associação Brasileira de Limnologia')
+        self.assertEqual(journal.publisher_name, [u'Associação Brasileira de Limnologia'])
 
     def test_without_publisher_name(self):
         journal = self.journal
@@ -1039,6 +1039,28 @@ class JournalTests(unittest.TestCase):
 
         del(journal.data['v490'])
         self.assertEqual(journal.publisher_loc, None)
+
+    def test_publisher_city(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_city, u'Rio Claro')
+
+    def test_without_publisher_city(self):
+        journal = self.journal
+
+        del(journal.data['v490'])
+        self.assertEqual(journal.publisher_city, None)
+
+    def test_publisher_state(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_state, u'SP')
+
+    def test_without_publisher_state(self):
+        journal = self.journal
+
+        del(journal.data['v320'])
+        self.assertEqual(journal.publisher_state, None)
 
     def test_journal_title(self):
         journal = self.journal
@@ -1536,50 +1558,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
-    def test_publisher_name(self):
-        article = self.article
-
-        self.assertEqual(article.journal.publisher_name, u'Associação Brasileira de Limnologia')
-
-    def test_without_publisher_name(self):
-        article = self.article
-
-        del(article.data['title']['v480'])
-        self.assertEqual(article.journal.publisher_name, None)
-
-    def test_publisher_loc(self):
-        article = self.article
-
-        self.assertEqual(article.journal.publisher_loc, u'Rio Claro')
-
-    def test_without_publisher_loc(self):
-        article = self.article
-
-        del(article.data['title']['v490'])
-        self.assertEqual(article.journal.publisher_loc, None)
-
-    def test_journal_title(self):
-        article = self.article
-
-        self.assertEqual(article.journal.title, u'Acta Limnologica Brasiliensia')
-
-    def test_without_journal_title(self):
-        article = self.article
-
-        del(article.data['title']['v100'])
-        self.assertEqual(article.journal.title, None)
-
-    def test_journal_acronym(self):
-        article = self.article
-
-        self.assertEqual(article.journal.acronym, u'alb')
-
-    def test_without_journal_acronym(self):
-        article = self.article
-
-        del(article.data['title']['v68'])
-        self.assertEqual(article.journal.acronym, None)
-
     def test_publication_date(self):
         article = self.article
 
@@ -1619,7 +1597,6 @@ class ArticleTests(unittest.TestCase):
 
         article.data['article']['v93'] = [{u'_': u'20120419'}]
         self.assertEqual(article.creation_date, '2012-04-19')
-
 
     def test_creation_date_1(self):
         article = self.article
@@ -1769,7 +1746,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.elocation, None)
 
-
     def test_start_page_loaded_through_xml(self):
         article = self.article
 
@@ -1877,14 +1853,12 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
 
-
     def test_doi_clean_1(self):
         article = self.article
 
         article.data['doi'] = u'http://www.crossref.org/10.1590/S2179-975X2012005000004'
 
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
-
 
     def test_doi_clean_2(self):
         article = self.article
@@ -2029,7 +2003,6 @@ class ArticleTests(unittest.TestCase):
                                           {u'a': u'article abstract 2', u'l': u'fr'}]
 
         self.assertEqual(article.original_abstract(iso_format=None), None)
-
 
     def test_without_corporative_authors(self):
         article = self.article
@@ -2688,7 +2661,6 @@ class ArticleTests(unittest.TestCase):
         expected = {u'pt': u'Título do Artigo'}
 
         self.assertEqual(article.translated_titles(iso_format=None), expected)
-
 
     def test_translated_abstracts_without_v83(self):
         article = self.article

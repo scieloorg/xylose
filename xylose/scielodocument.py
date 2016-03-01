@@ -717,19 +717,48 @@ class Journal(object):
         This method retrieves the publisher name of the given article,
         if it exists.
         This method deals with the legacy fields (480).
-        """
 
-        return self.data.get('v480', [{'_': None}])[0]['_']
+        This method return a list:
+
+        ["Associa\u00e7\u00e3o Brasileira de Limnologia",
+        "Sociedade Botânica do Brasil"]
+        """
+        if 'v480' not in self.data:
+            return None
+
+        return [publisher['_'] for publisher in self.data.get('v480') if '_' in publisher and publisher['_'] != ""]
 
     @property
     def publisher_loc(self):
         """
-        This method retrieves the publisher localization of the given article,
+        This method retrieves the publisher localization of the given journal,
+        if it exists.
+        This method deals with the legacy fields (490).
+        """
+
+        warnings.warn("deprecated, use journal.publisher_city", DeprecationWarning)
+
+        return self.data.get('v490', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_city(self):
+        """
+        This method retrieves the publisher localization of the given journal,
         if it exists.
         This method deals with the legacy fields (490).
         """
 
         return self.data.get('v490', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_state(self):
+        """
+        This method retrieves the publisher state of the given journal,
+        if it exists.
+        This method deals with the legacy fields (320).
+        """
+
+        return self.data.get('v320', [{'_': None}])[0]['_']
 
     @property
     def title(self):
@@ -740,6 +769,24 @@ class Journal(object):
         """
 
         return self.data.get('v100', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_country(self):
+        """
+        This method retrieves the publisher country of journal.
+        This method return a tuple: ('US', u'United States'), otherwise
+        return None.
+        """
+        if 'v310' not in self.data:
+            return None
+
+        country_code = self.data.get('v310', [{'_': None}])[0]['_']
+        country_name = choices.ISO_3166.get(country_code, None)
+
+        if not country_code or not country_name:
+            return None
+
+        return (country_code, country_name)
 
     @property
     def subtitle(self):
@@ -926,24 +973,6 @@ class Journal(object):
             return None
 
         return missions
-
-    @property
-    def publisher_country(self):
-        """
-        This method retrieves the publisher country of journal.
-        This method return a tuple: ('US', u'United States'), otherwise
-        return None.
-        """
-        if 'v310' not in self.data:
-            return None
-
-        country_code = self.data.get('v310', [{'_': None}])[0]['_']
-        country_name = choices.ISO_3166.get(country_code, None)
-
-        if not country_code or not country_name:
-            return None
-
-        return (country_code, country_name)
 
     @property
     def copyrighter(self):
