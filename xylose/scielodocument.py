@@ -933,8 +933,7 @@ class Journal(object):
 
         return [title['_'] for title in self.data.get('v240') if '_' in title and title['_'] != ""]
 
-
-   @property
+    @property
     def sponsors(self):
         """
         This method retrieves the journal sponsors of the given journal,
@@ -948,7 +947,6 @@ class Journal(object):
         sponsors = self.data.get('v140')
 
         return [sponsor['_'] for sponsor in sponsors if '_' in sponsor and sponsor['_'] != ""]
-
 
 
 class Article(object):
