@@ -867,6 +867,24 @@ class Journal(object):
         return missions
 
     @property
+    def publisher_country(self):
+        """
+        This method retrieves the publisher country of journal.
+        This method return a tuple: ('US', u'United States'), otherwise
+        return None.
+        """
+        if 'v310' not in self.data:
+            return None
+
+        country_code = self.data.get('v310', [{'_': None}])[0]['_']
+        country_name = choices.ISO_3166.get(country_code, None)
+
+        if not country_code or not country_name:
+            return None
+
+        return (country_code, country_name)
+
+    @property
     def copyright(self):
         """
         This method retrieves the journal copyright of the given journal,

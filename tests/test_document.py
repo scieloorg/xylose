@@ -1085,6 +1085,26 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.mission)
 
+    def test_journal_publisher_country(self):
+        journal = self.journal
+
+        expected = ('BR', 'Brazil')
+
+        self.assertEqual(journal.publisher_country, expected)
+
+    def test_journal_publisher_country_without_country(self):
+        journal = self.journal
+
+        del(journal.data['v310'])
+
+        self.assertIsNone(journal.publisher_country)
+
+    def test_journal_publisher_country_not_findable_code(self):
+        self.fulldoc['title']['v310'] = [{"_": "BRX"}]
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertIsNone(journal.publisher_country)
+
 
     def test_journal_copyright(self):
         journal = self.journal
