@@ -886,7 +886,7 @@ class Journal(object):
         if 'v240' not in self.data:
             return None
 
-        return [title['_'] for title in self.data.get('v240')]
+        return [title['_'] for title in self.data.get('v240') if '_' in title and title['_'] != ""]
 
 
 class Article(object):
