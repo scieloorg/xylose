@@ -1085,7 +1085,6 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.mission)
 
-
     def test_journal_copyright(self):
         journal = self.journal
 
@@ -1098,6 +1097,22 @@ class JournalTests(unittest.TestCase):
         del(journal.data['v62'])
 
         self.assertIsNone(journal.copyright)
+
+    def test_journal_copyright(self):
+        journal = self.journal
+
+        expected = ['Physical Therapy Movement',
+                    'Revista de fisioterapia da PUC-PR']
+
+        self.assertEqual(journal.other_titles, expected)
+
+    def test_journal_copyright(self):
+        journal = self.journal
+
+        del(journal.data['v240'])
+
+        self.assertIsNone(journal.other_titles)
+
 
 class ArticleTests(unittest.TestCase):
 

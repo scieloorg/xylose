@@ -874,6 +874,20 @@ class Journal(object):
         """
         return self.data.get('v62', [{'_': None}])[0]['_']
 
+    @property
+    def other_titles(self):
+        """
+        This method retrieves the other titles of the given journal,
+        if it exists.
+
+        Return a list: ['Physical Therapy Movement',
+                        'Revista de fisioterapia da PUC-PR']
+        """
+        if 'v240' not in self.data:
+            return None
+
+        return [title['_'] for title in self.data.get('v240')]
+
 
 class Article(object):
 
