@@ -1179,6 +1179,47 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.copyright)
 
+    def test_journal_other_titles(self):
+        journal = self.journal
+
+        expected = ['Physical Therapy Movement',
+                    'Revista de fisioterapia da PUC-PR']
+
+        self.assertEqual(journal.other_titles, expected)
+
+    def test_journal_other_title_without_other_titles(self):
+        journal = self.journal
+
+        del(journal.data['v240'])
+
+        self.assertIsNone(journal.other_titles)
+
+    def test_journal_sponsors(self):
+        journal = self.journal
+
+        expected = [u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno",
+                    u"Conselho Nacional de Desenvolvimento Cient\u00edfico e Tecnol\u00f3gico - CNPq"]
+        self.assertEqual(journal.sponsors, expected)
+
+    def test_journal_sponsors_without_sponsors(self):
+        journal = self.journal
+
+        del(journal.data['v140'])
+
+        self.assertIsNone(journal.sponsors)
+
+    def test_journal_sponsors_with_empty_items(self):
+        self.fulldoc['title']['v140'] = [{"_": u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno"},
+                                         {"_": ""},
+                                         {"_": ""}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        expected = [u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno"]
+
+        self.assertEqual(journal.sponsors, expected)
+
+
 class ArticleTests(unittest.TestCase):
 
     def setUp(self):
