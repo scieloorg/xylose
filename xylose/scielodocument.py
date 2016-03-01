@@ -378,6 +378,42 @@ class Journal(object):
         return data
 
     @property
+    def publication_level(self):
+
+        pl = self.data.get('v330', [{'_': None}])[0]['_']
+
+        pl = pl.upper() if pl else None
+
+        if pl is None:
+            return None
+
+        return (pl, choices.journal_publication_level.get(pl, pl))
+
+    @property
+    def controlled_vocabulary(self):
+
+        cv = self.data.get('v85', [{'_': None}])[0]['_']
+
+        cv = cv.lower() if cv else None
+
+        if cv is None:
+            return None
+
+        return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
+
+    @property
+    def editorial_standard(self):
+
+        es = self.data.get('v117', [{'_': None}])[0]['_']
+
+        es = es.lower() if es else None
+
+        if es is None:
+            return None
+
+        return (es, choices.journal_standard.get(es, es))
+
+    @property
     def submission_url(self):
         """
         This method retrieves the submission system url of the given journal
@@ -385,6 +421,15 @@ class Journal(object):
         """
 
         return self.data.get('v692', [{'_': None}])[0]['_']
+
+    @property
+    def secs_code(self):
+        """
+        This method retrieves the secs_code of the journal
+        This method deals with the legacy field (v37).
+        """
+
+        return self.data.get('v37', [{'_': None}])[0]['_']
 
     @property
     def cnn_code(self):
@@ -825,7 +870,6 @@ class Journal(object):
     def publisher_country(self):
         """
         This method retrieves the publisher country of journal.
-
         This method return a tuple: ('US', u'United States'), otherwise
         return None.
         """
@@ -840,7 +884,6 @@ class Journal(object):
 
         return (country_code, country_name)
 
-
     @property
     def copyright(self):
         """
@@ -848,6 +891,7 @@ class Journal(object):
         if it exists.
         """
         return self.data.get('v62', [{'_': None}])[0]['_']
+
 
 class Article(object):
 

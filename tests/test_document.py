@@ -265,6 +265,74 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, 'XXX')
 
+    def test_without_plevel(self):
+        journal = self.journal
+
+        del(journal.data['v330'])
+
+        self.assertEqual(journal.publication_level, None)
+
+    def test_plevel(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publication_level, (u'CT', u'Scientific Technical'))
+
+    def test_plevel_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v330'][0]['_'] = 'XXX'
+
+        self.assertEqual(journal.publication_level, ('XXX', 'XXX'))
+
+    def test_without_ctrl_vocabulary(self):
+        journal = self.journal
+
+        del(journal.data['v85'])
+
+        self.assertEqual(journal.controlled_vocabulary, None)
+
+    def test_ctrl_vocabulary(self):
+        journal = self.journal
+
+        self.assertEqual(journal.controlled_vocabulary, ('nd', 'No Descriptor'))
+
+    def test_ctrl_vocabulary_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v85'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.controlled_vocabulary, ('xxx', 'xxx'))
+
+    def test_without_secs_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.secs_code, None)
+
+    def test_secs_code(self):
+        journal = self.journal
+
+        journal.data['v37'] = [{'_': 'secs_code'}]
+        self.assertEqual(journal.secs_code, 'secs_code')
+
+    def test_without_standard(self):
+        journal = self.journal
+
+        del(journal.data['v117'])
+
+        self.assertEqual(journal.editorial_standard, None)
+
+    def test_standard(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editorial_standard, ('other', 'other standard'))
+
+    def test_standard_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v117'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.editorial_standard, ('xxx', 'xxx'))
+
     def test_without_periodicity(self):
         journal = self.journal
 
