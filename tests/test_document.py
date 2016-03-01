@@ -1106,7 +1106,7 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.other_titles, expected)
 
-    def test_journal_other_title_without_orther_titles(self):
+    def test_journal_other_title_without_other_titles(self):
         journal = self.journal
 
         del(journal.data['v240'])
