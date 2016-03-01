@@ -568,6 +568,18 @@ class Journal(object):
                 return langs
 
     @property
+    def abstract_languages(self):
+        """
+        This method retrieves a list of possible languages that the journal
+        publishes the abstracts.
+        This method deals with the legacy fields (v360).
+        """
+        if 'v360' in self.data:
+            langs = [i['_'] for i in self.data['v360'] if i['_'] in choices.ISO639_1_to_2.keys()]
+            if len(langs) > 0:
+                return langs
+
+    @property
     def collection_acronym(self):
         """
         This method retrieves the collection of the given journal,

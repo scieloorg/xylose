@@ -435,6 +435,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.languages, None)
 
+    def test_abstract_languages(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(sorted(journal.abstract_languages), [u'en', u'pt'])
+
+    def test_abstract_languages_without_v350(self):
+        del(self.fulldoc['title']['v360'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.abstract_languages, None)
+
     def test_current_without_v51(self):
         del(self.fulldoc['title']['v51'])
 
