@@ -633,6 +633,14 @@ class Journal(object):
 
         return self.data.get('v400', [{'_': None}])[0]['_']
 
+    @property
+    def institutional_url(self):
+        """
+        This method retrieves the journal institutional url of the given article.
+        """
+
+        return self.data.get('v69', [{'_': None}])[0]['_']
+
     def url(self, language='en'):
         """
         This method retrieves the journal url of the given article.

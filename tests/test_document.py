@@ -363,6 +363,17 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.controlled_vocabulary, ('xxx', 'xxx'))
 
+    def test_without_institutional_url(self):
+        journal = self.journal
+
+        del(journal.data['v69'])
+        self.assertEqual(journal.institutional_url, None)
+
+    def test_institutional_url(self):
+        journal = self.journal
+
+        self.assertEqual(journal.institutional_url, u'http://www.ablimno.org.br')
+
     def test_without_secs_code(self):
         journal = self.journal
 
