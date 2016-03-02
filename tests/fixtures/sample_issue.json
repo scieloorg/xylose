@@ -182,6 +182,28 @@
             {
                 "_": "0"
             }
+        ],
+        "v540": [
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> Todo el contenido de esta revista, excepto d\u00f3nde est\u00e1 identificado, est&#225; bajo una <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Licencia Creative Commons</a>",
+                "_": "",
+                "l": "es"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> Todo o conte\u00fado deste peri\u00f3dico, exceto onde est&#225 identificado, est&#225; licenciado sob uma <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Licen&#231;a Creative Commons</a>",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Creative Commons Attribution License</a>",
+                "_": "",
+                "l": "en"
+            }
+        ],
+        "v541": [
+            {
+                "_": "BY"
+            }
         ]
     },
     "title": {
@@ -435,6 +457,23 @@
             {
                 "t": "ONLIN",
                 "_": "1806-9681"
+            }
+        ],
+        "v540": [
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> Todo el contenido de esta revista, excepto d\u00f3nde est\u00e1 identificado, est&#225; bajo una <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Licencia Creative Commons</a>",
+                "_": "",
+                "l": "es"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> Todo o conte\u00fado deste peri\u00f3dico, exceto onde est&#225 identificado, est&#225; licenciado sob uma <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Licen&#231;a Creative Commons</a>",
+                "_": "",
+                "l": "pt"
+            },
+            {
+                "t": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"http://i.creativecommons.org/l/by/3.0/80x15.png\" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/3.0/\">Creative Commons Attribution License</a>",
+                "_": "",
+                "l": "en"
             }
         ],
         "v541": [

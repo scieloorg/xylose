@@ -280,6 +280,155 @@ class Issue(object):
 
         return tools.get_date(pdate.replace('-', '')) if pdate else None
 
+    @property
+    def is_press_release(self):
+
+        pr = self.data['issue'].get('v41', [{'_': ''}])[0]['_'].lower()
+
+        return True if 'pr' in pr else False
+
+    @property
+    def titles(self):
+
+        titles = {}
+
+        for title in self.data['issue'].get('v33', []):
+            if 'l' in title and '_' in title:
+                titles[title['l']] = title['_']
+
+        if not titles:
+            return None
+
+        return titles
+
+    @property
+    def total_documents(self):
+
+        return self.data['issue'].get('v122', [{'_': 0}])[0]['_']
+
+    @property
+    def controlled_vocabulary(self):
+
+        cv = self.data['issue'].get('v85', [{'_': None}])[0]['_']
+
+        cv = cv.lower() if cv else None
+
+        if cv is None:
+            return None
+
+        return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
+
+    @property
+    def editorial_standard(self):
+
+        es = self.data['issue'].get('v117', [{'_': None}])[0]['_']
+
+        es = es.lower() if es else None
+
+        if es is None:
+            return None
+
+        return (es, choices.journal_standard.get(es, es))
+
+    @property
+    def permissions(self):
+        data = None
+
+        if 'license' in self.data:
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
+            data['id'] = self.data['license']
+
+            return data
+
+        if 'v541' in self.data['issue'] and self.data['issue']['v541'][0]['_'].lower() == 'nd':
+            return None
+
+        if 'v541' in self.data['issue']:
+            if len(self.data['issue']['v541'][0]['_'].lower().split('/')) == 1:
+                license = '%s/4.0' % self.data['issue']['v541'][0]['_'].lower()
+            else:
+                license = self.data['issue']['v541'][0]['_'].lower()
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % license
+            data['id'] = license
+            return data
+
+        if 'v540' in self.data['issue']:
+            for dlicense in self.data['issue']['v540']:
+                if not 't' in dlicense:
+                    continue
+
+                license_url = LICENSE_REGEX.findall(dlicense['t'])
+                if len(license_url) == 0:
+                    continue
+
+                license_id = LICENSE_CREATIVE_COMMONS.findall(license_url[0])
+
+                if len(license_id) == 0:
+                    continue
+
+                data = {}
+                data['text'] = dlicense['t']
+                data['url'] = license_url[0]
+                data['id'] = license_id[0]
+
+                if 'l' in dlicense and dlicense['l'] == 'en':
+                    break
+
+        return data or self.journal.permissions
+
+    @property
+    def processing_date(self):
+        """
+        This method retrieves the processing date of the given issue, if it exists.
+        This method deals with the legacy fields (91).
+        """
+
+        pdate = self.data.get(
+            'processing_date',
+            self.data['issue'].get('v91', [{'_': ''}])[0]['_']
+        )
+
+        if not pdate:
+            return None
+
+        return tools.get_date(pdate.replace('-', '')) if pdate else None
+
+    @property
+    def update_date(self):
+        """
+        This method retrieves the update date of the given issue, if it exists.
+        If not it will retrieve de update date.
+        This method deals with the legacy fields (91) and new field updated_at.
+        """
+
+        updated_at = self.data.get(
+            'updated_at',
+            self.processing_date
+        )
+
+        if not updated_at:
+            update_at = self.creation_date
+
+        return tools.get_date(updated_at.replace('-', '')) if updated_at else None
+
+    @property
+    def creation_date(self):
+        """
+        This method retrieves the creation_date date of the given issue, if it exists.
+        This method deals with the legacy fields (93) and new field created_at.
+        """
+
+        created_at = self.data.get(
+            'created_at',
+            self.data['issue'].get('v93', [{'_': ''}])[0]['_']
+        )
+
+        return tools.get_date(created_at.replace('-', '')) if created_at else None
+
 
 class Journal(object):
 
@@ -338,6 +487,14 @@ class Journal(object):
     @property
     def permissions(self):
         data = None
+
+        if 'license' in self.data:
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
+            data['id'] = self.data['license']
+
+            return data
 
         if 'v541' in self.data and self.data['v541'][0]['_'].lower() == 'nd':
             return None
@@ -1361,12 +1518,12 @@ class Article(object):
         updated_at = self.data.get(
             'updated_at',
             self.data['article'].get('v91', [{'_': ''}])[0]['_']
-        ).replace('-', '')
+        )
 
         if not updated_at:
-            return self.creation_date
+            update_at = self.creation_date
 
-        return tools.get_date(updated_at) if updated_at else None
+        return tools.get_date(updated_at.replace('-', '')) if updated_at else None
 
     @property
     def creation_date(self):
@@ -1378,9 +1535,9 @@ class Article(object):
         created_at = self.data.get(
             'created_at',
             self.data['article'].get('v93', [{'_': ''}])[0]['_']
-        ).replace('-', '')
+        )
 
-        return tools.get_date(created_at) if created_at else None
+        return tools.get_date(created_at.replace('-', '')) if created_at else None
 
     @property
     def receive_date(self):
