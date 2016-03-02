@@ -424,3 +424,26 @@ journal_title_category = {
     u'abbrev_wos': u'Web of Science (abbreviated)',
     u'abbrev_nlm': u'National Library of Medicine (abbreviated)',
 }
+
+month_bad_prediction = {
+    'jan': 1,
+    'ene': 1,
+    'fev': 2,
+    'feb': 2,
+    'mar': 3,
+    'abr': 4,
+    'apr': 4,
+    'mai': 5,
+    'may': 5,
+    'jun': 6,
+    'jul': 7,
+    'ago': 8,
+    'aug': 8,
+    'set': 9,
+    'sep': 9,
+    'out': 10,
+    'oct': 10,
+    'nov': 11,
+    'dez': 12,
+    'dic': 12
+}

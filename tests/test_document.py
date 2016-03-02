@@ -97,6 +97,61 @@ class IssueTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
         self.issue = Issue(self.fulldoc)
 
+    def test_start_end_month(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'out./dez'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'xxx./xxx'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'x': 'xxx./xxx'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_3(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'x': 'xxx./xxx'},
+            {'x': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, None)
+        self.assertEqual(issue.end_month, None)
+
+    def test_start_end_month_4(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'jan./feb'},
+            {'m': 'jan./fev'}
+        ]
+
+        self.assertEqual(issue.start_month, '01')
+        self.assertEqual(issue.end_month, '02')
+
     def test_is_marked_up(self):
         issue = self.issue
 

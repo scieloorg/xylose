@@ -3,6 +3,7 @@ import sys
 from functools import wraps
 import warnings
 import re
+import unicodedata
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -30,6 +31,14 @@ LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the c
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
+
+
+def cleanup_string(text):
+    nfd_form = unicodedata.normalize('NFD', text.strip().lower())
+
+    cleaned_str = u''.join(x for x in nfd_form if unicodedata.category(x)[0] == 'L' or x == ' ')
+
+    return cleaned_str
 
 
 def remove_control_characters(data):
@@ -222,6 +231,55 @@ class Issue(object):
         """
         if 'v32' in self.data['issue']:
             return self.data['issue']['v32'][0]['_']
+
+    @property
+    def start_month(self):
+        """
+        This method retrieves the stating month of the issue.
+        This method deals with the field (v43)
+        The issue database do not have a feaseble way to collect this data. It
+        is a exact match made from a field content that is filled by convention
+        eg: feb./mar
+            jan/mar
+            ene/mar
+            out/dez
+            oct/dic
+        As it is a convetion it may be filled out of the convetion :-/ :-o in
+        this situations the result will be None.
+        """
+
+        for item in [month['m'].split('/')[0] for month in self.data['issue'].get('v43', []) if 'm' in month]:
+            item = cleanup_string(unicode(item))
+            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
+
+            if not month:
+                continue
+
+            return '%02d' % (month) if month else None
+
+    @property
+    def end_month(self):
+        """
+        This method retrieves the stating month of the issue.
+        This method deals with the field (v43)
+        The issue database do not have a feaseble way to collect this data. It
+        is a exact match made from a field content that is filled by convention
+        eg: feb./mar
+            jan/mar
+            ene/mar
+            out/dez
+            oct/dic
+        As it is a convetion it may be filled out of the convetion :-/ :-o in
+        this situations the result will be None.
+        """
+        for item in [month['m'].split('/')[1] for month in self.data['issue'].get('v43', []) if 'm' in month and len(month['m'].split('/')) == 2]:
+            item = cleanup_string(unicode(item))
+            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
+
+            if not month:
+                continue
+
+            return '%02d' % (month) if month else None
 
     @property
     def supplement_volume(self):
