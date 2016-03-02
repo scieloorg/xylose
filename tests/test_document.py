@@ -325,11 +325,20 @@ class IssueTests(unittest.TestCase):
 
         self.assertEqual(issue.permissions, None)
 
-
     def test_without_standard(self):
         issue = self.issue
 
         del(issue.data['issue']['v117'])
+
+        # retorna standard de journal
+
+        self.assertEqual(issue.editorial_standard, (u'nbr6023', u'nbr 6023/89 - associa\xe7\xe3o nacional'))
+
+    def test_without_standard_also_in_journal(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v117'])
+        del(issue.journal.data['v117'])
 
         self.assertEqual(issue.editorial_standard, None)
 
@@ -349,6 +358,16 @@ class IssueTests(unittest.TestCase):
         issue = self.issue
 
         del(issue.data['issue']['v85'])
+
+        # retorna ctrl_vocab de journal
+
+        self.assertEqual(issue.controlled_vocabulary, (u'nd', u'No Descriptor'))
+
+    def test_without_ctrl_vocabulary_also_in_journal(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v85'])
+        del(issue.journal.data['v85'])
 
         self.assertEqual(issue.controlled_vocabulary, None)
 

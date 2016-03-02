@@ -383,7 +383,7 @@ class Issue(object):
         cv = cv.lower() if cv else None
 
         if cv is None:
-            return None
+            return self.journal.controlled_vocabulary
 
         return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
 
@@ -395,7 +395,7 @@ class Issue(object):
         es = es.lower() if es else None
 
         if es is None:
-            return None
+            return self.journal.editorial_standard
 
         return (es, choices.journal_standard.get(es, es))
 
