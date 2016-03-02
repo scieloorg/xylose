@@ -126,6 +126,17 @@ class Issue(object):
             return self.data['title']['v69'][0]['_'].replace('http://', '')
 
     @property
+    def is_marked_up(self):
+        """
+        This method retrieves the issue order of the given article.
+        This method deals with the fields (v880).
+        """
+
+        imu = self.data['issue'].get('v200', [{'_': 0}])[0]['_']
+
+        return True if str(imu) == '1' else False
+
+    @property
     def order(self):
         """
         This method retrieves the issue order of the given article.

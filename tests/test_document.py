@@ -97,6 +97,20 @@ class IssueTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
         self.issue = Issue(self.fulldoc)
 
+    def test_is_marked_up(self):
+        issue = self.issue
+
+        issue.data['issue']['v220'] = [{'_': 1}]
+
+        self.assertTrue(issue.is_marked_up)
+
+    def test_is_marked_up(self):
+        issue = self.issue
+
+        issue.data['issue']['v220'] = [{'_': 0}]
+
+        self.assertFalse(issue.is_marked_up)
+
     def test_creation_date(self):
         issue = self.issue
 
