@@ -97,6 +97,30 @@ class IssueTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
         self.issue = Issue(self.fulldoc)
 
+    def test_sections(self):
+        issue = self.issue
+
+        expected = {
+            "CODE020": {
+                "en": "Other Themes",
+                "pt": "Temas Livres"
+            },
+            "CODE100": {
+                "en": "Review",
+                "pt": "Resenha"
+            },
+            "CODE120": {
+                "en": "Theme",
+                "pt": "Artigos do tema"
+            },
+            "CODE040": {
+                "en": "Editorial",
+                "pt": "Editorial"
+            }
+        }
+
+        self.assertEqual(issue.sections(), expected)
+
     def test_start_end_month(self):
         issue = self.issue
 

@@ -512,6 +512,18 @@ class Issue(object):
 
         return tools.get_date(created_at.replace('-', '')) if created_at else None
 
+    def sections(self, iso_format=None):
+
+        sections = {}
+
+        for section in self.data['issue'].get('v49', []):
+            if not 'c' in section or not 'l' in section or not 't' in section:
+                continue
+            sections.setdefault(section['c'], {})
+            sections[section['c']][section['l']] = section['t']
+
+        return sections if sections else None
+
 
 class Journal(object):
 

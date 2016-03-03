@@ -109,17 +109,68 @@
         ],
         "v49": [
             {
-                "c": "PD010",
+
+                "c": "CODE020",
                 "l": "pt",
                 "_": "",
-                "t": "Artigos"
+                "t": "Temas Livres"
+
             },
             {
-                "c": "PD010",
+
+                "c": "CODE020",
                 "l": "en",
                 "_": "",
-                "t": "Articles"
+                "t": "Other Themes"
+
+            },
+            {
+
+                "c": "CODE040",
+                "l": "pt",
+                "_": "",
+                "t": "Editorial"
+
+            },
+            {
+
+                "c": "CODE040",
+                "l": "en",
+                "_": "",
+                "t": "Editorial"
+
+            },
+            {
+
+                "c": "CODE100",
+                "l": "pt",
+                "_": "",
+                "t": "Resenha"
+
+            },
+            {
+
+                "c": "CODE100",
+                "l": "en",
+                "_": "",
+                "t": "Review"
+
+            },
+            {
+
+                "c": "CODE120",
+                "l": "pt",
+                "_": "",
+                "t": "Artigos do tema"
+
+            },
+            {
+                "c": "CODE120",
+                "l": "en",
+                "_": "",
+                "t": "Theme"
             }
+
         ],
         "v48": [
             {
