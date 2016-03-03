@@ -4,6 +4,7 @@ from functools import wraps
 import warnings
 import re
 import unicodedata
+import datetime
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -742,7 +743,13 @@ class Journal(object):
         if data is None:
             return None
 
-        return cleanup_number(data)
+        year = cleanup_number(data)[:4]
+
+        if len(year) == 4:
+            return str(datetime.datetime.strptime(year, '%Y').year)
+
+        if len(year) == 2:
+            return str(datetime.datetime.strptime(year, '%y').year)
 
     @property
     def first_volume(self):
@@ -780,7 +787,14 @@ class Journal(object):
         if data is None:
             return None
 
-        return cleanup_number(data)
+        year = cleanup_number(data)[:4]
+
+        if len(year) == 4:
+            return str(datetime.datetime.strptime(year, '%Y').year)
+
+        if len(year) == 2:
+            return str(datetime.datetime.strptime(year, '%y').year)
+
 
     @property
     def last_volume(self):
