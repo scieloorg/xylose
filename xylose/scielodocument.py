@@ -166,12 +166,12 @@ class Issue(object):
         This method deals with the fields (v880).
         """
 
-        pid = self.data['issue'].get('v880', [{'_': None}])[0]['_']
+        order = self.data['issue'].get('v36', [{'_': None}])[0]['_']
 
-        if not pid:
+        if not order:
             return None
 
-        return str(int(pid[14:18]))
+        return str(int(order[4:]))
 
     @property
     def type(self):
