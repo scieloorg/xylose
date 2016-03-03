@@ -119,7 +119,7 @@ class IssueTests(unittest.TestCase):
             }
         }
 
-        self.assertEqual(issue.sections(), expected)
+        self.assertEqual(issue.sections, expected)
 
     def test_start_end_month(self):
         issue = self.issue

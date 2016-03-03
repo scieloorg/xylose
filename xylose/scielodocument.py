@@ -512,7 +512,8 @@ class Issue(object):
 
         return tools.get_date(created_at.replace('-', '')) if created_at else None
 
-    def sections(self, iso_format=None):
+    @property
+    def sections(self):
 
         sections = {}
 
