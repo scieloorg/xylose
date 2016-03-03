@@ -33,7 +33,20 @@ SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
 
 
+def cleanup_number(text):
+    """
+    Lefting just valid numbers
+    """
+
+    return ''.join([i for i in text if i.isdigit()])
+
+
 def cleanup_string(text):
+    """
+    Remove any special character like -,./ lefting just numbers and alphabet
+    characters
+    """
+
     nfd_form = unicodedata.normalize('NFD', text.strip().lower())
 
     cleaned_str = u''.join(x for x in nfd_form if unicodedata.category(x)[0] == 'L' or x == ' ')
@@ -724,7 +737,12 @@ class Journal(object):
         This method deals with the legacy field (v301).
         """
 
-        return self.data.get('v301', [{'_': None}])[0]['_']
+        data = self.data.get('v301', [{'_': None}])[0]['_']
+
+        if data is None:
+            return None
+
+        return cleanup_number(data)
 
     @property
     def first_volume(self):
@@ -757,7 +775,12 @@ class Journal(object):
         This method deals with the legacy field (v304).
         """
 
-        return self.data.get('v304', [{'_': None}])[0]['_']
+        data = self.data.get('v304', [{'_': None}])[0]['_']
+
+        if data is None:
+            return None
+
+        return cleanup_number(data)
 
     @property
     def last_volume(self):

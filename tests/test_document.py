@@ -1214,6 +1214,13 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.first_year, None)
 
+    def test_first_year_2(self):
+        journal = self.journal
+
+        journal.data['v301'] = [{'_': 'maio 1998'}]
+
+        self.assertEqual(journal.first_year, '1998')
+
     def test_first_volume(self):
         journal = self.journal
 
@@ -1249,6 +1256,13 @@ class JournalTests(unittest.TestCase):
         journal = self.journal
 
         self.assertEqual(journal.last_year, None)
+
+    def test_last_year_2(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': 'maio 1998'}]
+
+        self.assertEqual(journal.last_year, '1998')
 
     def test_last_volume(self):
         journal = self.journal
