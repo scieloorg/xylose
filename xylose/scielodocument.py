@@ -176,7 +176,7 @@ class Issue(object):
     @property
     def type(self):
         """
-        This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special'].
+        This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special', 'pressrelease'].
         """
 
         label = ''.join([
