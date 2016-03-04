@@ -3,6 +3,8 @@ import sys
 from functools import wraps
 import warnings
 import re
+import unicodedata
+import datetime
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -30,6 +32,27 @@ LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the c
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
+
+
+def cleanup_number(text):
+    """
+    Lefting just valid numbers
+    """
+
+    return ''.join([i for i in text if i.isdigit()])
+
+
+def cleanup_string(text):
+    """
+    Remove any special character like -,./ lefting just numbers and alphabet
+    characters
+    """
+
+    nfd_form = unicodedata.normalize('NFD', text.strip().lower())
+
+    cleaned_str = u''.join(x for x in nfd_form if unicodedata.category(x)[0] == 'L' or x == ' ')
+
+    return cleaned_str
 
 
 def remove_control_characters(data):
@@ -126,23 +149,34 @@ class Issue(object):
             return self.data['title']['v69'][0]['_'].replace('http://', '')
 
     @property
+    def is_marked_up(self):
+        """
+        This method retrieves the issue order of the given article.
+        This method deals with the fields (v880).
+        """
+
+        imu = self.data['issue'].get('v200', [{'_': 0}])[0]['_']
+
+        return True if str(imu) == '1' else False
+
+    @property
     def order(self):
         """
         This method retrieves the issue order of the given article.
         This method deals with the fields (v880).
         """
 
-        pid = self.data['issue'].get('v880', [{'_': None}])[0]['_']
+        order = self.data['issue'].get('v36', [{'_': None}])[0]['_']
 
-        if not pid:
+        if not order:
             return None
 
-        return str(int(pid[14:18]))
+        return str(int(order[4:]))
 
     @property
     def type(self):
         """
-        This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special'].
+        This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special', 'pressrelease'].
         """
 
         label = ''.join([
@@ -152,6 +186,9 @@ class Issue(object):
             self.data['issue'].get('v132', [{'_': ''}])[0]['_'],
             self.data['issue'].get('v41', [{'_': ''}])[0]['_'],
         ]).lower()
+
+        if 'pr' in label:
+            return 'pressrelease'
 
         if 'ahead' in label:
             return 'ahead'
@@ -211,6 +248,55 @@ class Issue(object):
         """
         if 'v32' in self.data['issue']:
             return self.data['issue']['v32'][0]['_']
+
+    @property
+    def start_month(self):
+        """
+        This method retrieves the stating month of the issue.
+        This method deals with the field (v43)
+        The issue database do not have a feaseble way to collect this data. It
+        is a exact match made from a field content that is filled by convention
+        eg: feb./mar
+            jan/mar
+            ene/mar
+            out/dez
+            oct/dic
+        As it is a convetion it may be filled out of the convetion :-/ :-o in
+        this situations the result will be None.
+        """
+
+        for item in [month['m'].split('/')[0] for month in self.data['issue'].get('v43', []) if 'm' in month]:
+            item = cleanup_string(unicode(item))
+            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
+
+            if not month:
+                continue
+
+            return '%02d' % (month) if month else None
+
+    @property
+    def end_month(self):
+        """
+        This method retrieves the stating month of the issue.
+        This method deals with the field (v43)
+        The issue database do not have a feaseble way to collect this data. It
+        is a exact match made from a field content that is filled by convention
+        eg: feb./mar
+            jan/mar
+            ene/mar
+            out/dez
+            oct/dic
+        As it is a convetion it may be filled out of the convetion :-/ :-o in
+        this situations the result will be None.
+        """
+        for item in [month['m'].split('/')[1] for month in self.data['issue'].get('v43', []) if 'm' in month and len(month['m'].split('/')) == 2]:
+            item = cleanup_string(unicode(item))
+            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
+
+            if not month:
+                continue
+
+            return '%02d' % (month) if month else None
 
     @property
     def supplement_volume(self):
@@ -280,6 +366,190 @@ class Issue(object):
 
         return tools.get_date(pdate.replace('-', '')) if pdate else None
 
+    @property
+    def is_press_release(self):
+
+        pr = self.data['issue'].get('v41', [{'_': ''}])[0]['_'].lower()
+
+        return True if 'pr' in pr else False
+
+    @property
+    def titles(self):
+
+        titles = {}
+
+        for title in self.data['issue'].get('v33', []):
+            if 'l' in title and '_' in title:
+                titles[title['l']] = title['_']
+
+        if not titles:
+            return None
+
+        return titles
+
+    @property
+    def total_documents(self):
+
+        return self.data['issue'].get('v122', [{'_': 0}])[0]['_']
+
+    @property
+    def controlled_vocabulary(self):
+
+        cv = self.data['issue'].get('v85', [{'_': None}])[0]['_']
+
+        cv = cv.lower() if cv else None
+
+        if cv is None:
+            return self.journal.controlled_vocabulary
+
+        return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
+
+    @property
+    def editorial_standard(self):
+
+        es = self.data['issue'].get('v117', [{'_': None}])[0]['_']
+
+        es = es.lower() if es else None
+
+        if es is None:
+            return self.journal.editorial_standard
+
+        return (es, choices.journal_standard.get(es, es))
+
+    @property
+    def permissions(self):
+        data = None
+
+        if 'license' in self.data:
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
+            data['id'] = self.data['license']
+
+            return data
+
+        if 'v541' in self.data['issue'] and self.data['issue']['v541'][0]['_'].lower() == 'nd':
+            return None
+
+        if 'v541' in self.data['issue']:
+            if len(self.data['issue']['v541'][0]['_'].lower().split('/')) == 1:
+                license = '%s/4.0' % self.data['issue']['v541'][0]['_'].lower()
+            else:
+                license = self.data['issue']['v541'][0]['_'].lower()
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % license
+            data['id'] = license
+            return data
+
+        if 'v540' in self.data['issue']:
+            for dlicense in self.data['issue']['v540']:
+                if not 't' in dlicense:
+                    continue
+
+                license_url = LICENSE_REGEX.findall(dlicense['t'])
+                if len(license_url) == 0:
+                    continue
+
+                license_id = LICENSE_CREATIVE_COMMONS.findall(license_url[0])
+
+                if len(license_id) == 0:
+                    continue
+
+                data = {}
+                data['text'] = dlicense['t']
+                data['url'] = license_url[0]
+                data['id'] = license_id[0]
+
+                if 'l' in dlicense and dlicense['l'] == 'en':
+                    break
+
+        return data or self.journal.permissions
+
+    @property
+    def processing_date(self):
+        """
+        This method retrieves the processing date of the given issue, if it exists.
+        This method deals with the legacy fields (91).
+        """
+
+        pdate = self.data.get(
+            'processing_date',
+            self.data['issue'].get('v91', [{'_': ''}])[0]['_']
+        )
+
+        if not pdate:
+            return None
+
+        return tools.get_date(pdate.replace('-', '')) if pdate else None
+
+    @property
+    def update_date(self):
+        """
+        This method retrieves the update date of the given issue, if it exists.
+        If not it will retrieve de update date.
+        This method deals with the legacy fields (91) and new field updated_at.
+        """
+
+        updated_at = self.data.get(
+            'updated_at',
+            self.processing_date
+        )
+
+        if not updated_at:
+            update_at = self.creation_date
+
+        return tools.get_date(updated_at.replace('-', '')) if updated_at else None
+
+    @property
+    def creation_date(self):
+        """
+        This method retrieves the creation_date date of the given issue, if it exists.
+        This method deals with the legacy fields (93) and new field created_at.
+        """
+
+        created_at = self.data.get(
+            'created_at',
+            self.data['issue'].get('v93', [{'_': ''}])[0]['_']
+        )
+
+        return tools.get_date(created_at.replace('-', '')) if created_at else None
+
+    @property
+    def sections(self):
+        """
+        This method retrieves the sections of the given issue, if it exists.
+        This method deals with the legacy fields (49) and new field created_at.
+        Eg:
+        {
+            "CODE020": {
+                "en": "Other Themes",
+                "pt": "Temas Livres"
+            },
+            "CODE100": {
+                "en": "Review",
+                "pt": "Resenha"
+            },
+            "CODE120": {
+                "en": "Theme",
+                "pt": "Artigos do tema"
+            },
+            "CODE040": {
+                "en": "Editorial",
+                "pt": "Editorial"
+            }
+        }
+        """
+        sections = {}
+
+        for section in self.data['issue'].get('v49', []):
+            if not 'c' in section or not 'l' in section or not 't' in section:
+                continue
+            sections.setdefault(section['c'], {})
+            sections[section['c']][section['l']] = section['t']
+
+        return sections if sections else None
+
 
 class Journal(object):
 
@@ -339,6 +609,14 @@ class Journal(object):
     def permissions(self):
         data = None
 
+        if 'license' in self.data:
+            data = {}
+            data['text'] = None
+            data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
+            data['id'] = self.data['license']
+
+            return data
+
         if 'v541' in self.data and self.data['v541'][0]['_'].lower() == 'nd':
             return None
 
@@ -353,7 +631,7 @@ class Journal(object):
             data['id'] = license
             return data
 
-        if  'v540' in self.data:
+        if 'v540' in self.data:
             for dlicense in self.data['v540']:
                 if not 't' in dlicense:
                     continue
@@ -378,6 +656,207 @@ class Journal(object):
         return data
 
     @property
+    def editor_address(self):
+        """
+        This method retrieve the editor address
+        This method deals with the field (v63)
+        """
+
+        if not 'v63' in self.data:
+            return None
+
+
+        return ', '.join([i['_'] for i in self.data.get('v63') if '_' in i and i['_'] != ''])
+
+    @property
+    def editor_email(self):
+        """
+        This method retrieve the editor address
+        This method deals with the field (v63)
+        """
+
+        return self.data.get('v64', [{'_': None}])[0]['_']
+
+    @property
+    def is_indexed_in_scie(self):
+        """
+        This method indicates if the given journal is indexed at SCIE
+        This method deals with the field (v851)
+        """
+
+        return True if self.data.get('v851', [{'_': None}])[0]['_'] else False
+
+    @property
+    def is_indexed_in_ssci(self):
+        """
+        This method indicates if the given journal is indexed at SSCI
+        This method deals with the field (v852)
+        """
+
+        return True if self.data.get('v852', [{'_': None}])[0]['_'] else False
+
+    @property
+    def is_indexed_in_ahci(self):
+        """
+        This method indicates if the given journal is indexed at SCIE
+        This method deals with the field (v853)
+        """
+
+        return True if self.data.get('v853', [{'_': None}])[0]['_'] else False
+
+    @property
+    def publication_level(self):
+
+        pl = self.data.get('v330', [{'_': None}])[0]['_']
+
+        pl = pl.upper() if pl else None
+
+        if pl is None:
+            return None
+
+        return (pl, choices.journal_publication_level.get(pl, pl))
+
+    @property
+    def controlled_vocabulary(self):
+
+        cv = self.data.get('v85', [{'_': None}])[0]['_']
+
+        cv = cv.lower() if cv else None
+
+        if cv is None:
+            return None
+
+        return (cv, choices.journal_ctrl_vocabulary.get(cv, cv))
+
+    @property
+    def editorial_standard(self):
+
+        es = self.data.get('v117', [{'_': None}])[0]['_']
+
+        es = es.lower() if es else None
+
+        if es is None:
+            return None
+
+        return (es, choices.journal_standard.get(es, es))
+
+    @property
+    def submission_url(self):
+        """
+        This method retrieves the submission system url of the given journal
+        This method deals with the legacy field (v692).
+        """
+
+        return self.data.get('v692', [{'_': None}])[0]['_']
+
+    @property
+    def secs_code(self):
+        """
+        This method retrieves the secs_code of the journal
+        This method deals with the legacy field (v37).
+        """
+
+        return self.data.get('v37', [{'_': None}])[0]['_']
+
+    @property
+    def cnn_code(self):
+        """
+        This method retrieves the cnn_code of the journal
+        This method deals with the legacy field (v20).
+        """
+
+        return self.data.get('v20', [{'_': None}])[0]['_']
+
+    @property
+    def first_year(self):
+        """
+        This method retrieves the first year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v301).
+        """
+
+        data = self.data.get('v301', [{'_': None}])[0]['_']
+
+        if data is None:
+            return None
+
+        year = cleanup_number(data)[:4]
+
+        if len(year) == 4:
+            return str(datetime.datetime.strptime(year, '%Y').year)
+
+        if len(year) == 2:
+            return str(datetime.datetime.strptime(year, '%y').year)
+
+    @property
+    def first_volume(self):
+        """
+        This method retrieves the first volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v302).
+        """
+
+        return self.data.get('v302', [{'_': None}])[0]['_']
+
+    @property
+    def first_number(self):
+        """
+        This method retrieves the first number of the journal, not considering
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v303).
+        """
+
+        return self.data.get('v303', [{'_': None}])[0]['_']
+
+    @property
+    def last_year(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v304).
+        """
+
+        data = self.data.get('v304', [{'_': None}])[0]['_']
+
+        if data is None:
+            return None
+
+        year = cleanup_number(data)[:4]
+
+        if len(year) == 4:
+            return str(datetime.datetime.strptime(year, '%Y').year)
+
+        if len(year) == 2:
+            return str(datetime.datetime.strptime(year, '%y').year)
+
+
+    @property
+    def last_volume(self):
+        """
+        This method retrieves the last volume of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v305).
+        """
+
+        return self.data.get('v305', [{'_': None}])[0]['_']
+
+    @property
+    def last_number(self):
+        """
+        This method retrieves the last year of the journal, not considering only
+        the issues published on the collection. It represents the entire collection
+        of the journal.
+        This method deals with the legacy field (v306).
+        """
+
+        return self.data.get('v306', [{'_': None}])[0]['_']
+
+    @property
     def languages(self):
         """
         This method retrieves a list of possible languages that the journal
@@ -386,6 +865,18 @@ class Journal(object):
         """
         if 'v350' in self.data:
             langs = [i['_'] for i in self.data['v350'] if i['_'] in choices.ISO639_1_to_2.keys()]
+            if len(langs) > 0:
+                return langs
+
+    @property
+    def abstract_languages(self):
+        """
+        This method retrieves a list of possible languages that the journal
+        publishes the abstracts.
+        This method deals with the legacy fields (v360).
+        """
+        if 'v360' in self.data:
+            langs = [i['_'] for i in self.data['v360'] if i['_'] in choices.ISO639_1_to_2.keys()]
             if len(langs) > 0:
                 return langs
 
@@ -443,6 +934,14 @@ class Journal(object):
 
         return self.data.get('v400', [{'_': None}])[0]['_']
 
+    @property
+    def institutional_url(self):
+        """
+        This method retrieves the journal institutional url of the given article.
+        """
+
+        return self.data.get('v69', [{'_': None}])[0]['_']
+
     def url(self, language='en'):
         """
         This method retrieves the journal url of the given article.
@@ -465,6 +964,17 @@ class Journal(object):
 
         if 'v440' in self.data:
             return [area['_'] for area in self.data['v440']]
+
+    @property
+    def index_coverage(self):
+        """
+        This method retrieves the index coverage of the given
+        journal, if it exists.
+        This method deals with the legacy fields (450).
+        """
+
+        if 'v450' in self.data:
+            return [area['_'] for area in self.data['v450']]
 
     @property
     def subject_areas(self):
@@ -516,19 +1026,48 @@ class Journal(object):
         This method retrieves the publisher name of the given article,
         if it exists.
         This method deals with the legacy fields (480).
-        """
 
-        return self.data.get('v480', [{'_': None}])[0]['_']
+        This method return a list:
+
+        ["Associa\u00e7\u00e3o Brasileira de Limnologia",
+        "Sociedade Botânica do Brasil"]
+        """
+        if 'v480' not in self.data:
+            return None
+
+        return [publisher['_'] for publisher in self.data.get('v480') if '_' in publisher and publisher['_'] != ""]
 
     @property
     def publisher_loc(self):
         """
-        This method retrieves the publisher localization of the given article,
+        This method retrieves the publisher localization of the given journal,
+        if it exists.
+        This method deals with the legacy fields (490).
+        """
+
+        warnings.warn("deprecated, use journal.publisher_city", DeprecationWarning)
+
+        return self.data.get('v490', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_city(self):
+        """
+        This method retrieves the publisher localization of the given journal,
         if it exists.
         This method deals with the legacy fields (490).
         """
 
         return self.data.get('v490', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_state(self):
+        """
+        This method retrieves the publisher state of the given journal,
+        if it exists.
+        This method deals with the legacy fields (320).
+        """
+
+        return self.data.get('v320', [{'_': None}])[0]['_']
 
     @property
     def title(self):
@@ -539,6 +1078,24 @@ class Journal(object):
         """
 
         return self.data.get('v100', [{'_': None}])[0]['_']
+
+    @property
+    def publisher_country(self):
+        """
+        This method retrieves the publisher country of journal.
+        This method return a tuple: ('US', u'United States'), otherwise
+        return None.
+        """
+        if 'v310' not in self.data:
+            return None
+
+        country_code = self.data.get('v310', [{'_': None}])[0]['_']
+        country_name = choices.ISO_3166.get(country_code, None)
+
+        if not country_code or not country_name:
+            return None
+
+        return (country_code, country_name)
 
     @property
     def subtitle(self):
@@ -613,7 +1170,10 @@ class Journal(object):
 
         per = per.upper() if per else None
 
-        return choices.periodicity.get(per, per)
+        if per is None:
+            return None
+
+        return (per, choices.periodicity.get(per, per))
 
     @property
     def periodicity_in_months(self):
@@ -722,6 +1282,45 @@ class Journal(object):
             return None
 
         return missions
+
+    @property
+    def copyrighter(self):
+        """
+        This method retrieves the journal copyrighter of the given journal,
+        if it exists.
+
+        This method deals with the legacy fields (v62).
+        """
+        return self.data.get('v62', [{'_': None}])[0]['_']
+
+    @property
+    def other_titles(self):
+        """
+        This method retrieves the other titles of the given journal,
+        if it exists.
+
+        Return a list: ['Physical Therapy Movement',
+                        'Revista de fisioterapia da PUC-PR']
+        """
+        if 'v240' not in self.data:
+            return None
+
+        return [title['_'] for title in self.data.get('v240') if '_' in title and title['_'] != ""]
+
+    @property
+    def sponsors(self):
+        """
+        This method retrieves the journal sponsors of the given journal,
+        if it exists.
+
+        There method clean empty 140 field.
+        """
+        if 'v140' not in self.data:
+            return None
+
+        sponsors = self.data.get('v140')
+
+        return [sponsor['_'] for sponsor in sponsors if '_' in sponsor and sponsor['_'] != ""]
 
 
 class Article(object):
@@ -1063,12 +1662,12 @@ class Article(object):
         updated_at = self.data.get(
             'updated_at',
             self.data['article'].get('v91', [{'_': ''}])[0]['_']
-        ).replace('-', '')
+        )
 
         if not updated_at:
-            return self.creation_date
+            update_at = self.creation_date
 
-        return tools.get_date(updated_at) if updated_at else None
+        return tools.get_date(updated_at.replace('-', '')) if updated_at else None
 
     @property
     def creation_date(self):
@@ -1080,9 +1679,9 @@ class Article(object):
         created_at = self.data.get(
             'created_at',
             self.data['article'].get('v93', [{'_': ''}])[0]['_']
-        ).replace('-', '')
+        )
 
-        return tools.get_date(created_at) if created_at else None
+        return tools.get_date(created_at.replace('-', '')) if created_at else None
 
     @property
     def receive_date(self):

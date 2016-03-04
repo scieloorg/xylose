@@ -97,6 +97,391 @@ class IssueTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/sample_issue.json' % path).read())
         self.issue = Issue(self.fulldoc)
 
+    def test_sections(self):
+        issue = self.issue
+
+        expected = {
+            "CODE020": {
+                "en": "Other Themes",
+                "pt": "Temas Livres"
+            },
+            "CODE100": {
+                "en": "Review",
+                "pt": "Resenha"
+            },
+            "CODE120": {
+                "en": "Theme",
+                "pt": "Artigos do tema"
+            },
+            "CODE040": {
+                "en": "Editorial",
+                "pt": "Editorial"
+            }
+        }
+
+        self.assertEqual(issue.sections, expected)
+
+    def test_start_end_month(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'out./dez'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'xxx./xxx'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'x': 'xxx./xxx'},
+            {'m': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_3(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'x': 'xxx./xxx'},
+            {'x': 'oct./dic'}
+        ]
+
+        self.assertEqual(issue.start_month, None)
+        self.assertEqual(issue.end_month, None)
+
+    def test_start_end_month_4(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'jan./feb'},
+            {'m': 'jan./fev'}
+        ]
+
+        self.assertEqual(issue.start_month, '01')
+        self.assertEqual(issue.end_month, '02')
+
+    def test_is_marked_up(self):
+        issue = self.issue
+
+        issue.data['issue']['v220'] = [{'_': 1}]
+
+        self.assertTrue(issue.is_marked_up)
+
+    def test_is_marked_up(self):
+        issue = self.issue
+
+        issue.data['issue']['v220'] = [{'_': 0}]
+
+        self.assertFalse(issue.is_marked_up)
+
+    def test_creation_date(self):
+        issue = self.issue
+
+        issue.data['issue']['v93'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.creation_date, '2012-04-19')
+
+    def test_creation_date_1(self):
+        issue = self.issue
+
+        issue.data['created_at'] = '2012-01-10'
+        issue.data['issue']['v93'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.creation_date, '2012-01-10')
+
+    def test_creation_date_2(self):
+        issue = self.issue
+
+        issue.data['created_at'] = '2012-01-10'
+        self.assertEqual(
+            issue.creation_date,
+            '2012-01-10')
+
+    def test_update_date(self):
+        issue = self.issue
+
+        issue.data['updated_at'] = '2012-01-10'
+        self.assertEqual(issue.update_date, '2012-01-10')
+
+    def test_update_date_1(self):
+        issue = self.issue
+
+        issue.data['updated_at'] = '2012-01-10'
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.update_date, '2012-01-10')
+
+    def test_update_date_2(self):
+        issue = self.issue
+
+        issue.data['issue']['v91'] = [{u'_': u'20120419'}]
+        self.assertEqual(issue.update_date, '2012-04-19')
+
+    def test_update_date_3(self):
+        issue = self.issue
+
+        issue.data['issue']['v91'] = [{u'_': u'20120418'}]
+        self.assertEqual(issue.update_date, '2012-04-18')
+
+    def test_permission_from_journal(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v540'])
+        del(issue.data['issue']['v541'])
+
+        self.assertEqual(issue.permissions['id'], 'by/4.0')
+
+    def test_permission_t0(self):
+        issue = self.issue
+
+        issue.data['issue']['v541'] = [{'_': 'BY-NC'}]
+
+        self.assertEqual(issue.permissions['id'], 'by-nc/4.0')
+
+    def test_permission_t1(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v541'])
+
+        issue.data['issue']['v540'] = [{
+            "t": '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> Todo el contenido de la revista, excepto dónde está identificado, está bajo una <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.es">Licencia Creative Commons</a>',
+            '_': "",
+            'l': "en"
+        }]
+
+        self.assertEqual(
+            issue.permissions['id'],
+            'by/3.0'
+        )
+
+    def test_permission_t2(self):
+        issue = self.issue
+
+        issue.data['license'] = 'by-nc/3.0'
+
+        self.assertEqual(issue.permissions['id'], 'by-nc/3.0')
+        self.assertEqual(issue.permissions['url'], 'http://creativecommons.org/licenses/by-nc/3.0/')
+
+    def test_permission_t3(self):
+        issue = self.issue
+
+        self.assertEqual(issue.permissions['id'], 'by/4.0')
+        self.assertEqual(issue.permissions['url'], 'http://creativecommons.org/licenses/by/4.0/')
+
+    def test_permission_t4(self):
+        issue = self.issue
+
+        issue.data['issue']['v540'] = [
+            {
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u"en"
+            }, {
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'es'
+            }, {
+                u't': u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>',
+                u'_': u'',
+                u'l': u'pt'
+            }
+        ]
+
+        self.assertEqual(issue.permissions['id'], 'by/4.0')
+        self.assertEqual(issue.permissions['url'], 'http://creativecommons.org/licenses/by/4.0/')
+
+    def test_permission_id(self):
+        issue = self.issue
+
+        self.assertEqual(issue.permissions['id'], 'by/4.0')
+
+    def test_permission_url(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v541'])
+
+        self.assertEqual(issue.permissions['url'], 'http://creativecommons.org/licenses/by/3.0/')
+
+    def test_permission_text(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v541'])
+
+        self.assertEqual(issue.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</a>')
+
+    def test_permission_without_v540(self):
+        issue = self.issue
+        del(issue.data['issue']['v541'])
+
+        del(issue.data['issue']['v540'])
+
+        del(issue.data['title']['v541'])
+
+        del(issue.data['title']['v540'])
+
+        self.assertEqual(issue.permissions, None)
+
+    def test_permission_without_v540_t(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v541'])
+
+        del(issue.data['issue']['v540'])
+
+        del(issue.data['title']['v541'])
+
+        del(issue.data['title']['v540'])
+
+        issue.data['issue']['v540'] = [{'_': ''}]
+
+        self.assertEqual(issue.permissions, None)
+
+    def test_without_standard(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v117'])
+
+        # retorna standard de journal
+
+        self.assertEqual(issue.editorial_standard, (u'nbr6023', u'nbr 6023/89 - associa\xe7\xe3o nacional'))
+
+    def test_without_standard_also_in_journal(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v117'])
+        del(issue.journal.data['v117'])
+
+        self.assertEqual(issue.editorial_standard, None)
+
+    def test_standard(self):
+        issue = self.issue
+
+        self.assertEqual(issue.editorial_standard, (u'nbr6023', u'nbr 6023/89 - associação nacional'))
+
+    def test_standard_out_of_choices(self):
+        issue = self.issue
+
+        issue.data['issue']['v117'][0]['_'] = 'xxx'
+
+        self.assertEqual(issue.editorial_standard, ('xxx', 'xxx'))
+
+    def test_without_ctrl_vocabulary(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v85'])
+
+        # retorna ctrl_vocab de journal
+
+        self.assertEqual(issue.controlled_vocabulary, (u'nd', u'No Descriptor'))
+
+    def test_without_ctrl_vocabulary_also_in_journal(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v85'])
+        del(issue.journal.data['v85'])
+
+        self.assertEqual(issue.controlled_vocabulary, None)
+
+    def test_ctrl_vocabulary(self):
+        issue = self.issue
+
+        self.assertEqual(issue.controlled_vocabulary, ('nd', 'No Descriptor'))
+
+    def test_ctrl_vocabulary_out_of_choices(self):
+        issue = self.issue
+
+        issue.data['issue']['v85'][0]['_'] = 'xxx'
+
+        self.assertEqual(issue.controlled_vocabulary, ('xxx', 'xxx'))
+
+    def test_total_documents(self):
+        issue = self.issue
+
+        self.assertEqual(issue.total_documents, '19')
+
+    def test_total_documents_without_data(self):
+        issue = self.issue
+
+        del(issue.data['issue']['v122'])
+
+        self.assertEqual(issue.total_documents, 0)
+
+    def test_title_titles(self):
+        issue = self.issue
+
+        issue.data['issue']['v33'] = [
+            {'l': 'pt', '_': 'lang pt'},
+            {'l': 'es', '_': 'lang es'}
+        ]
+        self.assertEqual(sorted(issue.titles.keys()), ['es', 'pt'])
+        self.assertEqual(sorted(issue.titles.values()), ['lang es', 'lang pt'])
+
+    def test_title_titles_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v33'] = [
+            {'l': 'pt', '_': 'lang pt'},
+            {'l': 'es'}
+        ]
+        self.assertEqual(sorted(issue.titles.keys()), ['pt'])
+        self.assertEqual(sorted(issue.titles.values()), ['lang pt'])
+
+    def test_title_titles(self):
+        issue = self.issue
+
+        issue.data['issue']['v33'] = [
+            {'l': 'pt', '_': 'lang pt'},
+            {'_': 'lang es'}
+        ]
+        self.assertEqual(sorted(issue.titles.keys()), ['pt'])
+        self.assertEqual(sorted(issue.titles.values()), ['lang pt'])
+
+    def test_title_without_titles(self):
+        issue = self.issue
+
+        self.assertEqual(issue.titles, None)
+
+    def test_is_press_release_true(self):
+        issue = self.issue
+
+        issue.data['issue']['v41'] = [{'_': 'PR'}]
+
+        self.assertTrue(issue.is_press_release)
+
+    def test_is_press_release_false_1(self):
+        issue = self.issue
+
+        issue.data['issue']['v41'] = [{'_': 'XX'}]
+
+        self.assertFalse(issue.is_press_release)
+
+    def test_is_press_release_false_2(self):
+        issue = self.issue
+
+        # Elemento não existe na fixture deve retornal False.
+
+        self.assertFalse(issue.is_press_release)
+
+    def test_type_pressrelease(self):
+        issue = self.issue
+
+        issue.data['issue']['v41'] = [{'_': 'pr'}]
+
+        self.assertEqual(issue.type, 'pressrelease')
+
     def test_type_regular(self):
         issue = self.issue
 
@@ -234,12 +619,84 @@ class JournalTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.journal = Journal(self.fulldoc['title'])
 
+    def test_editor_email(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editor_email, u'actalb@rc.unesp.br')
+
+    def test_editor_email_without_data(self):
+        journal = self.journal
+
+        del(journal.data['v64'])
+
+        self.assertIsNone(journal.editor_email)
+
+    def test_editor_address(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editor_address, u'Av. 24 A, 1515, 13506-900 Rio Claro-SP/Brasil, Tel.:(55 19)3526 9107')
+
+    def test_editor_address_without_data(self):
+        journal = self.journal
+
+        del(journal.data['v63'])
+
+        self.assertIsNone(journal.editor_address)
+
+    def test_in_scie(self):
+        journal = self.journal
+
+        journal.data['v851'] = [{'_': 'SCIE'}]
+
+        self.assertTrue(journal.is_indexed_in_scie)
+
+    def test_in_scie(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_scie)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        journal.data['v852'] = [{'_': 'SSCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ssci)
+
+    def test_in_ssci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ssci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        journal.data['v853'] = [{'_': 'A&HCI'}]
+
+        self.assertTrue(journal.is_indexed_in_ahci)
+
+    def test_in_ahci(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_indexed_in_ahci)
+
     def test_without_periodicity_in_months(self):
         journal = self.journal
 
         del(journal.data['v380'])
 
         self.assertEqual(journal.periodicity_in_months, None)
+
+    def test_submission_url(self):
+        journal = self.journal
+
+        journal.data['v692'] = [{'_': 'http://www.submision.org/'}]
+
+        self.assertEqual(journal.submission_url, 'http://www.submision.org/')
+
+    def test_submission_url(self):
+        journal = self.journal
+
+        self.assertEqual(journal.submission_url, None)
 
     def test_periodicity_in_months(self):
         journal = self.journal
@@ -253,6 +710,85 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.periodicity_in_months, 'XXX')
 
+    def test_without_plevel(self):
+        journal = self.journal
+
+        del(journal.data['v330'])
+
+        self.assertEqual(journal.publication_level, None)
+
+    def test_plevel(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publication_level, (u'CT', u'Scientific Technical'))
+
+    def test_plevel_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v330'][0]['_'] = 'XXX'
+
+        self.assertEqual(journal.publication_level, ('XXX', 'XXX'))
+
+    def test_without_ctrl_vocabulary(self):
+        journal = self.journal
+
+        del(journal.data['v85'])
+
+        self.assertEqual(journal.controlled_vocabulary, None)
+
+    def test_ctrl_vocabulary(self):
+        journal = self.journal
+
+        self.assertEqual(journal.controlled_vocabulary, ('nd', 'No Descriptor'))
+
+    def test_ctrl_vocabulary_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v85'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.controlled_vocabulary, ('xxx', 'xxx'))
+
+    def test_without_institutional_url(self):
+        journal = self.journal
+
+        del(journal.data['v69'])
+        self.assertEqual(journal.institutional_url, None)
+
+    def test_institutional_url(self):
+        journal = self.journal
+
+        self.assertEqual(journal.institutional_url, u'http://www.ablimno.org.br')
+
+    def test_without_secs_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.secs_code, None)
+
+    def test_secs_code(self):
+        journal = self.journal
+
+        journal.data['v37'] = [{'_': 'secs_code'}]
+        self.assertEqual(journal.secs_code, 'secs_code')
+
+    def test_without_standard(self):
+        journal = self.journal
+
+        del(journal.data['v117'])
+
+        self.assertEqual(journal.editorial_standard, None)
+
+    def test_standard(self):
+        journal = self.journal
+
+        self.assertEqual(journal.editorial_standard, ('other', 'other standard'))
+
+    def test_standard_out_of_choices(self):
+        journal = self.journal
+
+        journal.data['v117'][0]['_'] = 'xxx'
+
+        self.assertEqual(journal.editorial_standard, ('xxx', 'xxx'))
+
     def test_without_periodicity(self):
         journal = self.journal
 
@@ -263,14 +799,14 @@ class JournalTests(unittest.TestCase):
     def test_periodicity(self):
         journal = self.journal
 
-        self.assertEqual(journal.periodicity, 'Quaterly')
+        self.assertEqual(journal.periodicity, ('Q', 'Quaterly'))
 
     def test_periodicity_out_of_choices(self):
         journal = self.journal
 
         journal.data['v380'][0]['_'] = 'XXX'
 
-        self.assertEqual(journal.periodicity, 'XXX')
+        self.assertEqual(journal.periodicity, ('XXX', 'XXX'))
 
     def test_journal(self):
         journal = self.journal
@@ -294,6 +830,18 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(journal.languages, None)
+
+    def test_abstract_languages(self):
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(sorted(journal.abstract_languages), [u'en', u'pt'])
+
+    def test_abstract_languages_without_v350(self):
+        del(self.fulldoc['title']['v360'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.abstract_languages, None)
 
     def test_current_without_v51(self):
         del(self.fulldoc['title']['v51'])
@@ -564,7 +1112,9 @@ class JournalTests(unittest.TestCase):
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.permissions['id'], 'by/3.0')
+        self.assertEqual(
+            journal.permissions['id'],
+            'by/3.0')
 
     def test_permission_t2(self):
         del(self.fulldoc['title']['v541'])
@@ -683,12 +1233,138 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.collection_acronym, u'scl')
 
+    def test_first_year(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_year, '1986')
+
+    def test_first_year_1(self):
+        journal = self.journal
+
+        del(journal.data['v301'])
+
+        self.assertEqual(journal.first_year, None)
+
+    def test_first_year_2(self):
+        journal = self.journal
+
+        journal.data['v301'] = [{'_': 'maio 1998'}]
+
+        self.assertEqual(journal.first_year, '1998')
+
+    def test_first_year_3(self):
+        journal = self.journal
+
+        journal.data['v301'] = [{'_': 'maio 19980100'}]
+
+        self.assertEqual(journal.first_year, '1998')
+
+    def test_first_year_4(self):
+        journal = self.journal
+
+        journal.data['v301'] = [{'_': 'maio 01'}]
+
+        self.assertEqual(journal.first_year, '2001')
+
+    def test_first_volume(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_volume, '1')
+
+    def test_first_volume_1(self):
+        journal = self.journal
+
+        del(journal.data['v302'])
+
+        self.assertEqual(journal.first_volume, None)
+
+    def test_first_number(self):
+        journal = self.journal
+
+        self.assertEqual(journal.first_number, '1')
+
+    def test_first_number_1(self):
+        journal = self.journal
+
+        del(journal.data['v303'])
+
+        self.assertEqual(journal.first_number, None)
+
+    def test_last_year(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': '2000'}]
+
+        self.assertEqual(journal.last_year, '2000')
+
+    def test_last_year_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_year, None)
+
+    def test_last_year_2(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': 'maio 1998'}]
+
+        self.assertEqual(journal.last_year, '1998')
+
+    def test_last_year_3(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': 'maio 19980100'}]
+
+        self.assertEqual(journal.last_year, '1998')
+
+    def test_last_year_4(self):
+        journal = self.journal
+
+        journal.data['v304'] = [{'_': 'maio 98'}]
+
+        self.assertEqual(journal.last_year, '1998')
+
+    def test_last_volume(self):
+        journal = self.journal
+
+        journal.data['v305'] = [{'_': '10'}]
+
+        self.assertEqual(journal.last_volume, '10')
+
+    def test_last_volume_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_volume, None)
+
+    def test_last_number(self):
+        journal = self.journal
+
+        journal.data['v306'] = [{'_': '30'}]
+
+        self.assertEqual(journal.last_number, '30')
+
+    def test_last_number_1(self):
+        journal = self.journal
+
+        self.assertEqual(journal.last_number, None)
+
     def test_without_journal_url(self):
         journal = self.journal
 
         del(journal.data['v690'])
 
         self.assertEqual(journal.url(), None)
+
+    def test_cnn_code(self):
+        journal = self.journal
+
+        self.assertEqual(journal.cnn_code, '083639-7')
+
+    def test_last_cnn_code_1(self):
+        journal = self.journal
+
+        del(journal.data['v20'])
+
+        self.assertEqual(journal.cnn_code, None)
 
     def test_journal_url(self):
         journal = self.journal
@@ -697,9 +1373,21 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.url(), expected)
 
-    def test_subject_descriptors(self):
-        #self.fulldoc['title']['v440'] = [{u'_': u'MARINE & FRESHWATER BIOLOGY'}, {u'_': u'OCEANOGRAPHY'}]
+    def test_subject_index_coverage(self):
+        journal = Journal(self.fulldoc['title'])
 
+        self.assertEqual(
+            sorted(journal.index_coverage),
+            sorted([u'ASFA - Aquatic Sciences and Fisheries Abstracts']))
+
+    def test_without_index_coverage(self):
+        del(self.fulldoc['title']['v450'])
+
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertEqual(journal.index_coverage, None)
+
+    def test_subject_descriptors(self):
         journal = Journal(self.fulldoc['title'])
 
         self.assertEqual(
@@ -773,7 +1461,7 @@ class JournalTests(unittest.TestCase):
     def test_publisher_name(self):
         journal = self.journal
 
-        self.assertEqual(journal.publisher_name, u'Associação Brasileira de Limnologia')
+        self.assertEqual(journal.publisher_name, [u'Associação Brasileira de Limnologia'])
 
     def test_without_publisher_name(self):
         journal = self.journal
@@ -791,6 +1479,28 @@ class JournalTests(unittest.TestCase):
 
         del(journal.data['v490'])
         self.assertEqual(journal.publisher_loc, None)
+
+    def test_publisher_city(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_city, u'Rio Claro')
+
+    def test_without_publisher_city(self):
+        journal = self.journal
+
+        del(journal.data['v490'])
+        self.assertEqual(journal.publisher_city, None)
+
+    def test_publisher_state(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publisher_state, u'SP')
+
+    def test_without_publisher_state(self):
+        journal = self.journal
+
+        del(journal.data['v320'])
+        self.assertEqual(journal.publisher_state, None)
 
     def test_journal_title(self):
         journal = self.journal
@@ -908,6 +1618,79 @@ class JournalTests(unittest.TestCase):
         journal = Journal(self.fulldoc['title'])
 
         self.assertIsNone(journal.mission)
+
+    def test_journal_publisher_country(self):
+        journal = self.journal
+
+        expected = ('BR', 'Brazil')
+
+        self.assertEqual(journal.publisher_country, expected)
+
+    def test_journal_publisher_country_without_country(self):
+        journal = self.journal
+
+        del(journal.data['v310'])
+
+        self.assertIsNone(journal.publisher_country)
+
+    def test_journal_publisher_country_not_findable_code(self):
+        self.fulldoc['title']['v310'] = [{"_": "BRX"}]
+        journal = Journal(self.fulldoc['title'])
+
+        self.assertIsNone(journal.publisher_country)
+
+    def test_journal_copyrighter(self):
+        journal = self.journal
+
+        self.assertEqual(journal.copyrighter,
+            u'Associa\u00e7\u00e3o Brasileira de Limnologia')
+
+    def test_journal_copyrighter_without_copyright(self):
+        journal = self.journal
+
+        del(journal.data['v62'])
+
+        self.assertIsNone(journal.copyrighter)
+
+    def test_journal_other_titles(self):
+        journal = self.journal
+
+        expected = ['Physical Therapy Movement',
+                    'Revista de fisioterapia da PUC-PR']
+
+        self.assertEqual(journal.other_titles, expected)
+
+    def test_journal_other_title_without_other_titles(self):
+        journal = self.journal
+
+        del(journal.data['v240'])
+
+        self.assertIsNone(journal.other_titles)
+
+    def test_journal_sponsors(self):
+        journal = self.journal
+
+        expected = [u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno",
+                    u"Conselho Nacional de Desenvolvimento Cient\u00edfico e Tecnol\u00f3gico - CNPq"]
+        self.assertEqual(journal.sponsors, expected)
+
+    def test_journal_sponsors_without_sponsors(self):
+        journal = self.journal
+
+        del(journal.data['v140'])
+
+        self.assertIsNone(journal.sponsors)
+
+    def test_journal_sponsors_with_empty_items(self):
+        self.fulldoc['title']['v140'] = [{"_": u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno"},
+                                         {"_": ""},
+                                         {"_": ""}]
+
+        journal = Journal(self.fulldoc['title'])
+
+        expected = [u"Associa\u00e7\u00e3o Brasileira de Limnologia - ABLimno"]
+
+        self.assertEqual(journal.sponsors, expected)
 
 
 class ArticleTests(unittest.TestCase):
@@ -1215,50 +1998,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
-    def test_publisher_name(self):
-        article = self.article
-
-        self.assertEqual(article.journal.publisher_name, u'Associação Brasileira de Limnologia')
-
-    def test_without_publisher_name(self):
-        article = self.article
-
-        del(article.data['title']['v480'])
-        self.assertEqual(article.journal.publisher_name, None)
-
-    def test_publisher_loc(self):
-        article = self.article
-
-        self.assertEqual(article.journal.publisher_loc, u'Rio Claro')
-
-    def test_without_publisher_loc(self):
-        article = self.article
-
-        del(article.data['title']['v490'])
-        self.assertEqual(article.journal.publisher_loc, None)
-
-    def test_journal_title(self):
-        article = self.article
-
-        self.assertEqual(article.journal.title, u'Acta Limnologica Brasiliensia')
-
-    def test_without_journal_title(self):
-        article = self.article
-
-        del(article.data['title']['v100'])
-        self.assertEqual(article.journal.title, None)
-
-    def test_journal_acronym(self):
-        article = self.article
-
-        self.assertEqual(article.journal.acronym, u'alb')
-
-    def test_without_journal_acronym(self):
-        article = self.article
-
-        del(article.data['title']['v68'])
-        self.assertEqual(article.journal.acronym, None)
-
     def test_publication_date(self):
         article = self.article
 
@@ -1299,7 +2038,6 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v93'] = [{u'_': u'20120419'}]
         self.assertEqual(article.creation_date, '2012-04-19')
 
-
     def test_creation_date_1(self):
         article = self.article
 
@@ -1311,7 +2049,9 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         article.data['created_at'] = '2012-01-10'
-        self.assertEqual(article.creation_date, '2012-01-10')
+        self.assertEqual(
+            article.creation_date,
+            '2012-01-10')
 
     def test_update_date(self):
         article = self.article
@@ -1448,7 +2188,6 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.elocation, None)
 
-
     def test_start_page_loaded_through_xml(self):
         article = self.article
 
@@ -1556,14 +2295,12 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
 
-
     def test_doi_clean_1(self):
         article = self.article
 
         article.data['doi'] = u'http://www.crossref.org/10.1590/S2179-975X2012005000004'
 
         self.assertEqual(article.doi, u'10.1590/S2179-975X2012005000004')
-
 
     def test_doi_clean_2(self):
         article = self.article
@@ -1708,7 +2445,6 @@ class ArticleTests(unittest.TestCase):
                                           {u'a': u'article abstract 2', u'l': u'fr'}]
 
         self.assertEqual(article.original_abstract(iso_format=None), None)
-
 
     def test_without_corporative_authors(self):
         article = self.article
@@ -2367,7 +3103,6 @@ class ArticleTests(unittest.TestCase):
         expected = {u'pt': u'Título do Artigo'}
 
         self.assertEqual(article.translated_titles(iso_format=None), expected)
-
 
     def test_translated_abstracts_without_v83(self):
         article = self.article
