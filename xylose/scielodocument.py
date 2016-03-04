@@ -517,7 +517,29 @@ class Issue(object):
 
     @property
     def sections(self):
-
+        """
+        This method retrieves the sections of the given issue, if it exists.
+        This method deals with the legacy fields (49) and new field created_at.
+        Eg:
+        {
+            "CODE020": {
+                "en": "Other Themes",
+                "pt": "Temas Livres"
+            },
+            "CODE100": {
+                "en": "Review",
+                "pt": "Resenha"
+            },
+            "CODE120": {
+                "en": "Theme",
+                "pt": "Artigos do tema"
+            },
+            "CODE040": {
+                "en": "Editorial",
+                "pt": "Editorial"
+            }
+        }
+        """
         sections = {}
 
         for section in self.data['issue'].get('v49', []):
