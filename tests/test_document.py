@@ -475,6 +475,13 @@ class IssueTests(unittest.TestCase):
 
         self.assertFalse(issue.is_press_release)
 
+    def test_type_pressrelease(self):
+        issue = self.issue
+
+        issue.data['issue']['v41'] = [{'_': 'pr'}]
+
+        self.assertEqual(issue.type, 'pressrelease')
+
     def test_type_regular(self):
         issue = self.issue
 

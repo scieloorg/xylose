@@ -187,6 +187,9 @@ class Issue(object):
             self.data['issue'].get('v41', [{'_': ''}])[0]['_'],
         ]).lower()
 
+        if 'pr' in label:
+            return 'pressrelease'
+
         if 'ahead' in label:
             return 'ahead'
 
