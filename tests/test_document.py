@@ -799,7 +799,7 @@ class JournalTests(unittest.TestCase):
     def test_periodicity(self):
         journal = self.journal
 
-        self.assertEqual(journal.periodicity, ('Q', 'Quaterly'))
+        self.assertEqual(journal.periodicity, ('Q', 'Quarterly'))
 
     def test_periodicity_out_of_choices(self):
         journal = self.journal

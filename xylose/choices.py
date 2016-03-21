@@ -68,7 +68,7 @@ article_types = {
 periodicity = {
     u'M': u'Monthly',
     u'B': u'Bimonthly (every two months)',
-    u'Q': u'Quaterly',
+    u'Q': u'Quarterly',
     u'T': u'Three times a year',
     u'F': u'Semiannual (twice a year)',
     u'A': u'Annual',
