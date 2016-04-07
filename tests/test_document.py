@@ -176,6 +176,28 @@ class IssueTests(unittest.TestCase):
         self.assertEqual(issue.start_month, '01')
         self.assertEqual(issue.end_month, '02')
 
+    def test_start_end_month_5(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'out.dez.'},
+            {'m': 'oct.dic.'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
+    def test_start_end_month_6(self):
+        issue = self.issue
+
+        issue.data['issue']['v43'] = [
+            {'m': 'out.-dez.'},
+            {'m': 'oct.-dic.'}
+        ]
+
+        self.assertEqual(issue.start_month, '10')
+        self.assertEqual(issue.end_month, '12')
+
     def test_is_marked_up(self):
         issue = self.issue
 

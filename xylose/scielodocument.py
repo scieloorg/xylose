@@ -48,7 +48,10 @@ def cleanup_string(text):
     characters
     """
 
-    nfd_form = unicodedata.normalize('NFD', text.strip().lower())
+    try:
+        nfd_form = unicodedata.normalize('NFD', text.strip().lower())
+    except TypeError:
+        nfd_form = unicodedata.normalize('NFD', unicode(text.strip().lower()))
 
     cleaned_str = u''.join(x for x in nfd_form if unicodedata.category(x)[0] == 'L' or x == ' ')
 
@@ -250,6 +253,26 @@ class Issue(object):
             return self.data['issue']['v32'][0]['_']
 
     @property
+    def _start_end_months(self):
+        list_str_with_months = [
+            cleanup_string(x.get('m', '')) for x in self.data['issue'].get('v43', [{}]) if 'm' in x
+        ]
+
+        if not list_str_with_months:
+            return None
+
+        str_with_months = ''.join(list_str_with_months).lower()
+
+        found_months = set()
+        for month_str, month_number in choices.month_bad_prediction.items():
+            if month_str in str_with_months:
+                found_months.add(month_number)
+
+        found_months = sorted(list(found_months))
+
+        return found_months
+
+    @property
     def start_month(self):
         """
         This method retrieves the stating month of the issue.
@@ -261,18 +284,12 @@ class Issue(object):
             ene/mar
             out/dez
             oct/dic
+            oct.dic
         As it is a convetion it may be filled out of the convetion :-/ :-o in
         this situations the result will be None.
         """
 
-        for item in [month['m'].split('/')[0] for month in self.data['issue'].get('v43', []) if 'm' in month]:
-            item = cleanup_string(unicode(item))
-            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
-
-            if not month:
-                continue
-
-            return '%02d' % (month) if month else None
+        return '%02d' % (self._start_end_months[0]) if self._start_end_months else None
 
     @property
     def end_month(self):
@@ -289,14 +306,8 @@ class Issue(object):
         As it is a convetion it may be filled out of the convetion :-/ :-o in
         this situations the result will be None.
         """
-        for item in [month['m'].split('/')[1] for month in self.data['issue'].get('v43', []) if 'm' in month and len(month['m'].split('/')) == 2]:
-            item = cleanup_string(unicode(item))
-            month = choices.month_bad_prediction[item] if item in choices.month_bad_prediction else None
 
-            if not month:
-                continue
-
-            return '%02d' % (month) if month else None
+        return '%02d' % (self._start_end_months[-1]) if self._start_end_months else None
 
     @property
     def supplement_volume(self):
