@@ -676,7 +676,6 @@ class Journal(object):
         if not 'v63' in self.data:
             return None
 
-
         return ', '.join([i['_'] for i in self.data.get('v63') if '_' in i and i['_'] != ''])
 
     @property
@@ -2396,7 +2395,6 @@ class Citation(object):
         if self.publication_type == u'conference' and 'v12' in self.data:
             return html_decode(self.data['v12'][0]['_'])
 
-
     @property
     def conference_name(self):
         """
@@ -2704,13 +2702,20 @@ class Citation(object):
 
     @property
     def authors(self):
+
+        aa = self.analytic_authors or []
+        ma = self.monographic_authors or []
+        return aa + ma
+
+    @property
+    def analytic_authors(self):
         """
         This method retrieves the authors of the given citation. These authors
         may correspond to an article, book analytic, link or thesis.
         """
-        docs = [u'article', u'book', u'link', u'thesis']
+
         authors = []
-        if self.publication_type in docs and 'v10' in self.data:
+        if 'v10' in self.data:
             for author in self.data['v10']:
                 authordict = {}
                 if 's' in author:
@@ -2729,9 +2734,9 @@ class Citation(object):
         This method retrieves the authors of the given book citation. These authors may
         correspond to a book monography citation.
         """
-        docs = [u'book', u'thesis']
+
         authors = []
-        if self.publication_type in docs and 'v16' in self.data:
+        if 'v16' in self.data:
             for author in self.data['v16']:
                 authordict = {}
                 if 's' in author:
