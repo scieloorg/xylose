@@ -3256,6 +3256,16 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.publication_type, u'book')
 
+    def test_publication_type_book_chapter(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the book chapter'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.publication_type, u'book')
+
     def test_publication_type_conference(self):
         json_citation = {}
 
@@ -3900,7 +3910,7 @@ class CitationTest(unittest.TestCase):
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.authors, None)
+        self.assertEqual(citation.authors, [])
 
     def test_monographic_authors(self):
         json_citation = {}
@@ -3937,11 +3947,6 @@ class CitationTest(unittest.TestCase):
 
         json_citation['v30'] = [{u'_': u'It is the journal title'}]
         json_citation['v12'] = [{u'_': u'It is the article title'}]
-        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
-                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
-                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
-                                {u'n': u'Acelino Popó Freitas'},
-                                {u's': u'Zé Marreta'}]
 
         citation = Citation(json_citation)
 
@@ -4051,16 +4056,9 @@ class CitationTest(unittest.TestCase):
 
         json_citation['v30'] = [{u'_': u'It is the journal title'}]
         json_citation['v12'] = [{u'_': u'It is the article title'}]
-        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
-                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
-                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
-                                {u'n': u'Acelino Popó Freitas'},
-                                {u's': u'Zé Marreta'}]
-
         citation = Citation(json_citation)
 
         self.assertEqual(citation.first_author, None)
-
 
     def test_series_journal(self):
         json_citation = {}
