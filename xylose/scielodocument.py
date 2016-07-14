@@ -32,6 +32,7 @@ LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the c
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
+CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>', re.IGNORECASE)
 
 
 def cleanup_number(text):
@@ -2617,6 +2618,11 @@ class Citation(object):
 
     @property
     def mixed_citation(self):
+
+        if 'mixed' in self.data:
+            data = html_decode(self.data['mixed']).strip()
+            return CLEANUP_MIXED_CITATION.sub('', data)
+
         if 'v704' in self.data:
             return html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
 
