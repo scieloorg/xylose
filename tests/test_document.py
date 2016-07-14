@@ -4303,7 +4303,6 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.link_access_date, u'Visitado el: 18 Jul. 2014')
         self.assertEqual(citation.mixed_citation, u"CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: <http://files.eric.ed.gov/fulltext/ED405219.pdf >. Visitado el: 18 Jul. 2014.")
 
-
     def test_citation_sample_link_without_comment(self):
 
         json_citation = {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v37': [{u'_': u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >'}], u'v12': [{u'l': u'en', u'_': u"Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia"}], u'v10': [{u's': u'CHUNG-CHIH CHEN', u'r': u'ND', u'_': u'', u'n': u'C. C.'}, {u's': u'TAYLOR', u'r': u'ND', u'_': u'', u'n': u'P. C.'}, {u's': u'ALDRIDGE', u'r': u'ND', u'_': u'', u'n': u'J. M.'}], u'v11': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v71': [{u'_': u'web'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500020'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Oak Brook'}], u'v65': [{u'_': u'19970000'}], u'v17': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'20'}], u'v700': [{u'_': u'24'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u"<mixed-citation>CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.</mixed-citation>"}], u'v706': [{u'_': u'c'}], u'v109': [{u'_': u'Visitado el: 18 Jul. 2014'}], u'v1': [{u'_': u'br1.1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
@@ -4326,3 +4325,43 @@ class CitationTest(unittest.TestCase):
         self.assertEqual(citation.conference_name, u'JORNADAS NACIONALES, 6; Y CONGRESO INTERNACIONAL DE ENSEÑANZA DE LA BIOLOGÍA, 1')
         self.assertEqual(citation.date, u'2004')
         self.assertEqual(citation.conference_location, u'Buenos Aires')
+
+    def test_mixed_citation_without_data(self):
+        citation = self.citation
+
+        self.assertEqual(citation.mixed_citation, None)
+
+    def test_mixed_citation_1(self):
+        citation = self.citation
+
+        citation.data['mixed'] = u'<p><font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.     '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_2(self):
+        citation = self.citation
+
+        citation.data['mixed'] = u'<p><font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</FONT></P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_3(self):
+        citation = self.citation
+
+        citation.data['mixed'] = u'< p >< font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.< / FONT>< / P >    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_4(self):
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_5(self):
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
