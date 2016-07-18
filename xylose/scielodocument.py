@@ -631,7 +631,7 @@ class Journal(object):
 
         if 'license' in self.data:
             data = {}
-            data['text'] = None
+            data['text'] = tools.creative_commons_text(self.data['license'])
             data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
             data['id'] = self.data['license']
 
@@ -646,7 +646,7 @@ class Journal(object):
             else:
                 license = self.data['v541'][0]['_'].lower()
             data = {}
-            data['text'] = None
+            data['text'] = tools.creative_commons_text(license)
             data['url'] = 'http://creativecommons.org/licenses/%s/' % license
             data['id'] = license
             return data
@@ -666,7 +666,7 @@ class Journal(object):
                     continue
 
                 data = {}
-                data['text'] = dlicense['t']
+                data['text'] = tools.creative_commons_text(license_id[0]) or dlicense['t']
                 data['url'] = license_url[0]
                 data['id'] = license_id[0]
 
@@ -1392,7 +1392,7 @@ class Article(object):
 
         if 'license' in self.data:
             data = {}
-            data['text'] = None
+            data['text'] = tools.creative_commons_text(self.data['license'])
             data['url'] = 'http://creativecommons.org/licenses/%s/' % self.data['license']
             data['id'] = self.data['license']
 
@@ -1413,7 +1413,7 @@ class Article(object):
                     continue
 
                 data = {}
-                data['text'] = html_decode(dlicense['t'])
+                data['text'] = tools.creative_commons_text(license_id[0]) or html_decode(dlicense['t'])
                 data['url'] = license_url[0]
                 data['id'] = license_id[0]
 
