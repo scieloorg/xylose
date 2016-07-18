@@ -33,6 +33,14 @@ DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
 CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>', re.IGNORECASE)
+REPLACE_TAGS_MIXED_CITATION = (
+    (re.compile(r'< *?i.*?>', re.IGNORECASE), '<italic>',),
+    (re.compile(r'< *?/ *?i.*?>', re.IGNORECASE), '</italic>',),
+    (re.compile(r'< *?u.*?>', re.IGNORECASE), '<underline>',),
+    (re.compile(r'< *?/ *?u.*?>', re.IGNORECASE), '</underline>',),
+    (re.compile(r'< *?b.*?>', re.IGNORECASE), '<bold>',),
+    (re.compile(r'< *?/ *?b.*?>', re.IGNORECASE), '</bold>',),
+)
 
 
 def cleanup_number(text):
@@ -2621,7 +2629,10 @@ class Citation(object):
 
         if 'mixed' in self.data:
             data = html_decode(self.data['mixed']).strip()
-            return CLEANUP_MIXED_CITATION.sub('', data)
+            cleaned = CLEANUP_MIXED_CITATION.sub('', data)
+            for pattern, value in REPLACE_TAGS_MIXED_CITATION:
+                cleaned = pattern.sub(value, cleaned)
+            return cleaned
 
         if 'v704' in self.data:
             return html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
