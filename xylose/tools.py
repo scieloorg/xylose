@@ -1,5 +1,28 @@
 from . import choices
 
+
+def creative_commons_text(license, html=False):
+
+    splited_license = license.split('/')
+
+    if not len(splited_license) == 2:
+        return None
+
+    license, version = splited_license
+
+    license_text = choices.CREATIVE_COMMONS_TEXTS.get(license.upper(), None)
+
+    if not license_text:
+        return None
+
+    text = u'This work is licensed under a Creative Commons %s %s International License.' % (license_text, version)
+
+    if html:
+        text = u'This work is licensed under a <a href="http://creativecommons.org/licenses/%s/%s/">Creative Commons %s %s International License</a>.' % (license.lower(), version, license_text, version)
+
+    return text
+
+
 def get_language(language, iso_format):
     if iso_format == u'iso 639-1':
         if language in choices.ISO639_1:

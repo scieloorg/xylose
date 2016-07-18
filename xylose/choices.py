@@ -1,5 +1,15 @@
 # encoding: utf-8
 
+CREATIVE_COMMONS_TEXTS = {
+    "BY": "Attribution",
+    "BY-ND": "Attribution-NoDerivatives",
+    "BY-SA": "Attribution-ShareAlike",
+    "BY-NC": "Attribution-NonCommercial",
+    "BY-NC-ND": "Attribution-NonCommercial-NoDerivatives",
+    "BY-NC-SA": "Attribution-NonCommercial-ShareAlike"
+    ""
+}
+
 ISO639_1_to_2 = {
     'gv': 'glv', 'gu': 'guj', 'gd': 'gla', 'ga': 'gle', 'gn': 'grn',
     'gl': 'glg', 'lg': 'lug', 'lb': 'ltz', 'la': 'lat', 'ln': 'lin',

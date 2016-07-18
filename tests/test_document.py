@@ -9,6 +9,111 @@ from xylose import tools
 
 class ToolsTests(unittest.TestCase):
 
+    def test_creative_commons_text_1(self):
+        result = tools.creative_commons_text('BY/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_1(self):
+        result = tools.creative_commons_text('BY/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_2(self):
+        result = tools.creative_commons_text('BY-ND/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution-NoDerivatives 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_2(self):
+        result = tools.creative_commons_text('BY-ND/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by-nd/4.0/">Creative Commons Attribution-NoDerivatives 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_3(self):
+        result = tools.creative_commons_text('BY-SA/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_3(self):
+        result = tools.creative_commons_text('BY-SA/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_4(self):
+        result = tools.creative_commons_text('BY-NC/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_4(self):
+        result = tools.creative_commons_text('BY-NC/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_5(self):
+        result = tools.creative_commons_text('BY-NC-ND/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_5(self):
+        result = tools.creative_commons_text('BY-NC-ND/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_6(self):
+        result = tools.creative_commons_text('BY-NC-SA/4.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_html_6(self):
+        result = tools.creative_commons_text('BY-NC-SA/4.0', html=True)
+
+        expected = u'This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_7(self):
+        result = tools.creative_commons_text('by/3.0')
+
+        expected = u'This work is licensed under a Creative Commons Attribution 3.0 International License.'
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_7(self):
+        result = tools.creative_commons_text('by')
+
+        expected = None
+
+        self.assertEqual(result, expected)
+
+    def test_creative_commons_text_8(self):
+        result = tools.creative_commons_text('')
+
+        expected = None
+
+        self.assertEqual(result, expected)
+
     def test_get_language_without_iso_format(self):
 
         language = tools.get_language(u'xx', None)
@@ -342,7 +447,7 @@ class IssueTests(unittest.TestCase):
 
         del(issue.data['issue']['v541'])
 
-        self.assertEqual(issue.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</a>')
+        self.assertEqual(issue.permissions['text'], u'This work is licensed under a Creative Commons Attribution 3.0 International License.')
 
     def test_permission_without_v540(self):
         issue = self.issue
