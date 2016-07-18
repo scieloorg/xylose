@@ -1318,7 +1318,7 @@ class JournalTests(unittest.TestCase):
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.permissions['text'], u'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a> All the contents of this journal, except where otherwise noted, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution License</a>')
+        self.assertEqual(journal.permissions['text'], u'This work is licensed under a Creative Commons Attribution-NonCommercial 3.0 International License.')
 
     def test_permission_without_v540(self):
         del(self.fulldoc['title']['v541'])
