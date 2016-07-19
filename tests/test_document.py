@@ -4535,3 +4535,66 @@ class CitationTest(unittest.TestCase):
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <span>The< / span > basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
         self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_13(self):
+        ## removing cite tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <span>The< / span > < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_14(self):
+        ## removing country-region tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <span>The< / span > < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_15(self):
+        ## removing <font face="Verdana,"/> tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <span>The< / span > < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_16(self):
+        ## removing place tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <place>The< / place > < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_17(self):
+        ## removing state tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., < state >The< /State> < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_18(self):
+        ## removing city tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <city >The< /city> < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_19(self):
+        ## removing region tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <region >The< /region> < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
