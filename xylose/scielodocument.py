@@ -32,14 +32,18 @@ LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the c
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
-CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>', re.IGNORECASE)
+CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?tt.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>|< *?/ *?tt.*?>', re.IGNORECASE)
 REPLACE_TAGS_MIXED_CITATION = (
-    (re.compile(r'< *?i.*?>', re.IGNORECASE), '<italic>',),
-    (re.compile(r'< *?/ *?i.*?>', re.IGNORECASE), '</italic>',),
-    (re.compile(r'< *?u.*?>', re.IGNORECASE), '<underline>',),
-    (re.compile(r'< *?/ *?u.*?>', re.IGNORECASE), '</underline>',),
-    (re.compile(r'< *?b.*?>', re.IGNORECASE), '<bold>',),
-    (re.compile(r'< *?/ *?b.*?>', re.IGNORECASE), '</bold>',),
+    (re.compile(r'< *?i.*?>', re.IGNORECASE), '<i>',),
+    (re.compile(r'< *?/ *?i.*?>', re.IGNORECASE), '</i>',),
+    (re.compile(r'< *?u.*?>', re.IGNORECASE), '<u>',),
+    (re.compile(r'< *?/ *?u.*?>', re.IGNORECASE), '</u>',),
+    (re.compile(r'< *?b.*?>', re.IGNORECASE), '<strong>',),
+    (re.compile(r'< *?/ *?b.*?>', re.IGNORECASE), '</strong>',),
+    (re.compile(r'< *?em.*?>', re.IGNORECASE), '<strong>',),
+    (re.compile(r'< *?/ *?em.*?>', re.IGNORECASE), '</strong>',),
+    (re.compile(r'< *?small.*?>', re.IGNORECASE), '<small>',),
+    (re.compile(r'< *?/ *?small.*?>', re.IGNORECASE), '</small>',),
 )
 
 
