@@ -4441,53 +4441,88 @@ class CitationTest(unittest.TestCase):
 
         citation.data['mixed'] = u'<p><font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.     '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_2(self):
         citation = self.citation
 
         citation.data['mixed'] = u'<p><font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</FONT></P>    '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_3(self):
         citation = self.citation
 
         citation.data['mixed'] = u'< p >< font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.< / FONT>< / P >    '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_4(self):
         citation = self.citation
 
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_5(self):
+        ## removing p tags in the middle
+
         citation = self.citation
 
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_6(self):
+        ## fixing i
+
         citation = self.citation
 
-        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., The basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i >Journal of Industrial Economics< / I>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
-        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_7(self):
+        ## change b to strong
+
         citation = self.citation
 
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\"><b>ALCHIAN, A .A.< /b>, The basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
-        self.assertEqual(citation.mixed_citation, u'<bold>ALCHIAN, A .A.</bold>, The basis of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
 
     def test_mixed_citation_8(self):
+        ## fixing u
+
         citation = self.citation
 
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">< B>ALCHIAN, A .A.< /b>, The < u >basis</U > of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <I>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
-        self.assertEqual(citation.mixed_citation, u'<bold>ALCHIAN, A .A.</bold>, The <underline>basis</underline> of some recent advances in the theory of   management of the firm, <italic>Journal of Industrial Economics</italic>, v. 14, n. 4, p. 30-44, 1965.')
+        self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The <u>basis</u> of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_9(self):
+        ## change em to strong
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\"><em>ALCHIAN, A .A.< /em>, The < u >basis</U > of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <I>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The <u>basis</u> of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_10(self):
+        ## fixing small
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\"><em>ALCHIAN, A .A.< /em>, The < u >basis</U > of < small>some</ SMALL> <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <I>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The <u>basis</u> of <small>some</small> recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_11(self):
+        ## removing tt
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\"><em>ALCHIAN, A .A.< /em>, The < u >basis</U > of < small>some</ SMALL> <p>recent<p> <tt>advances< / tt> <font face>in</font> the theory of   management of the firm, <I>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The <u>basis</u> of <small>some</small> recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
