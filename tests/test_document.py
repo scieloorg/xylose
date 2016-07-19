@@ -4526,3 +4526,12 @@ class CitationTest(unittest.TestCase):
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\"><em>ALCHIAN, A .A.< /em>, The < u >basis</U > of < small>some</ SMALL> <p>recent<p> <tt>advances< / tt> <font face>in</font> the theory of   management of the firm, <I>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
 
         self.assertEqual(citation.mixed_citation, u'<strong>ALCHIAN, A .A.</strong>, The <u>basis</u> of <small>some</small> recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+    def test_mixed_citation_12(self):
+        ## removing span tags in the middle
+
+        citation = self.citation
+
+        citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <span>The< / span > basis of some <p>recent<p> advances <font face>in</font> the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P>    '
+
+        self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
