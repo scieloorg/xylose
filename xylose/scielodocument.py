@@ -32,7 +32,7 @@ LICENSE_CREATIVE_COMMONS = re.compile(r'licenses/(.*?/\d\.\d)') # Extracts the c
 DOI_REGEX = re.compile(r'\d{2}\.\d+/.*$')
 SUPPLBEG_REGEX = re.compile(r'^0 ')
 SUPPLEND_REGEX = re.compile(r' 0$')
-CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?tt.*?>|< *?span.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>|< *?/ *?tt.*?>|< *?/ *?span.*?>', re.IGNORECASE)
+CLEANUP_MIXED_CITATION = re.compile(r'< *?p.*?>|< *?f.*?>|< *?tt.*?>|< *?span.*?>|< *?cite.*?>|< *?country-region.*?>|< *?region.*?>|< *?place.*?>|< *?state.*?>|< *?city.*?>|< *?/ *?p.*?>|< *?/ *?f.*?>|< *?/ *?tt.*?>|< *?/ *?span.*?>|< *?/ *?cite.*?>|< *?/ *?country-region.*?>|< *?/ *?region.*?>|< *?/ *?place.*?>|< *?/ *?state.*?>|< *?/ *?city.*?>', re.IGNORECASE)
 REPLACE_TAGS_MIXED_CITATION = (
     (re.compile(r'< *?i.*?>', re.IGNORECASE), '<i>',),
     (re.compile(r'< *?/ *?i.*?>', re.IGNORECASE), '</i>',),
