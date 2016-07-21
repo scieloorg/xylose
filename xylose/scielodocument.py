@@ -2639,7 +2639,11 @@ class Citation(object):
             return cleaned
 
         if 'v704' in self.data:
-            return html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
+            data = html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
+            cleaned = CLEANUP_MIXED_CITATION.sub('', data)
+            for pattern, value in REPLACE_TAGS_MIXED_CITATION:
+                cleaned = pattern.sub(value, cleaned)
+            return cleaned
 
     @property
     def link_access_date(self):
