@@ -770,6 +770,18 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.editor_address)
 
+    def test_previous_title(self):
+        journal = self.journal
+
+        journal.data['v610'] = [{'_': u'Previous Title'}]
+
+        self.assertEqual(journal.previous_title, u'Previous Title')
+
+    def test_previous_title_without_data(self):
+        journal = self.journal
+
+        self.assertEqual(journal.previous_title, None)
+
     def test_in_scie(self):
         journal = self.journal
 

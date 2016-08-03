@@ -1093,6 +1093,16 @@ class Journal(object):
         return self.data.get('v320', [{'_': None}])[0]['_']
 
     @property
+    def previous_title(self):
+        """
+        This method retrieves the previous journal title of the given article,
+        if it exists.
+        This method deals with the legacy fields (610).
+        """
+
+        return self.data.get('v610', [{'_': None}])[0]['_']
+
+    @property
     def title(self):
         """
         This method retrieves the journal_title of the given article,
