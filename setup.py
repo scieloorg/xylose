@@ -4,9 +4,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requires = [
-    'thriftpy'
-]
+requires = []
 
 setup(
     name="xylose",
