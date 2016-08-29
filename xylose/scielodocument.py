@@ -773,6 +773,15 @@ class Journal(object):
         return self.data.get('v692', [{'_': None}])[0]['_']
 
     @property
+    def scimago_code(self):
+        """
+        This method retrieves the secs_code of the journal
+        This method deals with the field (scimago_id).
+        """
+
+        return self.data.get('scimago_id', None)
+
+    @property
     def secs_code(self):
         """
         This method retrieves the secs_code of the journal
