@@ -4,13 +4,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requires = [
-    'thriftpy'
-]
+requires = []
 
 setup(
     name="xylose",
-    version='1.15.5',
+    version='1.16.5',
     description="A SciELO library to abstract a JSON data structure that is a product of the ISIS2JSON conversion using the ISIS2JSON type 3 data model.",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",
@@ -26,6 +24,7 @@ setup(
         "Topic :: System",
         "Topic :: Utilities",
     ],
+    dependency_links=[],
     setup_requires=["nose>=1.0", "coverage"],
     tests_require=["mocker"],
     install_requires=requires,
