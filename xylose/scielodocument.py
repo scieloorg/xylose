@@ -1287,7 +1287,7 @@ class Journal(object):
         This method deals with the legacy fields (940).
         """
 
-        return tools.get_date(self.data['v940'][0]['_'])
+        return self.data.get("created_at", tools.get_date(self.data['v940'][0]['_']))
 
     @property
     def update_date(self):
@@ -1296,7 +1296,16 @@ class Journal(object):
         This method deals with the legacy fields (941).
         """
 
-        return tools.get_date(self.data['v941'][0]['_'])
+        return self.data.get("updated_at", tools.get_date(self.data['v941'][0]['_']))
+
+    @property
+    def processing_date(self):
+        """
+        This method retrieves the update date of the given journal, if it exists.
+        This method deals with the legacy fields (941).
+        """
+
+        return self.data.get("processing_date", tools.get_date(self.data['v941'][0]['_']))
 
     @property
     def mission(self):
