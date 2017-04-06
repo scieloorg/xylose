@@ -13,6 +13,7 @@ except ImportError:
 
 from . import choices
 from . import tools
+from . import iso3166
 
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
@@ -1132,7 +1133,7 @@ class Journal(object):
             return None
 
         country_code = self.data.get('v310', [{'_': None}])[0]['_']
-        country_name = choices.ISO_3166.get(country_code, None)
+        country_name = iso3166.COUNTRY_CODES_ALPHA_2.get(country_code, {'name': None})['name']
 
         if not country_code or not country_name:
             return None
@@ -2080,6 +2081,7 @@ class Article(object):
             for aff in self.affiliations:
                     normalized[aff['index']] = aff.copy()
                     normalized[aff['index']]['normalized'] = False
+                    normalized[aff['index']]['country_iso_3166'] = aff.get('country_iso_3166', '')
 
         if self.normalized_affiliations:
             for aff in self.normalized_affiliations:
@@ -2112,9 +2114,9 @@ class Article(object):
                         else:
                             affdict['index'] = ''
 
-                        if 'p' in aff and aff['p'] in choices.ISO_3166:
-                            affdict['country'] = choices.ISO_3166[aff['p']]
-                            affdict['country_iso_3166'] = aff['p']
+                        if 'p' in aff and html_decode(aff['p']).lower() in iso3166.COUNTRY_CODES_ALPHA_2_FORMS:
+                            affdict['country_iso_3166'] = iso3166.COUNTRY_CODES_ALPHA_2_FORMS.get(aff['p'].lower(), '')
+                            affdict['country'] = iso3166.COUNTRY_CODES_ALPHA_2.get(aff['p'], {'name': html_decode(aff['p'])})['name']
 
                         if 's' in aff:
                             affdict['state'] = aff['s']
@@ -2147,9 +2149,13 @@ class Article(object):
                     affdict['state'] = html_decode(aff['s'])
                 if 'p' in aff:
                     affdict['country'] = html_decode(aff['p'])
-                if 'p' in aff and 'q' in aff and aff['p'] in choices.ISO_3166:
-                    affdict['country'] = choices.ISO_3166[aff['p']]
+                    if html_decode(aff['p']).lower() in iso3166.COUNTRY_CODES_ALPHA_2_FORMS:
+                        affdict['country_iso_3166'] = iso3166.COUNTRY_CODES_ALPHA_2_FORMS.get(aff['p'].lower(), '')
+
+                if 'p' in aff and 'q' in aff and aff['p'] in iso3166.COUNTRY_CODES_ALPHA_2:
+                    affdict['country'] = iso3166.COUNTRY_CODES_ALPHA_2[aff['p']]['name']
                     affdict['country_iso_3166'] = aff['p']
+
                 if 'e' in aff:
                     affdict['email'] = html_decode(aff['e'])
                 if 'd' in aff:

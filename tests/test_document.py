@@ -2760,7 +2760,7 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(result_index, u'A01A02A03A04')
         self.assertEqual(result_country, u'BrazilBrazilUSMexico')
-        self.assertEqual(result_country_iso, u'BRBRMX')
+        self.assertEqual(result_country_iso, u'BRBRUSMX')
         self.assertEqual(result_status, u'TrueTrueFalseFalse')
         self.assertEqual(result_state, u'São PauloSão PauloYucatán')
 
@@ -2856,6 +2856,7 @@ class ArticleTests(unittest.TestCase):
              u'country': u'Brazil'}
         ]
 
+        article.normalized_affiliations
         self.assertEqual(article.normalized_affiliations, affiliations)
 
     def test_normalized_affiliations(self):
@@ -2918,6 +2919,7 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A01',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
                 'email': u'caioisola@yahoo.com.br',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Biol\xf3gicas',
@@ -2926,6 +2928,7 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A02',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
                 'email': u'alex_peressin@yahoo.com.br',
                 'state': u'SP',
                 'orgdiv1': u'Programa de P\xf3s-Gradua\xe7\xe3o em Diversidade Biol\xf3gica e Conserva\xe7\xe3o',
@@ -2934,6 +2937,7 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A03',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
                 'email': u'mcetra@ufscar.br',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais',
@@ -2942,13 +2946,14 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A04',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
                 'email': u'vbarrella@pucsp.br',
                 'state': u'SP',
                 'orgdiv1': u'Laborat\xf3rio de Ecossistemas Aqu\xe1ticos',
                 'institution': u'PONTIFICIA UNIVERSIDADE CATOLICA DE SAO PAULO'
             }
         ]
-
+        self.maxDiff = None
         self.assertEqual(article.affiliations, expected)
 
     def test_affiliation_without_affiliation_name(self):
@@ -2970,6 +2975,7 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A03',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
                 'email': u'mcetra@ufscar.br', 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
