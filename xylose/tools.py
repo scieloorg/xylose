@@ -31,15 +31,15 @@ def get_language(language, iso_format):
             return u'#undefined %s#' % language
     elif iso_format == u'iso 639-2':
         return choices.ISO639_1_to_2.get(language, u'#undefined %s#' % language)
-    
+
     return language
 
 
 def get_date(date):
     pub_date = [date[0:4]]
 
-    months = range(1,13)
-    days = range(1,32)
+    months = range(1, 13)
+    days = range(1, 32)
 
     try:
         month = int(date[4:6])
@@ -57,5 +57,11 @@ def get_date(date):
         if day in days:
             pub_date.append("%02d" % day)
 
-
     return "-".join(pub_date)
+
+
+def get_country_ISO_3166_code_from_name(something):
+
+    iso_country_ISP_3166 = None
+
+    return iso_country_ISP_3166
