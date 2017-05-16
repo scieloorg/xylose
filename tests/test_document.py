@@ -770,6 +770,58 @@ class JournalTests(unittest.TestCase):
 
         self.assertIsNone(journal.editor_address)
 
+    def test_is_publishing_model_continuous_false_without_field(self):
+        journal = self.journal
+
+        self.assertFalse(journal.is_publishing_model_continuous)
+
+    def test_is_publishing_model_continuous_false_with_field_undefined(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'undefined'}]
+
+        self.assertFalse(journal.is_publishing_model_continuous)
+
+    def test_is_publishing_model_continuous_false_with_field_regular(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'regular'}]
+
+        self.assertFalse(journal.is_publishing_model_continuous)
+
+    def test_is_publishing_model_continuous_true(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'continuous'}]
+
+        self.assertTrue(journal.is_publishing_model_continuous)
+
+    def test_is_publishing_model_continuous(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'continuous'}]
+
+        self.assertEqual(journal.publishing_model, 'continuous')
+
+    def test_is_publishing_model_regular_1(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'regular'}]
+
+        self.assertEqual(journal.publishing_model, 'regular')
+
+    def test_is_publishing_model_regular_2(self):
+        journal = self.journal
+
+        self.assertEqual(journal.publishing_model, 'regular')
+
+    def test_is_publishing_model_continuous_true(self):
+        journal = self.journal
+
+        journal.data['v699'] = [{'_': u'continuous'}]
+
+        self.assertTrue(journal.is_publishing_model_continuous)
+
     def test_previous_title(self):
         journal = self.journal
 
@@ -2452,6 +2504,17 @@ class ArticleTests(unittest.TestCase):
         article = self.article
 
         self.assertEqual(article.doi, None)
+
+    def test_publisher_ahead_id(self):
+        article = self.article
+
+        self.assertEqual(article.publisher_ahead_id, u'S2179-975X2012005000004')
+
+    def test_publisher_ahead_id_none(self):
+        article = self.article
+
+        del(article.data['article']['v881'])
+        self.assertEqual(article.publisher_ahead_id, None)
 
     def test_publisher_id(self):
         article = self.article

@@ -681,6 +681,34 @@ class Journal(object):
         return data
 
     @property
+    def publishing_model(self):
+        """
+        This method retrieve the publishing model
+        This method deals with the field (v699)
+        """
+
+        value = self.data.get('v699', [{'_': ''}])[0]['_']
+
+        if value.lower() == 'continuous':
+            return 'continuous'
+
+        return 'regular'
+
+    @property
+    def is_publishing_model_continuous(self):
+        """
+        This method retrieve the publishing model
+        This method deals with the field (v699)
+        """
+
+        value = self.data.get('v699', [{'_': ''}])[0]['_']
+
+        if self.publishing_model == 'continuous':
+            return True
+
+        return False
+
+    @property
     def editor_address(self):
         """
         This method retrieve the editor address
@@ -1901,6 +1929,16 @@ class Article(object):
         This method deals with the legacy fields (880).
         """
         return self.data['article']['v880'][0]['_']
+
+    @property
+    def publisher_ahead_id(self):
+        """
+        This method retrieves the publisher ahead id of the given article, if it exists.
+        The ahead id is stored in the field v881 when the Ahead of Print document
+        is prometed to an oficial issue, and leave the ahead of print status.
+        This method deals with the legacy fields (881).
+        """
+        return self.data['article'].get('v881', [{'_': None}])[0]['_']
 
     @property
     def document_type(self):
