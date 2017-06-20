@@ -2063,6 +2063,8 @@ class Article(object):
                     authordict['role'] = html_decode(author['r'])
                 if '1' in author:
                     authordict['xref'] = html_decode(author['1'].split(' '))
+                if 'k' in author:
+                    authordict['orcid'] = html_decode(author['k'])
 
                 authors.append(authordict)
 
