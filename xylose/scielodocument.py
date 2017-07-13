@@ -2156,7 +2156,7 @@ class Article(object):
 
                         if 'p' in aff and html_decode(aff['p']).lower() in iso3166.COUNTRY_CODES_ALPHA_2_FORMS:
                             affdict['country_iso_3166'] = iso3166.COUNTRY_CODES_ALPHA_2_FORMS.get(aff['p'].lower(), '')
-                            affdict['country'] = iso3166.COUNTRY_CODES_ALPHA_2.get(aff['p'], {'name': html_decode(aff['p'])})['name']
+                            affdict['country'] = html_decode(iso3166.COUNTRY_CODES_ALPHA_2.get(aff['p'], {'name': html_decode(aff['p'])})['name'])
 
                         if 's' in aff:
                             affdict['state'] = aff['s']

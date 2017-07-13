@@ -1,11 +1,21 @@
+# coding: utf-8
+
 import os
 import csv
 
 COUNTRY_CODES = []
-with open(os.path.dirname(os.path.realpath(__file__)) + '/assets/country_codes.csv', 'r') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=',')
-    for row in spamreader:
-        COUNTRY_CODES.append(row)
+try:
+    pointer = open(os.path.dirname(os.path.realpath(__file__)) + '/assets/country_codes.csv', 'r', encoding='utf-8')
+    with pointer as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+        for row in spamreader:
+            COUNTRY_CODES.append([i for i in row])
+except TypeError:
+    pointer = open(os.path.dirname(os.path.realpath(__file__)) + '/assets/country_codes.csv', 'r')
+    with pointer as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+        for row in spamreader:
+            COUNTRY_CODES.append([i.decode('utf-8') for i in row])
 
 
 def load_alpha_2():
