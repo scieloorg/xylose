@@ -1844,6 +1844,27 @@ class Article(object):
         return sponsors
 
     @property
+    def start_page_sequence(self):
+        """
+        This method retrieves the star page sequence of the given article, if it exists.
+        This method deals with the legacy fields (14).
+
+        Este metodo atende as seguinte variancias de dados do legado:
+        {'v14': [{'f': 10, 'l': 12, 's': 1}]}
+        {'v14': [{'f': 10}, {'l': 12}, {'s': 1}]}
+        """
+
+        for item in self.data['article'].get('v14', [{}]):
+            if 's' in item and item['s'].replace('0', '') != '':
+                return item['s']
+
+        data = self.data['article'].get('v14', [{}])[0].get('s', '')
+
+        if data.replace('0', '') != '':
+            return data
+
+
+    @property
     def start_page(self):
         """
         This method retrieves the star page of the given article, if it exists.

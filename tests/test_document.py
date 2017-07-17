@@ -2359,6 +2359,34 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.start_page, u'229')
 
+    def test_start_page_sec(self):
+        article = self.article
+
+        self.article.data['article']['v14'] = [
+            {
+                'l': '232',
+                'f': '229',
+                '_': '',
+                's': '1'  # seq
+            }
+        ]
+
+        self.assertEqual(article.start_page_sequence, u'1')
+
+    def test_start_page_sec_0(self):
+        article = self.article
+
+        self.article.data['article']['v14'] = [
+            {
+                'l': '232',
+                'f': '229',
+                '_': '',
+                's': '0'  # seq
+            }
+        ]
+
+        self.assertEqual(article.start_page_sequence, None)
+
     def test_without_start_page(self):
         article = self.article
 
@@ -2378,6 +2406,46 @@ class ArticleTests(unittest.TestCase):
         del(article.data['article']['v14'])
 
         self.assertEqual(article.elocation, None)
+
+    def test_start_page_sec_loaded_through_xml(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'',
+                u'l': u'122'
+            },
+            {
+                u'_': u'',
+                u'f': u'110'
+            },
+            {
+                u'_': u'',
+                u's': u'1'  # seq
+            }
+        ]
+
+        self.assertEqual(article.start_page_sequence, u'1')
+
+    def test_start_page_sec_0_loaded_through_xml(self):
+        article = self.article
+
+        article.data['article']['v14'] = [
+            {
+                u'_': u'',
+                u'l': u'122'
+            },
+            {
+                u'_': u'',
+                u'f': u'110'
+            },
+            {
+                u'_': u'',
+                u's': u'0'  # seq
+            }
+        ]
+
+        self.assertEqual(article.start_page_sequence, None)
 
     def test_start_page_loaded_through_xml(self):
         article = self.article
