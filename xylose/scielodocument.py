@@ -191,6 +191,16 @@ class Issue(object):
         return str(int(order[4:]))
 
     @property
+    def assets_code(self):
+        """
+        This method retrieves the issue label available in the field v4. The
+        path to the document assets is build with this code.
+        ex: /pdf/[journal_acronym]/[assets_code]/[file_code]
+        """
+
+        return self.data['issue'].get('v4', [{'_': None}])[0]['_']
+
+    @property
     def type(self):
         """
         This method retrieves the issue type ['ahead', 'regular', 'supplement', 'special', 'pressrelease'].

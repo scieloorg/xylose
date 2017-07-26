@@ -226,6 +226,13 @@ class IssueTests(unittest.TestCase):
 
         self.assertEqual(issue.sections, expected)
 
+    def test_assets_code_month(self):
+        issue = self.issue
+
+        issue.data['issue']['v4'] = [{'_': 'v10n12'}]
+
+        self.assertEqual(issue.assets_code, 'v10n12')
+
     def test_start_end_month(self):
         issue = self.issue
 
