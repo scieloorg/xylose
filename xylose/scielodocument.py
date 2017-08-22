@@ -15,6 +15,8 @@ from . import choices
 from . import tools
 from . import iso3166
 
+from legendarium import formatter
+
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
 # --------------
@@ -106,6 +108,44 @@ class Issue(object):
         self._iso_format = iso_format
         self._journal = None
         self.data = data
+
+    def bibliographic_legends(self, language='en'):
+
+        legends = {}
+        legends['descriptive_short_format'] = formatter.descriptive_short_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_short_format'] = formatter.descriptive_html_short_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_very_short_format'] = formatter.descriptive_very_short_format(
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_very_short_format'] = formatter.descriptive_html_very_short_format(
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+
+        return legends
 
     @property
     def journal(self):
@@ -1436,6 +1476,36 @@ class Article(object):
         self._issue = None
         self._citations = None
 
+    def bibliographic_legends(self, language='en'):
+
+        legends = {}
+        legends['descriptive_format'] = formatter.descriptive_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.issue.volume,
+            self.issue.number,
+            self.start_page,
+            self.end_page,
+            self.elocation,
+            (self.issue.supplement_volume or '') + (self.issue.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_format'] = formatter.descriptive_html_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.issue.volume,
+            self.issue.number,
+            self.start_page,
+            self.end_page,
+            self.elocation,
+            (self.issue.supplement_volume or '') + (self.issue.supplement_number or ''),
+            language
+            )
+
+        return legends
+
     @property
     def issue(self):
 
@@ -1873,6 +1943,20 @@ class Article(object):
         if data.replace('0', '') != '':
             return data
 
+
+    @property
+    def internal_sequence_id(self):
+        """
+        This method retrieves the article sequence identification inside a issue.
+        This is an internal sequence to uniquely identify the article of an issue.
+
+        This id is not the elocation identification and it do not replaces the
+        elocation number in any situation.
+
+        This method deals with the legacy field (121).
+        """
+
+        return self.data['article'].get('121', [{'_': 0}])[0]['_']
 
     @property
     def start_page(self):

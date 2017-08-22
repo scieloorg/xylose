@@ -4,11 +4,13 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
-requires = []
+requires = [
+    "legendarium>=1.2.0"
+]
 
 setup(
     name="xylose",
-    version='1.25.0',
+    version='1.26.0',
     description="A SciELO library to abstract a JSON data structure that is a product of the ISIS2JSON conversion using the ISIS2JSON type 3 data model.",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",
