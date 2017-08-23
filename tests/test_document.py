@@ -2196,16 +2196,23 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
-    def test_publication_date(self):
+    def test_publication_date_with_article_date(self):
+        article = self.article
+
+        self.assertEqual(article.publication_date, '2012-02-16')
+
+    def test_publication_date_without_article_date(self):
         article = self.article
 
         article.data['article']['v65'] = [{u'_': u'20120102'}]
+        del(article.data['article']['v223'])
         self.assertEqual(article.publication_date, '2012-01-02')
 
     def test_without_publication_date(self):
         article = self.article
 
         del(article.data['article']['v65'])
+        del(article.data['article']['v223'])
         with self.assertRaises(KeyError):
             article.publication_date
 

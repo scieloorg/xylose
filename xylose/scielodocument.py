@@ -1789,8 +1789,13 @@ class Article(object):
     def publication_date(self):
         """
         This method retrieves the publication date of the given article, if it exists.
-        This method deals with the legacy fields (65).
+        This method deals with the legacy fields (65) and (223).
+        65 represents the issue date
+        223 represents the article publication date
         """
+
+        if 'v223' in self.data['article']:
+            return tools.get_date(self.data['article']['v223'][0]['_'])
 
         return tools.get_date(self.data['article']['v65'][0]['_'])
 
