@@ -15,6 +15,8 @@ from . import choices
 from . import tools
 from . import iso3166
 
+from legendarium import formatter
+
 allowed_formats = ['iso 639-2', 'iso 639-1', None]
 
 # --------------
@@ -46,6 +48,14 @@ REPLACE_TAGS_MIXED_CITATION = (
     (re.compile(r'< *?small.*?>', re.IGNORECASE), '<small>',),
     (re.compile(r'< *?/ *?small.*?>', re.IGNORECASE), '</small>',),
 )
+
+
+class XyloseException(Exception):
+    pass
+
+
+class UnavailableMetadataException(XyloseException):
+    pass
 
 
 def cleanup_number(text):
@@ -107,11 +117,52 @@ class Issue(object):
         self._journal = None
         self.data = data
 
+    def bibliographic_legends(self, language='en'):
+
+        legends = {}
+        legends['descriptive_short_format'] = formatter.descriptive_short_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_short_format'] = formatter.descriptive_html_short_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_very_short_format'] = formatter.descriptive_very_short_format(
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_very_short_format'] = formatter.descriptive_html_very_short_format(
+            self.publication_date,
+            self.volume,
+            self.number,
+            (self.supplement_volume or '') + (self.supplement_number or ''),
+            language
+            )
+
+        return legends
+
     @property
     def journal(self):
 
         if 'title' in self.data:
             self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+        else:
+            msg = 'Journal metadata not found for the issue %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._journal
 
@@ -1436,11 +1487,44 @@ class Article(object):
         self._issue = None
         self._citations = None
 
+    def bibliographic_legends(self, language='en'):
+
+        legends = {}
+        legends['descriptive_format'] = formatter.descriptive_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.issue.volume,
+            self.issue.number,
+            self.start_page,
+            self.end_page,
+            self.elocation,
+            (self.issue.supplement_volume or '') + (self.issue.supplement_number or ''),
+            language
+            )
+        legends['descriptive_html_format'] = formatter.descriptive_html_format(
+            self.journal.title,
+            self.journal.abbreviated_title,
+            self.publication_date,
+            self.issue.volume,
+            self.issue.number,
+            self.start_page,
+            self.end_page,
+            self.elocation,
+            (self.issue.supplement_volume or '') + (self.issue.supplement_number or ''),
+            language
+            )
+
+        return legends
+
     @property
     def issue(self):
 
         if 'issue' in self.data:
             self._issue = self._issue or Issue(self.data['issue'], iso_format=self._iso_format)
+        else:
+            msg = 'Issue metadata not found for the document %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._issue
 
@@ -1449,6 +1533,9 @@ class Article(object):
 
         if 'title' in self.data:
             self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+        else:
+            msg = 'Journal metadata not found for the document %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._journal
 
@@ -1719,8 +1806,13 @@ class Article(object):
     def publication_date(self):
         """
         This method retrieves the publication date of the given article, if it exists.
-        This method deals with the legacy fields (65).
+        This method deals with the legacy fields (65) and (223).
+        65 represents the issue date
+        223 represents the article publication date
         """
+
+        if 'v223' in self.data['article']:
+            return tools.get_date(self.data['article']['v223'][0]['_'])
 
         return tools.get_date(self.data['article']['v65'][0]['_'])
 
@@ -1873,6 +1965,20 @@ class Article(object):
         if data.replace('0', '') != '':
             return data
 
+
+    @property
+    def internal_sequence_id(self):
+        """
+        This method retrieves the article sequence identification inside a issue.
+        This is an internal sequence to uniquely identify the article of an issue.
+
+        This id is not the elocation identification and it do not replaces the
+        elocation number in any situation.
+
+        This method deals with the legacy field (121).
+        """
+
+        return self.data['article'].get('121', [{'_': 0}])[0]['_']
 
     @property
     def start_page(self):

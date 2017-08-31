@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode
+from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
 from xylose import tools
 
 
@@ -225,6 +225,14 @@ class IssueTests(unittest.TestCase):
         }
 
         self.assertEqual(issue.sections, expected)
+
+    def test_issue_journal_without_journal_metadata(self):
+        issue = self.issue
+
+        del(issue.data['title'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            issue.journal
 
     def test_assets_code_month(self):
         issue = self.issue
@@ -1898,6 +1906,22 @@ class ArticleTests(unittest.TestCase):
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.article = Article(self.fulldoc)
 
+    def test_document_without_journal_metadata(self):
+        article = self.article
+
+        del(article.data['title'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            article.journal
+
+    def test_document_without_issue_metadata(self):
+        article = self.article
+
+        del(article.data['issue'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            article.issue
+
     def test_article(self):
         article = self.article
         self.assertTrue(isinstance(article, Article))
@@ -2196,16 +2220,23 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
-    def test_publication_date(self):
+    def test_publication_date_with_article_date(self):
+        article = self.article
+
+        self.assertEqual(article.publication_date, '2012-02-16')
+
+    def test_publication_date_without_article_date(self):
         article = self.article
 
         article.data['article']['v65'] = [{u'_': u'20120102'}]
+        del(article.data['article']['v223'])
         self.assertEqual(article.publication_date, '2012-01-02')
 
     def test_without_publication_date(self):
         article = self.article
 
         del(article.data['article']['v65'])
+        del(article.data['article']['v223'])
         with self.assertRaises(KeyError):
             article.publication_date
 
