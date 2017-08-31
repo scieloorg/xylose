@@ -50,6 +50,14 @@ REPLACE_TAGS_MIXED_CITATION = (
 )
 
 
+class XyloseException(Exception):
+    pass
+
+
+class UnavailableMetadataException(XyloseException):
+    pass
+
+
 def cleanup_number(text):
     """
     Lefting just valid numbers
@@ -152,6 +160,9 @@ class Issue(object):
 
         if 'title' in self.data:
             self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+        else:
+            msg = 'Journal metadata not found for the issue %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._journal
 
@@ -1511,6 +1522,9 @@ class Article(object):
 
         if 'issue' in self.data:
             self._issue = self._issue or Issue(self.data['issue'], iso_format=self._iso_format)
+        else:
+            msg = 'Issue metadata not found for the document %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._issue
 
@@ -1519,6 +1533,9 @@ class Article(object):
 
         if 'title' in self.data:
             self._journal = self._journal or Journal(self.data['title'], iso_format=self._iso_format)
+        else:
+            msg = 'Journal metadata not found for the document %s' % self.publisher_id
+            raise UnavailableMetadataException(msg)
 
         return self._journal
 

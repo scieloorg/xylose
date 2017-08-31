@@ -3,7 +3,7 @@
 import unittest
 import json
 import os
-from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode
+from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
 from xylose import tools
 
 
@@ -225,6 +225,14 @@ class IssueTests(unittest.TestCase):
         }
 
         self.assertEqual(issue.sections, expected)
+
+    def test_issue_journal_without_journal_metadata(self):
+        issue = self.issue
+
+        del(issue.data['title'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            issue.journal
 
     def test_assets_code_month(self):
         issue = self.issue
@@ -1897,6 +1905,22 @@ class ArticleTests(unittest.TestCase):
         path = os.path.dirname(os.path.realpath(__file__))
         self.fulldoc = json.loads(open('%s/fixtures/full_document.json' % path).read())
         self.article = Article(self.fulldoc)
+
+    def test_document_without_journal_metadata(self):
+        article = self.article
+
+        del(article.data['title'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            article.journal
+
+    def test_document_without_issue_metadata(self):
+        article = self.article
+
+        del(article.data['issue'])
+
+        with self.assertRaises(UnavailableMetadataException):
+            article.issue
 
     def test_article(self):
         article = self.article
