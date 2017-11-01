@@ -1998,14 +1998,14 @@ class Article(object):
         data = self.data['article'].get('v14', [{}])[0].get('f', '')
 
         if data.replace('0', '') != '':
-            return data
+            return html_decode(data)
 
         # if nothing works until now. we will try once more. It's tested.
 
         #pages = sorted(self.data['article']['v14'][0]['_'].split('-'))
         pages = sorted(self.data['article'].get('v14', [{}])[0].get('_', '').split('-'))
 
-        return pages[0] if pages[0].replace('0', '') != '' else None
+        return html_decode(pages[0]) if pages[0].replace('0', '') != '' else None
 
     @property
     def end_page(self):
@@ -2022,7 +2022,7 @@ class Article(object):
 
         pages = sorted(self.data['article'].get('v14', [{}])[0].get('_', '').split('-'))
 
-        return pages[-1] if pages[-1].replace('0', '') != '' else None
+        return html_decode(pages[-1]) if pages[-1].replace('0', '') != '' else None
 
     @property
     def elocation(self):
@@ -2509,12 +2509,12 @@ class Citation(object):
         """
 
         if 'v514' in self.data:
-            return self.data['v514'][0].get('f', None)
+            return html_decode(self.data['v514'][0].get('f', None))
 
         if not 'v14' in self.data:
             return None
 
-        return self.data['v14'][0]['_'].split('-')[0]
+        return html_decode(self.data['v14'][0]['_'].split('-')[0])
 
     @property
     def end_page(self):
@@ -2524,7 +2524,7 @@ class Citation(object):
         """
 
         if 'v514' in self.data:
-            return self.data['v514'][0].get('l', None)
+            return html_decode(self.data['v514'][0].get('l', None))
 
         if not 'v14' in self.data:
             return None
@@ -2534,7 +2534,7 @@ class Citation(object):
         if not len(splited) == 2:
             return None
 
-        return splited[1]
+        return html_decode(splited[1])
 
     @property
     def elocation(self):
