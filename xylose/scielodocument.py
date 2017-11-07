@@ -2682,7 +2682,7 @@ class Citation(object):
         """
 
         if 'v37' in self.data:
-            return self.data['v37'][0]['_']
+            return html_decode(self.data['v37'][0]['_'])
 
     @property
     def date(self):
