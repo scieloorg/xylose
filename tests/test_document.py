@@ -1975,7 +1975,45 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.section, None)
 
-    def test_secion_code_field_v49(self):
+    def test_section_without_field_section(self):
+        """
+        Article without field section trying to load section from issue metadata
+
+        The field section is populated by a processing, if by some reason the
+        processing fails to run, the section field will be empty or absent.
+        """
+
+        self.fulldoc['article']['v49'] = [{'_': 'RSP10'}]
+        self.fulldoc['issue']['issue']['v49'] = [{
+                '_': '',
+                'l': 'en',
+                'c': 'RSP10',
+                't': 'Original Articles'
+            }, {
+                '_': '',
+                'l': 'pt',
+                'c': 'RSP10',
+                't': 'Artigos Originais'
+            }, {
+                '_': '',
+                'l': 'en',
+                'c': 'RSP110',
+                't': 'Research Articles'
+            }, {
+                '_': '',
+                'l': 'pt',
+                'c': 'RSP110',
+                't': 'Artigos de Pesquisas'
+            }
+        ]
+
+        article = Article(self.fulldoc)
+
+        section = article.section
+
+        self.assertEqual(section, {'pt': 'Artigos Originais', 'en': 'Original Articles'})
+
+    def test_section_code_field_v49(self):
         self.fulldoc['article']['v49'] = [{'_': 'RSP10'}]
 
         article = Article(self.fulldoc)

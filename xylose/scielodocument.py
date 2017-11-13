@@ -1610,9 +1610,13 @@ class Article(object):
         This method deals with the fields (section).
         """
 
-        if 'section' in self.data:
+        section = self.data.get('section', None)
 
-            return self.data['section']
+        if section:
+            return section
+
+        return self.issue.sections.get(self.section_code or '', None) if self.issue.sections else None
+
 
     @property
     def section_code(self):
