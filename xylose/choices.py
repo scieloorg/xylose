@@ -123,7 +123,8 @@ collections = {
     'cic': [u'Ciência e Cultura', 'cienciaecultura.bvs.br'],
     'cci': [u'ComCiência', 'comciencia.scielo.br'],
     'wid': ['West Indians', 'caribbean.scielo.org'],
-    'pro': ['Proceedings', 'www.proceedings.scielo.br']
+    'pro': ['Proceedings', 'www.proceedings.scielo.br'],
+    'ecu': ['Ecuador', 'scielo.senescyt.gob.ec'],
 }
 
 journal_status = {
