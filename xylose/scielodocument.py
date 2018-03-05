@@ -2182,6 +2182,29 @@ class Article(object):
 
         return trans_abstracts
 
+    def abstracts(self, iso_format=None):
+        """
+        This method retrieves just the trasnlated abstracts of the given article, if it exists.
+        This method deals with the legacy fields (83).
+        """
+        fmt = iso_format or self._iso_format
+
+        trans_abstracts = {}
+        if 'v83' in self.data['article']:
+            for abstract in self.data['article']['v83']:
+                if 'a' in abstract and 'l' in abstract:  # Validating this, because some original 'isis' records doesn't have the abstract driving the tool to an unexpected error: ex. S0066-782X2012001300004
+                    language = tools.get_language(abstract['l'], fmt)
+
+                    trans_abstracts.setdefault(
+                        html_decode(language),
+                        html_decode(abstract['a'])
+                    )
+
+        if len(trans_abstracts) == 0:
+            return None
+
+        return trans_abstracts
+
     @property
     def authors(self):
         """
