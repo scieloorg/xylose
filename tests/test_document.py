@@ -3499,6 +3499,49 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.translated_abstracts(iso_format=None), expected)
 
+    def test_abstracts(self):
+        article = self.article
+
+        article.data['article']['v83'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"a": u"Article Abstract"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"a": u"Resumo do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'pt': u'Resumo do Artigo', u'en': u'Article Abstract'}
+
+        self.assertEqual(article.abstracts(iso_format=None), expected)
+
+    def test_abstracts_without_v83(self):
+        article = self.article
+
+        del(article.data['article']['v83'])
+
+        self.assertEqual(article.abstracts(iso_format=None), None)
+
+    def test_abstracts_iso639_2(self):
+        article = self.article
+
+        article.data['article']['v83'] = [
+                                            {
+                                                u"l": u"en",
+                                                u"a": u"Article Abstract"
+                                            },
+                                            {
+                                                u"l": u"pt",
+                                                u"a": u"Resumo do Artigo"
+                                            }
+                                         ]
+
+        expected = {u'por': u'Resumo do Artigo', u'eng': u'Article Abstract'}
+
+        self.assertEqual(article.abstracts(iso_format='iso 639-2'), expected)
+
     def test_thesis_degree(self):
         self.fulldoc['article']['v51']  = [{u'_': u'Degree 1'}]
 
