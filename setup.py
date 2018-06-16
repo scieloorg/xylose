@@ -10,7 +10,7 @@ requires = [
 
 setup(
     name="xylose",
-    version='1.33.0',
+    version='1.33.1',
     description="A SciELO library to abstract a JSON data structure that is a product of the ISIS2JSON conversion using the ISIS2JSON type 3 data model.",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",
@@ -28,8 +28,8 @@ setup(
         "Topic :: Utilities",
     ],
     dependency_links=[],
-    setup_requires=["nose>=1.0", "coverage"],
-    tests_require=["mocker"],
+    setup_requires=[],
+    tests_require=[],
     install_requires=requires,
-    test_suite="nose.collector",
+    test_suite="tests",
 )
