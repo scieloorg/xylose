@@ -2717,17 +2717,14 @@ class Citation(object):
         This method retrieves the citation date, if it is exists.
         """
 
-        if self.publication_type == u'link' and 'v110' in self.data:
-            return tools.get_date(self.data['v110'][0]['_'])
+        if 'v65' in self.data:
+            return tools.get_date(self.data['v65'][0]['_'])
 
         if self.publication_type == u'thesis' and 'v45' in self.data:
             return tools.get_date(self.data['v45'][0]['_'])
 
         if self.publication_type == u'conference' and 'v55' in self.data:
             return tools.get_date(self.data['v55'][0]['_'])
-
-        if 'v65' in self.data:
-            return tools.get_date(self.data['v65'][0]['_'])
 
     @property
     def edition(self):
