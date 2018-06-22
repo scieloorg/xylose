@@ -2716,13 +2716,44 @@ class Citation(object):
         """
         This method retrieves the citation date, if it is exists.
         """
+        if self.publication_date:
+            return self.publication_date
 
+        if self.thesis_date:
+            return self.thesis_date
+
+        if self.conference_date:
+            return self.conference_date
+
+    @property
+    def publication_date(self):
+        """
+        This method retrieves the publication date, if it is exists.
+        """
         if 'v65' in self.data:
             return tools.get_date(self.data['v65'][0]['_'])
 
+    @property
+    def access_date(self):
+        """
+        This method retrieves the access date, if it is exists.
+        """
+        if self.publication_type == u'link' and 'v110' in self.data:
+            return tools.get_date(self.data['v110'][0]['_'])
+
+    @property
+    def thesis_date(self):
+        """
+        This method retrieves the thesis date, if it is exists.
+        """
         if self.publication_type == u'thesis' and 'v45' in self.data:
             return tools.get_date(self.data['v45'][0]['_'])
 
+    @property
+    def conference_date(self):
+        """
+        This method retrieves the conference date, if it is exists.
+        """
         if self.publication_type == u'conference' and 'v55' in self.data:
             return tools.get_date(self.data['v55'][0]['_'])
 

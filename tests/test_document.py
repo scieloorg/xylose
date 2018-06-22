@@ -3831,7 +3831,17 @@ class CitationTest(unittest.TestCase):
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.date, u'2013')
+        self.assertEqual(citation.date, u'2012')
+
+    def test_a_link_access_date_absent_v65(self):
+        json_citation = {}
+        json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
+        json_citation['v110'] = [{u'_': u'201300'}]
+
+        citation = Citation(json_citation)
+
+        self.assertEqual(citation.access_date, u'2013')
+        self.assertEqual(citation.date, None)
 
     def test_without_date(self):
         json_citation = {}
