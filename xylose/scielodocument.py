@@ -2714,16 +2714,21 @@ class Citation(object):
     @property
     def date(self):
         """
-        This method retrieves the citation date, if it is exists.
+        This method retrieves the date, if it is exists, according to the
+        reference type
+        Se é desejável obter a data de publicação, usar: self.publication_date
         """
-        if self.publication_date:
-            return self.publication_date
+        if self.access_date:
+            return self.access_date
 
         if self.thesis_date:
             return self.thesis_date
 
         if self.conference_date:
             return self.conference_date
+
+        if self.publication_date:
+            return self.publication_date
 
     @property
     def publication_date(self):
@@ -2732,6 +2737,12 @@ class Citation(object):
         """
         if 'v65' in self.data:
             return tools.get_date(self.data['v65'][0]['_'])
+
+        if self.thesis_date:
+            return self.thesis_date
+
+        if self.conference_date:
+            return self.conference_date
 
     @property
     def access_date(self):
