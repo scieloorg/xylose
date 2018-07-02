@@ -1076,7 +1076,7 @@ class JournalTests(unittest.TestCase):
     def test_current_status_some_changes(self):
 
         v51 = [
-            {'a': '19981126', 'c': "20020000", 'b': "C", 'd': "D", '_': ""}
+            {'a': '19981126', 'c': "20020101", 'b': "C", 'd': "D", '_': ""}
         ]
 
         self.fulldoc['title']['v51'] = v51
@@ -1090,14 +1090,14 @@ class JournalTests(unittest.TestCase):
     def test_status_some_changes(self):
 
         v51 = [
-            {'a': '19981126', 'c': "20020000", 'b': "C", 'd': "D", '_': ""}
+            {'a': '19981126', 'c': "20020101", 'b': "C", 'd': "D", '_': ""}
         ]
 
         self.fulldoc['title']['v51'] = v51
 
         journal = Journal(self.fulldoc['title'])
 
-        self.assertEqual(journal.status_history, [('1998-11-26', 'current', ''), ('2002', 'deceased', '')])
+        self.assertEqual(journal.status_history, [('1998-11-26', 'current', ''), ('2002-01-01', 'deceased', '')])
 
     def test_status_lots_of_changes(self):
 
@@ -3817,31 +3817,33 @@ class CitationTest(unittest.TestCase):
 
     def test_date(self):
         json_citation = {}
-        json_citation['v65'] = [{u'_': u'2012'}]
+        json_citation['v65'] = [{u'_': u'20120101'}]
 
         citation = Citation(json_citation)
-
-        self.assertEqual(citation.date, u'2012')
+        self.assertEqual(citation.date, u'2012-01-01')
+        self.assertEqual(citation.publication_date, u'2012-01-01')
 
     def test_a_link_access_date(self):
         json_citation = {}
         json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
-        json_citation['v110'] = [{u'_': u'201300'}]
-        json_citation['v65'] = [{u'_': u'2012'}]
+        json_citation['v110'] = [{u'_': u'20130101'}]
+        json_citation['v65'] = [{u'_': u'20120101'}]
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.date, u'2012')
+        self.assertEqual(citation.date, u'2013-01-01')
+        self.assertEqual(citation.access_date, u'2013-01-01')
+        self.assertEqual(citation.publication_date, u'2012-01-01')
 
     def test_a_link_access_date_absent_v65(self):
         json_citation = {}
         json_citation['v37'] = [{u'_': u'http://www.scielo.br'}]
-        json_citation['v110'] = [{u'_': u'201300'}]
+        json_citation['v110'] = [{u'_': u'201301'}]
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.access_date, u'2013')
-        self.assertEqual(citation.date, None)
+        self.assertEqual(citation.access_date, u'2013-01')
+        self.assertEqual(citation.publication_date, None)
 
     def test_without_date(self):
         json_citation = {}
@@ -3849,6 +3851,7 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.date, None)
+        self.assertEqual(citation.publication_date, None)
 
     def test_book_edition(self):
         json_citation = {}
@@ -4229,7 +4232,7 @@ class CitationTest(unittest.TestCase):
         json_citation = {}
 
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v45'] = [{u'_': u'20120101'}]
         json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
                                 {u's': u'Hurricane Carter', u'n': u'Rubin'},
                                 {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
@@ -4356,7 +4359,7 @@ class CitationTest(unittest.TestCase):
         json_citation = {}
 
         json_citation['v18'] = [{u'_': u'It is the thesis title'}]
-        json_citation['v45'] = [{u'_': u'20120000'}]
+        json_citation['v45'] = [{u'_': u'20120101'}]
         json_citation['v10'] = [{u's': u'Maguila Rodrigues', u'n': u'Adilson'},
                                 {u's': u'Hurricane Carter', u'n': u'Rubin'},
                                 {u's': u'Sullivan', u'n': u'Mike'},
@@ -4676,7 +4679,7 @@ class CitationTest(unittest.TestCase):
 
     def test_citation_sample_link(self):
 
-        json_citation = {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v37': [{u'_': u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >'}], u'v12': [{u'l': u'en', u'_': u"Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia"}], u'v10': [{u's': u'CHUNG-CHIH CHEN', u'r': u'ND', u'_': u'', u'n': u'C. C.'}, {u's': u'TAYLOR', u'r': u'ND', u'_': u'', u'n': u'P. C.'}, {u's': u'ALDRIDGE', u'r': u'ND', u'_': u'', u'n': u'J. M.'}], u'v11': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v71': [{u'_': u'web'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500020'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Oak Brook'}], u'v65': [{u'_': u'19970000'}], u'v61': [{u'_': u'Disponible en: <ext-link ext-link-type="uri" ns0:href="&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;">&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;</ext-link>'}], u'v17': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'20'}], u'v700': [{u'_': u'24'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u"<mixed-citation>CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.</mixed-citation>"}], u'v706': [{u'_': u'c'}], u'v109': [{u'_': u'Visitado el: 18 Jul. 2014'}], u'v1': [{u'_': u'br1.1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
+        json_citation = {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v37': [{u'_': u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >'}], u'v12': [{u'l': u'en', u'_': u"Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia"}], u'v10': [{u's': u'CHUNG-CHIH CHEN', u'r': u'ND', u'_': u'', u'n': u'C. C.'}, {u's': u'TAYLOR', u'r': u'ND', u'_': u'', u'n': u'P. C.'}, {u's': u'ALDRIDGE', u'r': u'ND', u'_': u'', u'n': u'J. M.'}], u'v11': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v71': [{u'_': u'web'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500020'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Oak Brook'}], u'v65': [{u'_': u'19970101'}], u'v61': [{u'_': u'Disponible en: <ext-link ext-link-type="uri" ns0:href="&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;">&lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;</ext-link>'}], u'v17': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'20'}], u'v700': [{u'_': u'24'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u"<mixed-citation>CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.</mixed-citation>"}], u'v706': [{u'_': u'c'}], u'v109': [{u'_': u'Visitado el: 18 Jul. 2014'}], u'v1': [{u'_': u'br1.1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
 
         citation = Citation(json_citation)
 
@@ -4688,7 +4691,7 @@ class CitationTest(unittest.TestCase):
 
     def test_citation_sample_link_without_comment(self):
 
-        json_citation = {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v37': [{u'_': u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >'}], u'v12': [{u'l': u'en', u'_': u"Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia"}], u'v10': [{u's': u'CHUNG-CHIH CHEN', u'r': u'ND', u'_': u'', u'n': u'C. C.'}, {u's': u'TAYLOR', u'r': u'ND', u'_': u'', u'n': u'P. C.'}, {u's': u'ALDRIDGE', u'r': u'ND', u'_': u'', u'n': u'J. M.'}], u'v11': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v71': [{u'_': u'web'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500020'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Oak Brook'}], u'v65': [{u'_': u'19970000'}], u'v17': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'20'}], u'v700': [{u'_': u'24'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u"<mixed-citation>CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.</mixed-citation>"}], u'v706': [{u'_': u'c'}], u'v109': [{u'_': u'Visitado el: 18 Jul. 2014'}], u'v1': [{u'_': u'br1.1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
+        json_citation = {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v37': [{u'_': u'<http://files.eric.ed.gov/fulltext/ED405219.pdf >'}], u'v12': [{u'l': u'en', u'_': u"Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia"}], u'v10': [{u's': u'CHUNG-CHIH CHEN', u'r': u'ND', u'_': u'', u'n': u'C. C.'}, {u's': u'TAYLOR', u'r': u'ND', u'_': u'', u'n': u'P. C.'}, {u's': u'ALDRIDGE', u'r': u'ND', u'_': u'', u'n': u'J. M.'}], u'v11': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v71': [{u'_': u'web'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500020'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Oak Brook'}], u'v65': [{u'_': u'19970101'}], u'v17': [{u'_': u'ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'20'}], u'v700': [{u'_': u'24'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u"<mixed-citation>CHUNG-CHIH CHEN, C. C.; TAYLOR, P. C.; ALDRIDGE, J. M. Development of a questionnaire for assessing teachers' beliefs about science and science teaching in Taiwan and Australia. In: ANNUAL MEETING OF THE NATIONAL ASSOCIATION FOR RESEARCH IN SCIENCE TEACHING, Oak Brook, 1997. Disponible en: &lt;http://files.eric.ed.gov/fulltext/ED405219.pdf &gt;. Visitado el: 18 Jul. 2014.</mixed-citation>"}], u'v706': [{u'_': u'c'}], u'v109': [{u'_': u'Visitado el: 18 Jul. 2014'}], u'v1': [{u'_': u'br1.1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
 
         citation = Citation(json_citation)
 
@@ -4700,13 +4703,52 @@ class CitationTest(unittest.TestCase):
 
     def test_citation_sample_congress(self):
 
-        json_citation= {u'v999': [{u'_': u'../bases-work/ciedu/ciedu'}], u'v12': [{u'l': u'es', u'_': u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales'}], u'v10': [{u's': u'G\xd3MEZ', u'r': u'ND', u'_': u'', u'n': u'S.'}], u'v71': [{u'_': u'conf-proc'}], u'v992': [{u'_': u'scl'}], u'v882': [{u'n': u'3', u'_': u'', u'v': u'20'}], u'v880': [{u'_': u'S1516-7313201400030053500029'}], u'v865': [{u'_': u'20140900'}], u'v66': [{u'_': u'Buenos Aires'}], u'v65': [{u'_': u'20040000'}], u'v62': [{u'_': u'Asociaci\xf3n de Docentes de Ciencias Biol\xf3gicas de la Argentina'}], u'v708': [{u'_': u'52'}], u'v2': [{u'_': u'S1516-7313(14)02000300535'}], u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}], u'v4': [{u'_': u'v20n3'}], u'v701': [{u'_': u'29'}], u'v700': [{u'_': u'33'}], u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}], u'v705': [{u'_': u'S'}], u'v704': [{u'_': u'<mixed-citation>G&#211;MEZ, S. et al. Escuelas con poblaciones en riesgo social: proyecto de intervenci&#243;n e investigaci&#243;n en el &#225;rea de ciencias naturales. In: JORNADAS NACIONALES, 6. Y CONGRESO INTERNACIONAL DE ENSE&#209;ANZA DE LA BIOLOG&#205;A, 1., 2004, Buenos Aires. Buenos Aires: Asociaci&#243;n de Docentes de Ciencias Biol&#243;gicas de la Argentina, 2004.</mixed-citation>'}], u'v706': [{u'_': u'c'}], u'v1': [{u'_': u'br1.1'}], u'v56': [{u'_': u'Buenos Aires'}], u'v54': [{u'_': u'2004'}], u'v53': [{u'_': u'JORNADAS NACIONALES, 6'}, {u'_': u'Y CONGRESO INTERNACIONAL DE ENSE\xd1ANZA DE LA BIOLOG\xcdA, 1'}], u'v936': [{u'i': u'1516-7313', u'y': u'2014', u'o': u'3', u'_': u''}]}
+        json_citation= {u'v999': 
+            [{u'_': u'../bases-work/ciedu/ciedu'}],
+             u'v12': 
+                [{u'l': u'es',
+                u'_': u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales'}], u'v10': [{u's': u'G\xd3MEZ',
+                u'r': u'ND',
+                u'_': u'',
+                u'n': u'S.'}],
+                u'v71': [{u'_': u'conf-proc'}],
+                u'v992': [{u'_': u'scl'}],
+                u'v882': [{u'n': u'3',
+                u'_': u'',
+                u'v': u'20'}],
+                u'v880': [{u'_': u'S1516-7313201400030053500029'}],
+                u'v865': [{u'_': u'20140900'}],
+                u'v66': [{u'_': u'Buenos Aires'}],
+                u'v65': [{u'_': u'20040101'}],
+                u'v62': [{u'_': u'Asociaci\xf3n de Docentes de Ciencias Biol\xf3gicas de la Argentina'}],
+                u'v708': [{u'_': u'52'}],
+                u'v2': [{u'_': u'S1516-7313(14)02000300535'}],
+                u'v3': [{u'_': u'1516-7313-ciedu-20-03-0535.xml'}],
+                u'v4': [{u'_': u'v20n3'}],
+                u'v701': [{u'_': u'29'}],
+                u'v700': [{u'_': u'33'}],
+                u'v702': [{u'_': u'ciedu/v20n3/1516-7313-ciedu-20-03-0535.xml'}],
+                u'v705': [{u'_': u'S'}],
+                u'v704': [{u'_': u'<mixed-citation>G&#211;MEZ, S. et al. Escuelas con poblaciones en riesgo social: proyecto de intervenci&#243;n e investigaci&#243;n en el &#225;rea de ciencias naturales. In: JORNADAS NACIONALES, 6. Y CONGRESO INTERNACIONAL DE ENSE&#209;ANZA DE LA BIOLOG&#205;A, 1., Diciembre 2003, Buenos Aires. Buenos Aires: Asociaci&#243;n de Docentes de Ciencias Biol&#243;gicas de la Argentina, 2004.</mixed-citation>'}],
+                u'v706': [{u'_': u'c'}],
+                u'v1': [{u'_': u'br1.1'}],
+                u'v56': [{u'_': u'Buenos Aires'}],
+                u'v54': [{u'_': u'Diciembre de 2003'}],
+                u'v55': [{u'_': u'20031200'}],
+                u'v53': [{u'_': u'JORNADAS NACIONALES, 6'}, {u'_': u'Y CONGRESO INTERNACIONAL DE ENSE\xd1ANZA DE LA BIOLOG\xcdA, 1'}],
+                u'v936': [{u'i': u'1516-7313',
+                u'y': u'2014',
+                u'o': u'3',
+                u'_': u''}]}
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.conference_title, u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales')
+        self.assertEqual(citation.conference_title,
+            u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales')
         self.assertEqual(citation.conference_name, u'JORNADAS NACIONALES, 6; Y CONGRESO INTERNACIONAL DE ENSEÑANZA DE LA BIOLOGÍA, 1')
-        self.assertEqual(citation.date, u'2004')
+        self.assertEqual(citation.date, u'2003-12')
+        self.assertEqual(citation.conference_date, u'2003-12')
+        self.assertEqual(citation.publication_date, u'2004-01-01')
         self.assertEqual(citation.conference_location, u'Buenos Aires')
 
     def test_mixed_citation_without_data(self):
