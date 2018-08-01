@@ -3581,7 +3581,7 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.thesis_organization, None)
 
-    @unittest.skip
+    @unittest.skip('skip test_citations')
     def test_citations(self):
         article = self.article
 
