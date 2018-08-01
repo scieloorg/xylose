@@ -4134,20 +4134,91 @@ class CitationTest(unittest.TestCase):
         json_citation['v30'] = [{u'_': u'It is the journal title'}]
         json_citation['v12'] = [{u'_': u'It is the article title'}]
         json_citation['v11'] = [{u'_': u'Article Institution'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.analytic_institution, [u'Article Institution'])
+        self.assertEqual(
+            citation.analytic_institution,
+            [u'Article Institution', u'Article Institution 2']
+        )
 
     def test_analytic_institution_for_a_book_citation(self):
         json_citation = {}
 
         json_citation['v18'] = [{u'_': u'It is the book title'}]
-        json_citation['v11'] = [{u'_': u'Book Institution'}]
+        json_citation['v11'] = [
+            {u'_': u'Book Institution'},
+            {u'_': u'Book Institution 2'},
+        ]
 
         citation = Citation(json_citation)
 
-        self.assertEqual(citation.analytic_institution, [u'Book Institution'])
+        self.assertEqual(
+            citation.analytic_institution,
+            [u'Book Institution', u'Book Institution 2']
+        )
+
+    def test_analytic_institution_authors_for_an_article_citation(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v11'] = [{u'_': u'Article Institution'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.analytic_institution_authors,
+            [u'Article Institution', u'Article Institution 2']
+        )
+
+    def test_analytic_institution_authors_for_a_book_citation(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v11'] = [
+            {u'_': u'Book Institution'},
+            {u'_': u'Book Institution 2'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.analytic_institution_authors,
+            [u'Book Institution', u'Book Institution 2']
+        )
+
+    def test_monographic_institution_authors_for_an_article_citation(self):
+        json_citation = {}
+
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v17'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.monographic_institution_authors,
+            None
+        )
+
+    def test_monographic_institution_authors_for_a_book_citation(self):
+        json_citation = {}
+
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v17'] = [
+            {u'_': u'Book Institution'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.monographic_institution_authors,
+            [u'Book Institution']
+        )
 
     def test_thesis_institution(self):
         json_citation = {}
