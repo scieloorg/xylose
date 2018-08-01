@@ -5,6 +5,7 @@ import warnings
 import re
 import unicodedata
 import datetime
+import logging
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -48,6 +49,10 @@ REPLACE_TAGS_MIXED_CITATION = (
     (re.compile(r'< *?small.*?>', re.IGNORECASE), '<small>',),
     (re.compile(r'< *?/ *?small.*?>', re.IGNORECASE), '</small>',),
 )
+
+
+def deprecation_msg(old, new, details=''):
+    return '"{}" will be deprected in future version. Use "{}" instead. {}'
 
 
 class XyloseException(Exception):
@@ -3010,12 +3015,39 @@ class Citation(object):
         return aa + ma
 
     @property
+    def analytic_person_authors(self):
+        """
+        This method retrieves the analytic person authors of a citation.
+        IT REPLACES the deprecated analytic_authors
+        """
+        authors = []
+        if 'v12' in self.data:
+            for author in self.data.get('v10', []):
+                authordict = {}
+                if 's' in author:
+                    authordict['surname'] = html_decode(author['s'])
+                if 'n' in author:
+                    authordict['given_names'] = html_decode(author['n'])
+                if 's' in author or 'n' in author:
+                    authors.append(authordict)
+
+        if len(authors) > 0:
+            return authors
+
+    @property
     def analytic_authors(self):
         """
         This method retrieves the authors of the given citation. These authors
         may correspond to an article, book analytic, link or thesis.
+        IT WILL BE DEPRECATED. Use analytic_person_authors instead
         """
-
+        logging.info(
+            deprecation_msg(
+                'analytic_authors',
+                'analytic_person_authors',
+                'analytic_person_authors is more suitable name'
+            )
+        )
         authors = []
         if 'v10' in self.data:
             for author in self.data['v10']:
@@ -3031,12 +3063,40 @@ class Citation(object):
             return authors
 
     @property
+    def monographic_person_authors(self):
+        """
+        This method retrieves the monographic person authors of citation.
+        IT REPLACES the deprecated monographic_authors
+        """
+        authors = []
+        if 'v18' in self.data:
+            for author in self.data.get('v16', []):
+                authordict = {}
+                if 's' in author:
+                    authordict['surname'] = html_decode(author['s'])
+                if 'n' in author:
+                    authordict['given_names'] = html_decode(author['n'])
+                if 's' in author or 'n' in author:
+                    authors.append(authordict)
+
+        if len(authors) > 0:
+            return authors
+
+    @property
     def monographic_authors(self):
         """
-        This method retrieves the authors of the given book citation. These authors may
+        This method retrieves the authors of the given book citation.
+        These authors may
         correspond to a book monography citation.
+        IT WILL BE DEPRECATED. Use monographic_person_authors instead.
         """
-
+        logging.info(
+            deprecation_msg(
+                'monographic_authors',
+                'monographic_person_authors',
+                'monographic_person_authors is more suitable name'
+            )
+        )
         authors = []
         if 'v16' in self.data:
             for author in self.data['v16']:
