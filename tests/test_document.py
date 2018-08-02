@@ -3,6 +3,8 @@
 import unittest
 import json
 import os
+import warnings
+
 from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
 from xylose import tools
 
@@ -4389,6 +4391,20 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.monographic_person_authors, None)
+
+    def test_pending_deprecation_warning_of_analytic_authors(self):
+        citation = Citation({})
+        with warnings.catch_warnings(record=True) as w:
+            assert citation.analytic_authors is None
+            assert len(w) == 1
+            assert issubclass(w[-1].category, PendingDeprecationWarning)
+
+    def test_pending_deprecation_warning_of_monographic_authors(self):
+        citation = Citation({})
+        with warnings.catch_warnings(record=True) as w:
+            self.assertEqual(citation.monographic_authors, None)
+            assert len(w) == 1
+            assert issubclass(w[-1].category, PendingDeprecationWarning)
 
     def test_monographic_authors(self):
         json_citation = {}

@@ -1,11 +1,10 @@
 # encoding: utf-8
 import sys
 from functools import wraps
-import warnings
 import re
 import unicodedata
 import datetime
-import logging
+import warnings
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -51,8 +50,10 @@ REPLACE_TAGS_MIXED_CITATION = (
 )
 
 
-def deprecation_msg(old, new, details=''):
-    return '"{}" will be deprected in future version. Use "{}" instead. {}'
+def warn_future_deprecation(old, new, details=''):
+    warnings.simplefilter("always")
+    msg = '"{}" will be deprected in future version. Use "{}" instead. {}'
+    warnings.warn(msg, PendingDeprecationWarning)
 
 
 class XyloseException(Exception):
@@ -3017,20 +3018,22 @@ class Citation(object):
     @property
     def analytic_person_authors(self):
         """
-        This method retrieves the analytic person authors of a citation.
-        IT REPLACES the deprecated analytic_authors
+        It retrieves the analytic person authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only articles or books have person authors.
+        IT REPLACES analytic_authors
         """
         authors = []
-        if 'v12' in self.data:
-            for author in self.data.get('v10', []):
-                authordict = {}
-                if 's' in author:
-                    authordict['surname'] = html_decode(author['s'])
-                if 'n' in author:
-                    authordict['given_names'] = html_decode(author['n'])
-                if 's' in author or 'n' in author:
-                    authors.append(authordict)
-
+        for author in self.data.get('v10', []):
+            authordict = {}
+            if 's' in author:
+                authordict['surname'] = html_decode(author['s'])
+            if 'n' in author:
+                authordict['given_names'] = html_decode(author['n'])
+            if 's' in author or 'n' in author:
+                authors.append(authordict)
         if len(authors) > 0:
             return authors
 
@@ -3041,12 +3044,10 @@ class Citation(object):
         may correspond to an article, book analytic, link or thesis.
         IT WILL BE DEPRECATED. Use analytic_person_authors instead
         """
-        logging.info(
-            deprecation_msg(
+        warn_future_deprecation(
                 'analytic_authors',
                 'analytic_person_authors',
                 'analytic_person_authors is more suitable name'
-            )
         )
         authors = []
         if 'v10' in self.data:
@@ -3065,20 +3066,22 @@ class Citation(object):
     @property
     def monographic_person_authors(self):
         """
-        This method retrieves the monographic person authors of citation.
-        IT REPLACES the deprecated monographic_authors
+        It retrieves the monographic person authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only articles or books have person authors.
+        IT REPLACES monographic_authors
         """
         authors = []
-        if 'v18' in self.data:
-            for author in self.data.get('v16', []):
-                authordict = {}
-                if 's' in author:
-                    authordict['surname'] = html_decode(author['s'])
-                if 'n' in author:
-                    authordict['given_names'] = html_decode(author['n'])
-                if 's' in author or 'n' in author:
-                    authors.append(authordict)
-
+        for author in self.data.get('v16', []):
+            authordict = {}
+            if 's' in author:
+                authordict['surname'] = html_decode(author['s'])
+            if 'n' in author:
+                authordict['given_names'] = html_decode(author['n'])
+            if 's' in author or 'n' in author:
+                authors.append(authordict)
         if len(authors) > 0:
             return authors
 
@@ -3090,12 +3093,10 @@ class Citation(object):
         correspond to a book monography citation.
         IT WILL BE DEPRECATED. Use monographic_person_authors instead.
         """
-        logging.info(
-            deprecation_msg(
+        warn_future_deprecation(
                 'monographic_authors',
                 'monographic_person_authors',
                 'monographic_person_authors is more suitable name'
-            )
         )
         authors = []
         if 'v16' in self.data:
