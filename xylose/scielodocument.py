@@ -5,7 +5,7 @@ import warnings
 import re
 import unicodedata
 import datetime
-import logging
+import warnings
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -51,8 +51,9 @@ REPLACE_TAGS_MIXED_CITATION = (
 )
 
 
-def deprecation_msg(old, new, details=''):
-    return '"{}" will be deprected in future version. Use "{}" instead. {}'
+def warn_future_deprecation(old, new, details=''):
+    msg = '"{}" will be deprected in future version. Use "{}" instead. {}'
+    warnings.warn(msg, PendingDeprecationWarning)
 
 
 class XyloseException(Exception):
@@ -2827,13 +2828,16 @@ class Citation(object):
     @property
     def analytic_institution_authors(self):
         """
-        It retrieves the analytic institution authors of a reference.
-        IT REPLACES the deprecated analytic_institution
+        It retrieves the analytic institution authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only articles or books have institution authors.
+        IT REPLACES analytic_institution
         """
         institutions = []
-        if 'v12' in self.data or 'v18' in self.data:
-            for institution in self.data.get('v11', []):
-                institutions.append(html_decode(institution['_']))
+        for institution in self.data.get('v11', []):
+            institutions.append(html_decode(institution['_']))
         if len(institutions) > 0:
             return institutions
 
@@ -2844,13 +2848,11 @@ class Citation(object):
         citation must be an article or book citation, if it exists.
         IT WILL BE DEPRECATED
         """
-        logging.info(
-            deprecation_msg(
-                'analytic_institution',
-                'analytic_institution_authors',
-                'analytic_institution_authors is more suitable name and '
-                'returns the authors independending on publication type'
-            )
+        warn_future_deprecation(
+            'analytic_institution',
+            'analytic_institution_authors',
+            'analytic_institution_authors is more suitable name and '
+            'returns the authors independending on publication type'
         )
         institutions = []
         if self.publication_type in [u'article', u'book']:
@@ -2864,16 +2866,20 @@ class Citation(object):
     @property
     def monographic_institution_authors(self):
         """
-        It retrieves the monographic institution authors of a reference.
-        IT REPLACES the deprecated monographic_institution
+        It retrieves the monographic institution authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only books have institution authors.
+        IT REPLACES monographic_institution
         """
-        if 'v18' in self.data:
-            institutions = []
-            for institution in self.data.get('v17', []):
-                institutions.append(html_decode(institution['_']))
-
-            if len(institutions) > 0:
-                return institutions
+        if 'v30' in self.data:
+            return
+        institutions = []
+        for institution in self.data.get('v17', []):
+            institutions.append(html_decode(institution['_']))
+        if len(institutions) > 0:
+            return institutions
 
     @property
     def monographic_institution(self):
@@ -2882,13 +2888,11 @@ class Citation(object):
         citation must be a book citation, if it exists.
         IT WILL BE DEPRECATED
         """
-        logging.info(
-            deprecation_msg(
-                'monographic_institution',
-                'monographic_institution_authors',
-                'monographic_institution_authors is more suitable name and '
-                'returns the authors independending on publication type'
-            )
+        warn_future_deprecation(
+            'monographic_institution',
+            'monographic_institution_authors',
+            'monographic_institution_authors is more suitable name and '
+            'returns the authors independending on publication type'
         )
         institutions = []
         if self.publication_type == u'book' and 'v17' in self.data:
