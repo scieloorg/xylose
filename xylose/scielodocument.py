@@ -52,6 +52,7 @@ REPLACE_TAGS_MIXED_CITATION = (
 
 
 def warn_future_deprecation(old, new, details=''):
+    warnings.simplefilter("always")
     msg = '"{}" will be deprected in future version. Use "{}" instead. {}'
     warnings.warn(msg, PendingDeprecationWarning)
 

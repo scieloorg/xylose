@@ -4166,8 +4166,16 @@ class CitationTest(unittest.TestCase):
     def test_pending_deprecation_warning_of_analytic_institution(self):
         citation = Citation({})
         with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            assert citation.analytic_institution is None
+            items = citation.analytic_institution
+            assert items is None
+            assert len(w) == 1
+            assert issubclass(w[-1].category, PendingDeprecationWarning)
+
+    def test_pending_deprecation_warning_of_monographic_institution(self):
+        citation = Citation({})
+        with warnings.catch_warnings(record=True) as w:
+            items = citation.monographic_institution
+            assert items is None
             assert len(w) == 1
             assert issubclass(w[-1].category, PendingDeprecationWarning)
 
