@@ -5,6 +5,7 @@ import warnings
 import re
 import unicodedata
 import datetime
+import warnings
 
 try:  # Keep compatibility with python 2.7
     from html import unescape
@@ -48,6 +49,12 @@ REPLACE_TAGS_MIXED_CITATION = (
     (re.compile(r'< *?small.*?>', re.IGNORECASE), '<small>',),
     (re.compile(r'< *?/ *?small.*?>', re.IGNORECASE), '</small>',),
 )
+
+
+def warn_future_deprecation(old, new, details=''):
+    warnings.simplefilter("always")
+    msg = '"{}" will be deprected in future version. Use "{}" instead. {}'
+    warnings.warn(msg, PendingDeprecationWarning)
 
 
 class XyloseException(Exception):
@@ -2819,19 +2826,59 @@ class Citation(object):
         if self.publication_type == 'article':
             return self.data.get('v35', None)
 
+    @property
+    def analytic_institution_authors(self):
+        """
+        It retrieves the analytic institution authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only articles or books have institution authors.
+        IT REPLACES analytic_institution
+        """
+        institutions = []
+        for institution in self.data.get('v11', []):
+            institutions.append(html_decode(institution['_']))
+        if len(institutions) > 0:
+            return institutions
 
     @property
     def analytic_institution(self):
         """
         This method retrieves the institutions in the given citation. The
         citation must be an article or book citation, if it exists.
+        IT WILL BE DEPRECATED
         """
+        warn_future_deprecation(
+            'analytic_institution',
+            'analytic_institution_authors',
+            'analytic_institution_authors is more suitable name and '
+            'returns the authors independending on publication type'
+        )
         institutions = []
-        if self.publication_type in [u'article', u'book'] and 'v11' in self.data:
+        if self.publication_type in [u'article', u'book']:
             if 'v11' in self.data:
                 for institution in self.data['v11']:
-                    institutions.append(html_decode(self.data['v11'][0]['_']))
+                    institutions.append(html_decode(institution['_']))
 
+        if len(institutions) > 0:
+            return institutions
+
+    @property
+    def monographic_institution_authors(self):
+        """
+        It retrieves the monographic institution authors of a reference,
+        no matter the publication type of the reference.
+        It is not desirable to restrict the conditioned return to the
+        publication type, because some reference standards are very peculiar
+        and not only books have institution authors.
+        IT REPLACES monographic_institution
+        """
+        if 'v30' in self.data:
+            return
+        institutions = []
+        for institution in self.data.get('v17', []):
+            institutions.append(html_decode(institution['_']))
         if len(institutions) > 0:
             return institutions
 
@@ -2840,12 +2887,19 @@ class Citation(object):
         """
         This method retrieves the institutions in the given citation. The
         citation must be a book citation, if it exists.
+        IT WILL BE DEPRECATED
         """
+        warn_future_deprecation(
+            'monographic_institution',
+            'monographic_institution_authors',
+            'monographic_institution_authors is more suitable name and '
+            'returns the authors independending on publication type'
+        )
         institutions = []
         if self.publication_type == u'book' and 'v17' in self.data:
             if 'v17' in self.data:
                 for institution in self.data['v17']:
-                    institutions.append(html_decode(self.data['v17'][0]['_']))
+                    institutions.append(html_decode(institution['_']))
 
         if len(institutions) > 0:
             return institutions
