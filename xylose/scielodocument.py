@@ -51,8 +51,8 @@ REPLACE_TAGS_MIXED_CITATION = (
 
 
 def warn_future_deprecation(old, new, details=''):
-    warnings.simplefilter("always")
-    msg = '"{}" will be deprected in future version. Use "{}" instead. {}'
+    msg = '"{}" will be deprecated in future version. '.format(old) + \
+        'Use "{}" instead. {}'.format(new, details)
     warnings.warn(msg, PendingDeprecationWarning)
 
 
@@ -2830,9 +2830,8 @@ class Citation(object):
         """
         It retrieves the analytic institution authors of a reference,
         no matter the publication type of the reference.
-        It is not desirable to restrict the conditioned return to the
-        publication type, because some reference standards are very peculiar
-        and not only articles or books have institution authors.
+        It is not desirable to return conditioned to the publication type,
+        because not only articles or books have institution authors.
         IT REPLACES analytic_institution
         """
         institutions = []
@@ -2846,13 +2845,14 @@ class Citation(object):
         """
         This method retrieves the institutions in the given citation. The
         citation must be an article or book citation, if it exists.
-        IT WILL BE DEPRECATED
+        IT WILL BE DEPRECATED. Use analytic_institution_authors instead.
         """
         warn_future_deprecation(
             'analytic_institution',
             'analytic_institution_authors',
-            'analytic_institution_authors is more suitable name and '
-            'returns the authors independending on publication type'
+            'Changes: '
+            '1) analytic_institution_authors is a more suitable name; '
+            '2) reconsidered the constrictions related to the publication type'
         )
         institutions = []
         if self.publication_type in [u'article', u'book']:
@@ -2868,9 +2868,8 @@ class Citation(object):
         """
         It retrieves the monographic institution authors of a reference,
         no matter the publication type of the reference.
-        It is not desirable to restrict the conditioned return to the
-        publication type, because some reference standards are very peculiar
-        and not only books have institution authors.
+        It is not desirable to return conditioned to the publication type,
+        because not only books have institution authors.
         IT REPLACES monographic_institution
         """
         if 'v30' in self.data:
@@ -2886,13 +2885,14 @@ class Citation(object):
         """
         This method retrieves the institutions in the given citation. The
         citation must be a book citation, if it exists.
-        IT WILL BE DEPRECATED
+        IT WILL BE DEPRECATED. Use monographic_institution_authors instead.
         """
         warn_future_deprecation(
             'monographic_institution',
             'monographic_institution_authors',
-            'monographic_institution_authors is more suitable name and '
-            'returns the authors independending on publication type'
+            'Changes: '
+            '1) monographic_institution_authors is a more suitable name; '
+            '2) reconsidered the constrictions related to the publication type'
         )
         institutions = []
         if self.publication_type == u'book' and 'v17' in self.data:
@@ -3056,8 +3056,38 @@ class Citation(object):
             return self.data['v237'][0]['_']
 
     @property
-    def authors(self):
+    def authors_groups(self):
+        """
+        It retrieves all the authors (person and institution) and
+        identifies their type (analytic or monographic).
+        IT REPLACES authors which returns only person authors
+        """
+        authors = {}
+        if self.analytic_authors_group is not None:
+            authors['analytic'] = self.analytic_authors_group
+        if self.monographic_authors_group is not None:
+            authors['monographic'] = self.monographic_authors_group
+        if len(authors) > 0:
+            return authors
 
+    @property
+    def authors(self):
+        """
+        This method retrieves the analytic and monographic person authors
+        of a citation.
+        IT WILL BE DEPRECATED.
+        Use authors_groups to retrieve all the authors (person and institution)
+        and (analytic and monographic)
+        """
+        warn_future_deprecation(
+            'authors',
+            'author_groups',
+            'The atribute "author_groups" returns all the authors '
+            '(person and institution) '
+            'identified by their type (analytic or monographic). '
+            'The atribute "authors" returns only person authors and do not '
+            'differs analytic from monographic'
+        )
         aa = self.analytic_authors or []
         ma = self.monographic_authors or []
         return aa + ma
@@ -3067,8 +3097,8 @@ class Citation(object):
         """
         It retrieves the analytic person authors of a reference,
         no matter the publication type of the reference.
-        It is not desirable to restrict the conditioned return to the
-        publication type, because some reference standards are very peculiar
+        It is not desirable to return conditioned to the
+        publication type, because some reference standards are peculiar
         and not only articles or books have person authors.
         IT REPLACES analytic_authors
         """
@@ -3085,16 +3115,38 @@ class Citation(object):
             return authors
 
     @property
+    def analytic_authors_group(self):
+        """
+        It retrieves all the analytic authors (person and institution).
+        IT REPLACES analytic_authors which returns only person authors
+        """
+        analytic = {}
+        if self.analytic_person_authors is not None:
+            analytic['person'] = self.analytic_person_authors
+        if self.analytic_institution_authors is not None:
+            analytic['institution'] = self.analytic_institution_authors
+        if len(analytic) > 0:
+            return analytic
+
+    @property
     def analytic_authors(self):
         """
-        This method retrieves the authors of the given citation. These authors
-        may correspond to an article, book analytic, link or thesis.
-        IT WILL BE DEPRECATED. Use analytic_person_authors instead
+        It retrieves only analytic person authors of a reference of
+        an article, book chapter, link or thesis.
+        IT WILL BE DEPRECATED.
+        To retrieve only analytic person authors,
+        use analytic_person_authors instead.
+        To retrieve all analytic authors (person and institution),
+        use analytic_authors_group instead.
         """
         warn_future_deprecation(
-                'analytic_authors',
-                'analytic_person_authors',
-                'analytic_person_authors is more suitable name'
+            'analytic_authors',
+            'analytic_person_authors or analytic_authors_group',
+            'The attribute "analytic_authors" returns only person authors. '
+            'To retrieve all the analytic authors (person and institution),'
+            ' use analytic_authors_group. '
+            'To retrieve only the analytic person authors,'
+            ' use analytic_person_authors. '
         )
         authors = []
         if 'v10' in self.data:
@@ -3115,11 +3167,13 @@ class Citation(object):
         """
         It retrieves the monographic person authors of a reference,
         no matter the publication type of the reference.
-        It is not desirable to restrict the conditioned return to the
-        publication type, because some reference standards are very peculiar
-        and not only articles or books have person authors.
+        It is not desirable to return conditioned to the
+        publication type, because some reference standards are peculiar
+        and not only books have person authors.
         IT REPLACES monographic_authors
         """
+        if 'v30' in self.data:
+            return
         authors = []
         for author in self.data.get('v16', []):
             authordict = {}
@@ -3133,17 +3187,37 @@ class Citation(object):
             return authors
 
     @property
+    def monographic_authors_group(self):
+        """
+        It retrieves all the monographic authors (person and institution).
+        IT REPLACES monographic_authors
+        """
+        monographic = {}
+        if self.monographic_person_authors is not None:
+            monographic['person'] = self.monographic_person_authors
+        if self.monographic_institution_authors is not None:
+            monographic['institution'] = self.monographic_institution_authors
+        if len(monographic) > 0:
+            return monographic
+
+    @property
     def monographic_authors(self):
         """
-        This method retrieves the authors of the given book citation.
-        These authors may
-        correspond to a book monography citation.
-        IT WILL BE DEPRECATED. Use monographic_person_authors instead.
+        It retrieves only monographic person authors of a reference.
+        IT WILL BE DEPRECATED.
+        To retrieve only monographic person authors,
+        use monographic_person_authors instead.
+        To retrieve all monographic authors (person and institution),
+        use monographic_authors_group instead.
         """
         warn_future_deprecation(
-                'monographic_authors',
-                'monographic_person_authors',
-                'monographic_person_authors is more suitable name'
+            'monographic_authors',
+            'monographic_person_authors or monographic_authors_group',
+            'The attribute "monographic_authors" returns only person authors. '
+            'To retrieve all the monographic authors (person and institution),'
+            ' use monographic_authors_group. '
+            'To retrieve only the monographic person authors,'
+            ' use monographic_person_authors. '
         )
         authors = []
         if 'v16' in self.data:
@@ -3160,14 +3234,43 @@ class Citation(object):
             return authors
 
     @property
+    def first_author_info(self):
+        """
+        It retrieves the info of the first author:
+        (analytic or monographic), (person or institution), author data,
+        of a citation, independent of citation type.
+        :returns: (analytic or monographic, person or institution, author data)
+        IT REPLACES first_author
+        """
+        types = [('analytic', 'person'),
+                 ('analytic', 'institution'),
+                 ('monographic', 'person'),
+                 ('monographic', 'institution'),
+                 ]
+        authors = [self.analytic_person_authors,
+                   self.analytic_institution_authors,
+                   self.monographic_person_authors,
+                   self.monographic_institution_authors,
+                   ]
+        for a, a_type in zip(authors, types):
+            if a is not None:
+                return a_type[0], a_type[1], a[0]
+
+    @property
     def first_author(self):
         """
-        This property retrieves the first author of the given citation,
+        It retrieves the first person author of the given citation,
         independent of citation type.
-
         :returns: dict with keys ``given_names`` and ``surname``
+        IT WILL BE DEPRECATED. Use first_author_info instead.
         """
-
+        warn_future_deprecation(
+            'first_author',
+            'first_author_info',
+            'The attribute "first_author" returns only a person author. '
+            'The attribute "first_author_info" returns info of the '
+            'first author independing if it is person or institution. '
+        )
         if self.authors:
             return self.authors[0]
         elif self.monographic_authors:

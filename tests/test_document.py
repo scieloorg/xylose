@@ -8,6 +8,8 @@ import warnings
 from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
 from xylose import tools
 
+warnings.simplefilter("always")
+
 
 class ToolsTests(unittest.TestCase):
 
@@ -4135,7 +4137,6 @@ class CitationTest(unittest.TestCase):
 
         json_citation['v30'] = [{u'_': u'It is the journal title'}]
         json_citation['v12'] = [{u'_': u'It is the article title'}]
-        json_citation['v11'] = [{u'_': u'Article Institution'}]
         json_citation['v11'] = [
             {u'_': u'Article Institution'},
             {u'_': u'Article Institution 2'},
@@ -4295,6 +4296,16 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.institutions, None)
 
+    def test_pending_deprecation_warning_of_authors(self):
+        citation = Citation({})
+        with warnings.catch_warnings(record=True) as w:
+            assert citation.authors == []
+            assert len(w) == 3
+            assert 'authors' in str(w[0].message)
+            assert 'analytic_authors' in str(w[1].message)
+            assert 'monographic_authors' in str(w[2].message)
+            assert issubclass(w[-1].category, PendingDeprecationWarning)
+
     def test_authors_article(self):
         json_citation = {}
 
@@ -4438,6 +4449,232 @@ class CitationTest(unittest.TestCase):
 
         self.assertEqual(citation.analytic_person_authors, expected)
 
+    def test_authors_groups_of_a_chapter(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                ]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        json_citation['v10'] = [
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution 3'},
+            {u'_': u'Article Institution 4'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{'surname': u'Sullivan', u'given_names': u'Mike'},
+                      {'surname': u'Hurricane Carter',
+                      u'given_names': u'Rubin'},
+                      ]
+        expected_m = {'person': expected_p, 'institution': expected_i}
+
+        expected_i = [u'Article Institution 3', u'Article Institution 4']
+        expected_p = [{'surname': u'Maguila Rodrigues',
+                      u'given_names': u'Adilson'},
+                      {u'given_names': u'Acelino Popó Freitas'},
+                      {'surname': u'Zé Marreta'}]
+        expected_a = {'person': expected_p, 'institution': expected_i}
+
+        citation = Citation(json_citation)
+        a = citation.authors_groups
+        self.assertEqual(a['analytic'], expected_a)
+        self.assertEqual(a['monographic'], expected_m)
+        self.assertEqual(
+            citation.authors_groups,
+            {
+                'analytic': expected_a,
+                'monographic': expected_m
+            }
+        )
+
+    def test_authors_groups_of_a_journal(self):
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                ]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        json_citation['v10'] = [
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution 3'},
+            {u'_': u'Article Institution 4'},
+        ]
+        expected_i = [u'Article Institution 3', u'Article Institution 4']
+        expected_p = [{'surname': u'Maguila Rodrigues',
+                      u'given_names': u'Adilson'},
+                      {u'given_names': u'Acelino Popó Freitas'},
+                      {'surname': u'Zé Marreta'}]
+        expected_a = {'person': expected_p, 'institution': expected_i}
+
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.authors_groups,
+            {
+                'analytic': expected_a,
+            }
+        )
+
+    def test_without_authors_groups(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        citation = Citation(json_citation)
+        self.assertEqual(citation.authors_groups, None)
+
+    def test_analytic_authors_group_of_a_book(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{u'given_names': u'Mike', 'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
+                    {u'surname': u'Zé Marreta'}]
+        expected = {'person': expected_p, 'institution': expected_i}
+        citation = Citation(json_citation)
+        self.assertEqual(citation.analytic_authors_group, expected)
+
+    def test_analytic_authors_group_of_a_chapter(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{u'given_names': u'Mike', u'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
+                    {u'surname': u'Zé Marreta'}]
+        expected = {'person': expected_p, 'institution': expected_i}
+        citation = Citation(json_citation)
+        self.assertEqual(citation.analytic_authors_group, expected)
+
+    def test_analytic_authors_group_of_a_journal(self):
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v10'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{u'given_names': u'Mike', u'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
+                    {u'surname': u'Zé Marreta'}]
+        expected = {'person': expected_p, 'institution': expected_i}
+        citation = Citation(json_citation)
+        self.assertEqual(citation.analytic_authors_group, expected)
+
+    def test_without_analytic_authors_group(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        citation = Citation(json_citation)
+        self.assertEqual(citation.analytic_authors_group, None)
+
+    def test_monographic_authors_group_of_a_book(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v17'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{u'given_names': u'Mike', u'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
+                    {u'surname': u'Zé Marreta'}]
+        expected = {'person': expected_p, 'institution': expected_i}
+        citation = Citation(json_citation)
+        self.assertEqual(citation.monographic_authors_group, expected)
+
+    def test_monographic_authors_group_of_a_chapter(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v17'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        expected_i = [u'Article Institution', u'Article Institution 2']
+        expected_p = [{u'given_names': u'Mike', u'surname': u'Sullivan'},
+                    {u'given_names': u'Rubin', u'surname': u'Hurricane Carter'},
+                    {u'given_names': u'Adilson', u'surname': u'Maguila Rodrigues'},
+                    {u'given_names': u'Acelino Popó Freitas'},
+                    {u'surname': u'Zé Marreta'}]
+        expected = {'person': expected_p, 'institution': expected_i}
+        citation = Citation(json_citation)
+        self.assertEqual(citation.monographic_authors_group, expected)
+
+    def test_monographic_authors_group_of_a_journal(self):
+        json_citation = {}
+        json_citation['v30'] = [{u'_': u'It is the journal title'}]
+        json_citation['v12'] = [{u'_': u'It is the article title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v17'] = [
+            {u'_': u'Article Institution'},
+            {u'_': u'Article Institution 2'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(citation.monographic_authors_group, None)
+
+    def test_without_monographic_authors_group(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        citation = Citation(json_citation)
+        self.assertEqual(citation.monographic_authors_group, None)
+
     def test_monographic_person_authors(self):
         json_citation = {}
 
@@ -4531,6 +4768,87 @@ class CitationTest(unittest.TestCase):
         citation = Citation(json_citation)
 
         self.assertEqual(citation.monographic_authors, None)
+
+    def test_pending_deprecation_warning_of_first_author(self):
+        citation = Citation({})
+        with warnings.catch_warnings(record=True) as w:
+            assert citation.first_author is None
+            assert issubclass(w[-1].category, PendingDeprecationWarning)
+            assert len(w) > 1
+            assert 'first_author' in str(w[0].message)
+
+    def test_first_author_info__analytic_person(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                ]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        json_citation['v10'] = [
+                                {u's': u'Maguila Rodrigues', u'n': u'Adilson'},
+                                {u'n': u'Acelino Popó Freitas'},
+                                {u's': u'Zé Marreta'}]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution 3'},
+            {u'_': u'Article Institution 4'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.first_author_info,
+            ('analytic', 'person', {'surname': u'Maguila Rodrigues',
+                                    u'given_names': u'Adilson'})
+        )
+
+    def test_first_author_info__monographic_person(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                ]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.first_author_info,
+            ('monographic', 'person',
+                {u'surname': u'Sullivan', u'given_names': u'Mike'},)
+        )
+
+    def test_first_author_info__analytic_institution(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v12'] = [{u'_': u'It is the chapter title'}]
+        json_citation['v16'] = [{u's': u'Sullivan', u'n': u'Mike'},
+                                {u's': u'Hurricane Carter', u'n': u'Rubin'},
+                                ]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        json_citation['v11'] = [
+            {u'_': u'Article Institution 3'},
+            {u'_': u'Article Institution 4'},
+        ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.first_author_info,
+            ('analytic', 'institution', u'Article Institution 3')
+        )
+
+    def test_first_author_info__monographic_institution(self):
+        json_citation = {}
+        json_citation['v18'] = [{u'_': u'It is the book title'}]
+        json_citation['v17'] = [{u'_': u'Article Institution'},
+                                {u'_': u'Article Institution 2'},
+                                ]
+        citation = Citation(json_citation)
+        self.assertEqual(
+            citation.first_author_info,
+            ('monographic', 'institution', u'Article Institution')
+        )
 
     def test_first_author_article(self):
         json_citation = {}
