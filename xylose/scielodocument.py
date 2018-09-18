@@ -277,8 +277,10 @@ class Issue(object):
         if 'ahead' in label:
             return 'ahead'
 
-        if 'v131' in self.data['issue'] or 'v132' in self.data['issue']:
-            return 'supplement'
+        v131 = self.data['issue'].get('v131', self.data['issue'].get('v132'))
+        if v131 is not None:
+            if v131[0]['_'] != '':
+                return 'supplement'
 
         if 'suppl' in label:
             return 'supplement'
