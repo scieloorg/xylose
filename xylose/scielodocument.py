@@ -316,6 +316,25 @@ class Issue(object):
         return label
 
     @property
+    def number_label(self):
+        """
+        This method retrieves the issue number label to provide the number to be
+        shown when there is label translation.
+        E.g.:
+            '2' == '2'
+            '0' == '0'
+            'spe' == ''
+            'spe3' == '3'
+        """
+        label = self.number or ''
+        if self.type == 'special':
+            label = ''.join([d for d in self.number if d.isdigit()])
+        elif self.type == 'supplement':
+            label = self.supplement_number if self.supplement_number \
+                and self.supplement_number != '0' else ''
+        return label
+
+    @property
     def volume(self):
         """
         This method retrieves the issue volume of the given issue, if it exists.
