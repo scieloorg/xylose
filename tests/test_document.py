@@ -633,6 +633,13 @@ class IssueTests(unittest.TestCase):
 
         self.assertEqual(issue.type, 'regular')
 
+    def test_type_v131_and_v132_is_empty_str(self):
+        issue = self.issue
+
+        issue.data['issue']['v131'] = [{'_': ''}]
+
+        self.assertNotEqual(issue.type, 'supplement')
+
     def test_type_supplement_1(self):
         issue = self.issue
 
