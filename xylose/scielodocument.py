@@ -325,10 +325,13 @@ class Issue(object):
             '0' == '0'
             'spe' == ''
             'spe3' == '3'
+            '5spe' == ''
+            '5spe3' == '3'
         """
         label = self.number or ''
         if self.type == 'special':
-            label = ''.join([d for d in self.number if d.isdigit()])
+            digits = re.findall(r'\d+$', self.number)
+            label = digits[0] if digits else ''
         elif self.type == 'supplement':
             label = self.supplement_number if self.supplement_number \
                 and self.supplement_number != '0' else ''
@@ -351,6 +354,26 @@ class Issue(object):
         """
         if 'v32' in self.data['issue']:
             return self.data['issue']['v32'][0]['_']
+
+    @property
+    def special_number(self):
+        """
+        This method retrieves the issue number of the given issue, if it exists.
+        This method deals with different format of numbers.
+        E.g.:
+            '2' == '2'
+            'spe' == None
+            'spe3' == None
+            '2spe' == '2'
+            '10spe' == '10'
+            '5spe.1' == '5'
+            '3spe-2' == '3'
+        """
+        special = self.number or ''
+        if self.number:
+            digits = re.findall(r'^\d+', self.number)
+            special = digits[0] if digits else None
+        return special
 
     @property
     def _start_end_months(self):
