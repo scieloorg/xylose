@@ -324,9 +324,9 @@ class Issue(object):
             '2' == '2'
             '0' == '' (it does not exist)
             'spe' == ''
-            'spe3' == '3'
-            '5spe' == ''
-            '5spe3' == '3'
+            'spe3' == ''
+            '5spe' == '5'
+            '5spe3' == '5'
         """
         label = self.number if self.number and self.number != '0' else ''
         if self.type == 'special':
