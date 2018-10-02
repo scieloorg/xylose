@@ -762,7 +762,57 @@ class IssueTests(unittest.TestCase):
 
     def test_collection_acronym(self):
 
-        self.assertTrue(self.issue.url, '')
+        self.assertTrue(self.issue.collection_acronym, '')
+
+    def test_issue_number_label(self):
+        self.issue.data['issue']['v32'] = [{u'_': u'2'}]
+        self.assertEqual(self.issue.number_label, u'2')
+        self.issue.data['issue']['v32'] = [{u'_': u'0'}]
+        self.assertEqual(self.issue.number_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'5'}]
+        self.assertEqual(self.issue.number_label, u'5')
+        del self.issue.data['issue']['v32']
+        self.assertEqual(self.issue.number_label, u'')
+
+    def test_special_number_label(self):
+        self.issue.data['issue']['v32'] = [{u'_': u'spe'}]
+        self.assertEqual(self.issue.number_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'spe2'}]
+        self.assertEqual(self.issue.number_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'5spe'}]
+        self.assertEqual(self.issue.number_label, u'5')
+        self.issue.data['issue']['v32'] = [{u'_': u'5spe3'}]
+        self.assertEqual(self.issue.number_label, u'5')
+
+    def test_supplement_number_label(self):
+        self.issue.data['issue']['v132'] = [{u'_': u'2'}]
+        del self.issue.data['issue']['v32']
+        self.assertEqual(self.issue.number_label, u'2')
+        self.issue.data['issue']['v32'] = [{u'_': u'3'}]
+        self.assertEqual(self.issue.number_label, u'2')
+        self.issue.data['issue']['v132'] = [{u'_': u'0'}]
+        self.issue.data['issue']['v32'] = [{u'_': u'1'}]
+        self.assertEqual(self.issue.number_label, u'')
+
+    def test_special_label(self):
+        del self.issue.data['issue']['v32']
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'2'}]
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'spe'}]
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'spe3'}]
+        self.assertEqual(self.issue.special_label, u'3')
+        self.issue.data['issue']['v32'] = [{u'_': u'2spe'}]
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'2spe4'}]
+        self.assertEqual(self.issue.special_label, u'4')
+        self.issue.data['issue']['v32'] = [{u'_': u'10spe'}]
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'5spe.1'}]
+        self.assertEqual(self.issue.special_label, u'1')
+        self.issue.data['issue']['v32'] = [{u'_': u'3spe-2'}]
+        self.assertEqual(self.issue.special_label, u'2')
 
 
 class JournalTests(unittest.TestCase):
@@ -5222,9 +5272,9 @@ class CitationTest(unittest.TestCase):
 
     def test_citation_sample_congress(self):
 
-        json_citation= {u'v999': 
+        json_citation= {u'v999':
             [{u'_': u'../bases-work/ciedu/ciedu'}],
-             u'v12': 
+             u'v12':
                 [{u'l': u'es',
                 u'_': u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales'}], u'v10': [{u's': u'G\xd3MEZ',
                 u'r': u'ND',

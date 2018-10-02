@@ -8,7 +8,7 @@ requires = [
 
 setup(
     name="xylose",
-    version='1.33.2',
+    version='1.33.3',
     description="A SciELO library to abstract a JSON data structure that is a "
                 "product of the ISIS2JSON conversion using the ISIS2JSON type "
                 "3 data model.",

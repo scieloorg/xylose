@@ -318,6 +318,28 @@ class Issue(object):
         return label
 
     @property
+    def number_label(self):
+        """
+        This method retrieves the issue number label to provide the number to be
+        shown when there is label translation.
+        E.g.:
+            '2' == '2'
+            '0' == '' (it does not exist)
+            'spe' == ''
+            'spe3' == ''
+            '5spe' == '5'
+            '5spe3' == '5'
+        """
+        label = self.number if self.number and self.number != '0' else ''
+        if self.type == 'special':
+            digits = re.findall(r'^\d+', self.number)
+            label = digits[0] if digits else ''
+        elif self.type == 'supplement':
+            label = self.supplement_number if self.supplement_number \
+                and self.supplement_number != '0' else ''
+        return label
+
+    @property
     def volume(self):
         """
         This method retrieves the issue volume of the given issue, if it exists.
@@ -334,6 +356,28 @@ class Issue(object):
         """
         if 'v32' in self.data['issue']:
             return self.data['issue']['v32'][0]['_']
+
+    @property
+    def special_label(self):
+        """
+        This method retrieves the special issue number of the given issue, if
+        it exists.
+        This method deals with different format of numbers.
+        E.g.:
+            '2' == '' (it is not an special issue)
+            'spe' == '' (there is no number in this special issue)
+            'spe3' == '3'
+            '2spe' == ''
+            '2spe4' == '4'
+            '10spe' == ''
+            '5spe.1' == '1'
+            '3spe-2' == '2'
+        """
+        special = ''
+        if self.number and self.type == 'special':
+            digits = re.findall(r'\d+$', self.number)
+            special = digits[0] if digits else ''
+        return special
 
     @property
     def _start_end_months(self):
