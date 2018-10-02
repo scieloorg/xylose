@@ -757,15 +757,25 @@ class IssueTests(unittest.TestCase):
 
         self.assertTrue(self.issue.collection_acronym, '')
 
+    def test_issue_number_label(self):
+        self.issue.data['issue']['v32'] = [{u'_': u'2'}]
+        self.assertEqual(self.issue.number_label, u'2')
+        self.issue.data['issue']['v32'] = [{u'_': u'0'}]
+        self.assertEqual(self.issue.number_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'5'}]
+        self.assertEqual(self.issue.number_label, u'5')
+        del self.issue.data['issue']['v32']
+        self.assertEqual(self.issue.number_label, u'')
+
     def test_special_number_label(self):
         self.issue.data['issue']['v32'] = [{u'_': u'spe'}]
         self.assertEqual(self.issue.number_label, u'')
         self.issue.data['issue']['v32'] = [{u'_': u'spe2'}]
-        self.assertEqual(self.issue.number_label, u'2')
-        self.issue.data['issue']['v32'] = [{u'_': u'5spe'}]
         self.assertEqual(self.issue.number_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'5spe'}]
+        self.assertEqual(self.issue.number_label, u'5')
         self.issue.data['issue']['v32'] = [{u'_': u'5spe3'}]
-        self.assertEqual(self.issue.number_label, u'3')
+        self.assertEqual(self.issue.number_label, u'5')
 
     def test_supplement_number_label(self):
         self.issue.data['issue']['v132'] = [{u'_': u'2'}]
@@ -777,23 +787,25 @@ class IssueTests(unittest.TestCase):
         self.issue.data['issue']['v32'] = [{u'_': u'1'}]
         self.assertEqual(self.issue.number_label, u'')
 
-    def test_special_number(self):
+    def test_special_label(self):
         del self.issue.data['issue']['v32']
-        self.assertEqual(self.issue.special_number, u'')
+        self.assertEqual(self.issue.special_label, u'')
         self.issue.data['issue']['v32'] = [{u'_': u'2'}]
-        self.assertEqual(self.issue.special_number, u'2')
+        self.assertEqual(self.issue.special_label, u'')
         self.issue.data['issue']['v32'] = [{u'_': u'spe'}]
-        self.assertEqual(self.issue.special_number, None)
+        self.assertEqual(self.issue.special_label, u'')
         self.issue.data['issue']['v32'] = [{u'_': u'spe3'}]
-        self.assertEqual(self.issue.special_number, None)
+        self.assertEqual(self.issue.special_label, u'3')
         self.issue.data['issue']['v32'] = [{u'_': u'2spe'}]
-        self.assertEqual(self.issue.special_number, u'2')
+        self.assertEqual(self.issue.special_label, u'')
+        self.issue.data['issue']['v32'] = [{u'_': u'2spe4'}]
+        self.assertEqual(self.issue.special_label, u'4')
         self.issue.data['issue']['v32'] = [{u'_': u'10spe'}]
-        self.assertEqual(self.issue.special_number, u'10')
+        self.assertEqual(self.issue.special_label, u'')
         self.issue.data['issue']['v32'] = [{u'_': u'5spe.1'}]
-        self.assertEqual(self.issue.special_number, u'5')
+        self.assertEqual(self.issue.special_label, u'1')
         self.issue.data['issue']['v32'] = [{u'_': u'3spe-2'}]
-        self.assertEqual(self.issue.special_number, u'3')
+        self.assertEqual(self.issue.special_label, u'2')
 
 
 class JournalTests(unittest.TestCase):
