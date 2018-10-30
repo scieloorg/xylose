@@ -1220,6 +1220,13 @@ class Journal(object):
         return self.data.get('v100', [{'_': None}])[0]['_']
 
     @property
+    def next_title(self):
+        """
+        New/next journal title from its legacy field (710).
+        """
+        return self.data.get('v710', [{'_': None}])[0]['_']
+
+    @property
     def publisher_country(self):
         """
         This method retrieves the publisher country of journal.

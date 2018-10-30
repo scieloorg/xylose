@@ -860,6 +860,11 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.previous_title, None)
 
+    def test_next_title(self):
+        self.assertEqual(self.journal.next_title, None)
+        self.journal.data['v710'] = [{'_': u'It has a new title!'}]
+        self.assertEqual(self.journal.next_title, u'It has a new title!')
+
     def test_in_scie(self):
         journal = self.journal
 
