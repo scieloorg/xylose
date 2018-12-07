@@ -1956,19 +1956,10 @@ class ArticleTests(unittest.TestCase):
         article = Article(self.fulldoc)
         self.assertEqual(article.original_section(), u'label en')
 
-        with warnings.catch_warnings(record=True) as w:
-            article.original_section()
-            self.assertIs(w[-1].category, PendingDeprecationWarning)
-
     def test_translated_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
-
         article = Article(self.fulldoc)
-
         self.assertEqual(sorted([k+v for k, v in article.translated_section().items()]), [u'eslabel es', 'ptlabel pt'])
-        with warnings.catch_warnings(record=True) as w:
-            article.translated_section()
-            self.assertIs(w[-1].category, PendingDeprecationWarning)
 
     def test_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt'}
