@@ -1953,16 +1953,12 @@ class ArticleTests(unittest.TestCase):
 
     def test_original_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
-
         article = Article(self.fulldoc)
-
         self.assertEqual(article.original_section(), u'label en')
 
     def test_translated_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
-
         article = Article(self.fulldoc)
-
         self.assertEqual(sorted([k+v for k, v in article.translated_section().items()]), [u'eslabel es', 'ptlabel pt'])
 
     def test_section_field_v49(self):

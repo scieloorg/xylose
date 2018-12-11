@@ -1598,18 +1598,14 @@ class Article(object):
         return self.issue.is_ahead_of_print
 
     def original_section(self, iso_format=None):
-
-        if not 'section' in self.data:
-            return None
-
-        return self.data['section'].get(self.original_language(iso_format), None)
+        if self.section:
+            return self.section.get(self.original_language(iso_format))
 
     def translated_section(self, iso_format=None):
-
-        if not 'section' in self.data:
-            return None
-
-        return {k: v for k, v in self.data['section'].items() if k != self.original_language(iso_format)}
+        if self.section:
+            return {k: v
+                    for k, v in self.section.items()
+                    if k != self.original_language(iso_format)}
 
     @property
     def section(self):
