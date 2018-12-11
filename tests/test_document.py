@@ -860,6 +860,11 @@ class JournalTests(unittest.TestCase):
 
         self.assertEqual(journal.previous_title, None)
 
+    def test_next_title(self):
+        self.assertEqual(self.journal.next_title, None)
+        self.journal.data['v710'] = [{'_': u'It has a new title!'}]
+        self.assertEqual(self.journal.next_title, u'It has a new title!')
+
     def test_in_scie(self):
         journal = self.journal
 
@@ -1953,16 +1958,12 @@ class ArticleTests(unittest.TestCase):
 
     def test_original_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
-
         article = Article(self.fulldoc)
-
         self.assertEqual(article.original_section(), u'label en')
 
     def test_translated_section_field_v49(self):
         self.fulldoc['section'] = {u'en': u'label en', u'pt': u'label pt', u'es': 'label es'}
-
         article = Article(self.fulldoc)
-
         self.assertEqual(sorted([k+v for k, v in article.translated_section().items()]), [u'eslabel es', 'ptlabel pt'])
 
     def test_section_field_v49(self):
