@@ -1987,6 +1987,10 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.section, None)
 
+    def test_section_in_data_which_has_no_title_data_and_no_issue_data(self):
+        article = Article({'article': {}})
+        self.assertEqual(article.section, None)
+
     def test_section_without_field_section(self):
         """
         Article without field section trying to load section from issue metadata
