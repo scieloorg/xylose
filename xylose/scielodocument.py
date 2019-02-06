@@ -1626,8 +1626,8 @@ class Article(object):
         if section:
             return section
 
-        return self.issue.sections.get(self.section_code or '', None) if self.issue.sections else None
-
+        if 'issue' in self.data and self.issue.sections:
+            return self.issue.sections.get(self.section_code or '', None)
 
     @property
     def section_code(self):
