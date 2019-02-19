@@ -2075,6 +2075,24 @@ class Article(object):
             return doi[0]
 
     @property
+    def doi_and_lang(self):
+        """
+        This method retrieves the lang and DOI.
+        """
+        raw_doi = self.data.get('doi_and_lang') or \
+            self.data.get('article', {}).get('v337')
+        if raw_doi:
+            items = [
+                tuple(item.values())
+                for item in raw_doi or []
+                if len(DOI_REGEX.findall(item.get('d'))) == 1
+            ]
+            item = (self.original_language(), self.doi)
+            if all(item) and item not in items:
+                items.insert(0, item)
+            return items
+
+    @property
     def publisher_id(self):
         """
         This method retrieves the publisher id of the given article, if it exists.
