@@ -2083,7 +2083,7 @@ class Article(object):
             self.data.get('article', {}).get('v337')
         if raw_doi:
             items = [
-                tuple(item.values())
+                (item.get('l'), item.get('d'))
                 for item in raw_doi or []
                 if len(DOI_REGEX.findall(item.get('d'))) == 1
             ]
