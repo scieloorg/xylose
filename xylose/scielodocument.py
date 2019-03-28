@@ -2065,7 +2065,6 @@ class Article(object):
         if 'v237' in self.data['article']:
             raw_doi = self.data['article']['v237'][0]['_']
 
-
         if not raw_doi:
             return None
 
@@ -2079,18 +2078,16 @@ class Article(object):
         """
         This method retrieves the lang and DOI.
         """
-        raw_doi = self.data.get('doi_and_lang') or \
-            self.data.get('article', {}).get('v337')
-        if raw_doi:
-            items = [
+        raw_doi = self.data.get('article', {}).get('v337')
+        items = [
                 (item.get('l'), item.get('d'))
                 for item in raw_doi or []
                 if len(DOI_REGEX.findall(item.get('d'))) == 1
             ]
-            item = (self.original_language(), self.doi)
-            if all(item) and item not in items:
-                items.insert(0, item)
-            return items
+        item = (self.original_language(), self.doi)
+        if all(item) and item not in items:
+            items.insert(0, item)
+        return items
 
     @property
     def publisher_id(self):
