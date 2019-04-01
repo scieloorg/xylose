@@ -3603,6 +3603,25 @@ class ArticleTests(unittest.TestCase):
 
         article.data['citations']
 
+    def test_doi_and_lang_no_v237(self):
+        expected = []
+        doc = {}
+        doc['article'] = {}
+        doc['article']['v40'] = [{'_': 'pt'}]
+        article = Article(doc)
+        self.assertEqual(article.doi_and_lang, expected)
+
+    def test_doi_and_lang_from_v237(self):
+        expected = [
+            ('pt', '10.1590/blabla.pt'),
+        ]
+        doc = {}
+        doc['article'] = {}
+        doc['article']['v40'] = [{'_': 'pt'}]
+        doc['article']['v237'] = [{'_': '10.1590/blabla.pt'}]
+        article = Article(doc)
+        self.assertEqual(article.doi_and_lang, expected)
+
     def test_doi_and_lang_from_v337(self):
         data = [
             {u'l': u'pt', 'd': '10.1590/blabla.pt'},
@@ -3622,27 +3641,6 @@ class ArticleTests(unittest.TestCase):
         article = Article(doc)
         self.assertEqual(article.doi_and_lang, expected)
 
-    def test_doi_and_lang_from_data(self):
-        data = [
-            {u'l': u'pt', 'd': '10.1590/blabla.pt'},
-            {u'l': u'en', 'd': '10.1590/blabla.en'},
-            {u'l': u'es', 'd': '10.1590/blabla.es'},
-        ]
-        expected = [
-            ('pt', '10.1590/blabla.pt'),
-            ('en', '10.1590/blabla.en'),
-            ('es', '10.1590/blabla.es'),
-        ]
-
-        doc = {}
-        doc['article'] = {}
-        doc['article']['v40'] = [{'_': 'pt'}]
-        doc['article']['v237'] = [{'_': '10.1590/blabla.pt'}]
-        doc['article']['v337'] = data
-        article = Article(doc)
-        article.data['doi_and_lang'] = data
-        self.assertEqual(article.doi_and_lang, expected)
-
     def test_doi_and_lang_from_v337_with_bad_format(self):
         data = [
             {u'l': u'pt', 'd': '10.1590/blabla.pt'},
@@ -3660,24 +3658,6 @@ class ArticleTests(unittest.TestCase):
         doc['article']['v337'] = data
         article = Article(doc)
 
-        self.assertEqual(article.doi_and_lang, expected)
-
-    def test_doi_and_lang_from_data_with_bad_format(self):
-        data = [
-            {u'l': u'pt', 'd': '10.1590/blabla.pt'},
-            {u'l': u'en', 'd': '10.1590/blabla.en'},
-            {u'l': u'es', 'd': 'blabla.es'},
-        ]
-        expected = [
-            ('pt', '10.1590/blabla.pt'),
-            ('en', '10.1590/blabla.en'),
-        ]
-        doc = {}
-        doc['article'] = {}
-        doc['article']['v40'] = [{'_': 'pt'}]
-        doc['article']['v237'] = [{'_': '10.1590/blabla.pt'}]
-        article = Article(doc)
-        article.data['doi_and_lang'] = data
         self.assertEqual(article.doi_and_lang, expected)
 
     def test_doi_and_lang_exist_v237_in_v337(self):
