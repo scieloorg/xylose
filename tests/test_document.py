@@ -4,7 +4,6 @@ import unittest
 import json
 import os
 import warnings
-
 from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
 from xylose import tools
 
@@ -2274,10 +2273,14 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.original_language(iso_format=None), u'en')
 
+    def test_publication_date_inform_deprecation_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            self.article.publication_date
+            assert issubclass(w[-1].category, DeprecationWarning)
+
     def test_publication_date_with_article_date(self):
         article = self.article
-
-        self.assertEqual(article.publication_date, '2012-02-16')
+        self.assertEqual(article.publication_date, '2011-09')
 
     def test_publication_date_without_article_date(self):
         article = self.article
@@ -2396,16 +2399,51 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.review_date, None)
 
-    def test_ahead_publication_date(self):
-        article = self.article
+    def test_ahead_publication_date_of_aop_article(self):
+        _data = {'issue': {'issue': {}}, 'article': {}}
+        _data['issue']['issue']['v31'] = [{u'_': u''}]
+        _data['issue']['issue']['v32'] = [{u'_': u'ahead'}]
+        _data['article']['v14'] = [{u'l': u'0', 'f': '0'}]
+        _data['article']['v223'] = [{u'_': u'20131125'}]
+        article = Article(_data)
 
-        article.data['article']['v223'] = [{u'_': u'20131125'}]
+        self.assertEqual(article.issue.volume, '')
+        self.assertEqual(article.issue.number, 'ahead')
+        self.assertEqual(article.start_page, None)
+        self.assertEqual(article.end_page, None)
+        self.assertEqual(article.publisher_ahead_id, None)
         self.assertEqual(article.ahead_publication_date, '2013-11-25')
 
-    def test_whitwout_ahead_publication_date(self):
-        article = self.article
+    def test_ahead_publication_date_of_ex_aop_article(self):
+        _data = {'issue': {'issue': {}}, 'article': {}}
+        _data['issue']['issue']['v31'] = [{u'_': u'1'}]
+        _data['issue']['issue']['v32'] = [{u'_': u'1'}]
+        _data['article']['v14'] = [{u'l': u'10', 'f': '10'}]
+        _data['article']['v881'] = [{u'_': u'1'}]
+        _data['article']['v223'] = [{u'_': u'20131125'}]
+        article = Article(_data)
 
-        del(article.data['article']['v223'])
+        self.assertEqual(article.issue.volume, '1')
+        self.assertEqual(article.issue.number, '1')
+        self.assertEqual(article.start_page, '10')
+        self.assertEqual(article.end_page, '10')
+        self.assertEqual(article.publisher_ahead_id, '1')
+        self.assertEqual(article.ahead_publication_date, '2013-11-25')
+
+    def test_ahead_publication_date_returns_None_because_it_is_not_ex_aop(self):
+        _data = {'issue': {'issue': {}}, 'article': {}}
+
+        _data['article']['v223'] = [{u'_': u'20131125'}]
+        _data['issue']['issue']['v31'] = [{u'_': u'1'}]
+        article = Article(_data)
+        self.assertEqual(article.ahead_publication_date, None)
+
+    def test_ahead_publication_date_returns_None_because_it_is_not_aop(self):
+        _data = {'issue': {'issue': {}}, 'article': {}}
+
+        _data['article']['v223'] = [{u'_': u'20131125'}]
+        _data['issue']['issue']['v31'] = [{u'_': u'1'}]
+        article = Article(_data)
         self.assertEqual(article.ahead_publication_date, None)
 
     def test_publication_contract(self):

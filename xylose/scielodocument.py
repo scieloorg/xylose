@@ -1820,21 +1820,73 @@ class Article(object):
     @property
     def publication_date(self):
         """
-        This method retrieves the publication date of the given article, if it exists.
+        This method retrieves the publication date of the given article,
+        given high priority for editorial publication than online publication
         This method deals with the legacy fields (65) and (223).
         65 represents the issue date
         223 represents the article publication date
-        """
+        Since SPS 1.8.1 e 1.9 all the documents have online publication date.
 
+        There are at least 3 situations:
+        1. Document and Issue are published in a correct time.
+           Issue date = 2009-01, Document date = 2009-01-01
+        2. Document is published before the scheduled date.
+           Issue date = 2009-06; Document date = 2008-12-20
+        3. Document is published late, after the schedule date.
+           Issue date = 2009-06; Document date = 2010-01-09
+
+        For these reasons, it is necessary to make explicity the dates
+        the document have, in order to use the proper date to the corresponding
+        purposes.
+
+        The document_publication_date must be a real publication date in order
+        to generate production reports, for instance, identify which journals
+        are early or late.
+
+        The issue_publication_date is a date which is expected to have a new 
+        issue; it is not necessarily a exact date; it is a range of date,
+        for instances, Summer 2009 or Apr-June 2009. It is more like a label
+        than a date.
+
+        """
+        warnings.warn(
+            "Deprecated. "
+            "Use 'article.document_publication_date' "
+            "to get online publication date (real publication date), "
+            "to generate production reports.  "
+            "Use 'article.issue_publication_date' "
+            "to get editorial publication date (planned publication date), "
+            "to generate indicators reports. ",
+            DeprecationWarning)
+        return self.issue_publication_date or self.document_publication_date
+
+    @property
+    def document_publication_date(self):
+        """
+        This method retrieves the document publication date.
+        It is supposed to be the real publication date online; a date that
+        can be used for production reports purposes.
+        All the documents must have, since 2019, SPS 1.9.
+        This method deals with the legacy field (223).
+        """
         if 'v223' in self.data['article']:
             return tools.get_date(self.data['article']['v223'][0]['_'])
 
+    @property
+    def issue_publication_date(self):
+        """
+        This method retrieves the issue publication date.
+        It is supposed to be the editorial publication date, which
+        is used for indicators reports purposes.
+        This method deals with the legacy field (65).
+        """
         return tools.get_date(self.data['article']['v65'][0]['_'])
 
     @property
     def processing_date(self):
         """
-        This method retrieves the processing date of the given article, if it exists.
+        This method retrieves the processing date of the given article,
+        if it exists.
         This method deals with the legacy fields (91).
         """
 
@@ -1862,7 +1914,7 @@ class Article(object):
         )
 
         if not updated_at:
-            update_at = self.creation_date
+            updated_at = self.creation_date
 
         return tools.get_date(updated_at.replace('-', '')) if updated_at else None
 
@@ -1913,11 +1965,15 @@ class Article(object):
     @property
     def ahead_publication_date(self):
         """
-        This method retrieves the ahead of print date of the given article, if it exist.
-        This method deals with the legacy fields (223).
+        This method retrieves the ahead of print date of the given article,
+        if it exist.
+        Since SPS 1.8.1 e 1.9 all the documents have online publication date
+        (v223).
+        This method returns document_publication_date, only if it is an
+        AOP article or an ex AOP
         """
-        if 'v223' in self.data['article']:
-            return tools.get_date(self.data['article']['v223'][0]['_'])
+        if self.publisher_ahead_id or self.issue.is_ahead_of_print:
+            return self.document_publication_date
         return None
 
     @property
@@ -3103,10 +3159,10 @@ class Citation(object):
         warn_future_deprecation(
             'authors',
             'author_groups',
-            'The atribute "author_groups" returns all the authors '
+            'The attribute "author_groups" returns all the authors '
             '(person and institution) '
             'identified by their type (analytic or monographic). '
-            'The atribute "authors" returns only person authors and do not '
+            'The attribute "authors" returns only person authors and do not '
             'differs analytic from monographic'
         )
         aa = self.analytic_authors or []
