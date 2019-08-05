@@ -3679,6 +3679,25 @@ class ArticleTests(unittest.TestCase):
         article = Article(doc)
         self.assertEqual(article.doi_and_lang, expected)
 
+    def test_doi_and_lang_from_v337_and_misplaced(self):
+        data = [
+            {u'd': u'pt', 'l': '10.1590/blabla.pt'},
+            {u'd': u'en', 'l': '10.1590/blabla.en'},
+            {u'd': u'es', 'l': '10.1590/blabla.es'},
+        ]
+        expected = [
+            ('pt', '10.1590/blabla.pt'),
+            ('en', '10.1590/blabla.en'),
+            ('es', '10.1590/blabla.es'),
+        ]
+        doc = {}
+        doc['article'] = {}
+        doc['article']['v40'] = [{'_': 'pt'}]
+        doc['article']['v237'] = [{'_': '10.1590/blabla.pt'}]
+        doc['article']['v337'] = data
+        article = Article(doc)
+        self.assertEqual(article.doi_and_lang, expected)
+
     def test_doi_and_lang_from_v337_with_bad_format(self):
         data = [
             {u'l': u'pt', 'd': '10.1590/blabla.pt'},
@@ -5355,9 +5374,9 @@ class CitationTest(unittest.TestCase):
 
     def test_citation_sample_congress(self):
 
-        json_citation= {u'v999': 
+        json_citation= {u'v999':
             [{u'_': u'../bases-work/ciedu/ciedu'}],
-             u'v12': 
+             u'v12':
                 [{u'l': u'es',
                 u'_': u'Escuelas con poblaciones en riesgo social: proyecto de intervenci\xf3n e investigaci\xf3n en el \xe1rea de ciencias naturales'}], u'v10': [{u's': u'G\xd3MEZ',
                 u'r': u'ND',

@@ -1843,7 +1843,7 @@ class Article(object):
         to generate production reports, for instance, identify which journals
         are early or late.
 
-        The issue_publication_date is a date which is expected to have a new 
+        The issue_publication_date is a date which is expected to have a new
         issue; it is not necessarily a exact date; it is a range of date,
         for instances, Summer 2009 or Apr-June 2009. It is more like a label
         than a date.
@@ -2135,11 +2135,14 @@ class Article(object):
         This method retrieves the lang and DOI.
         """
         raw_doi = self.data.get('article', {}).get('v337')
-        items = [
-                (item.get('l'), item.get('d'))
-                for item in raw_doi or []
-                if len(DOI_REGEX.findall(item.get('d'))) == 1
-            ]
+        items = []
+        for item in raw_doi or []:
+            lang = item.get("l")
+            doi = item.get("d")
+            if len(DOI_REGEX.findall(lang)) == 1 and len(doi) == 2:
+                lang, doi = doi, lang
+            if len(DOI_REGEX.findall(doi)) == 1 and len(lang) == 2:
+                items.append((lang, doi))
         if self.doi:
             item = (self.original_language(), self.doi)
             if all(item) and item not in items:
