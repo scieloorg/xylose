@@ -3698,6 +3698,23 @@ class ArticleTests(unittest.TestCase):
         article = Article(doc)
         self.assertEqual(article.doi_and_lang, expected)
 
+    def test_doi_and_lang_from_v337_and_misplaced_and_missing_one_of_them(self):
+        data = [
+            {u'd': u'pt', 'l': '10.1590/blabla.pt'},
+            {u'd': u'en'},
+            {u'd': u'es'},
+        ]
+        expected = [
+            ('pt', '10.1590/blabla.pt'),
+        ]
+        doc = {}
+        doc['article'] = {}
+        doc['article']['v40'] = [{'_': 'pt'}]
+        doc['article']['v237'] = [{'_': '10.1590/blabla.pt'}]
+        doc['article']['v337'] = data
+        article = Article(doc)
+        self.assertEqual(article.doi_and_lang, expected)
+
     def test_doi_and_lang_from_v337_with_bad_format(self):
         data = [
             {u'l': u'pt', 'd': '10.1590/blabla.pt'},
