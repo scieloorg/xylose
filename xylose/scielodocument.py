@@ -2139,10 +2139,11 @@ class Article(object):
         for item in raw_doi or []:
             lang = item.get("l")
             doi = item.get("d")
-            if len(DOI_REGEX.findall(lang)) == 1 and len(doi) == 2:
-                lang, doi = doi, lang
-            if len(DOI_REGEX.findall(doi)) == 1 and len(lang) == 2:
-                items.append((lang, doi))
+            if lang and doi:
+                if len(DOI_REGEX.findall(lang)) == 1 and len(doi) == 2:
+                    lang, doi = doi, lang
+                if len(DOI_REGEX.findall(doi)) == 1 and len(lang) == 2:
+                    items.append((lang, doi))
         if self.doi:
             item = (self.original_language(), self.doi)
             if all(item) and item not in items:
