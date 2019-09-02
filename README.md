@@ -1,29 +1,39 @@
-.. image:: https://secure.travis-ci.org/scieloorg/xylose.png?branch=master
-`See Build details <http://travis-ci.org/#!/scieloorg/xylose>`_
-
-======
-Xylose
-======
+# Xylose
 
 A SciELO library to abstract a JSON data structure that is a product of the ISIS2JSON conversion using the ISIS2JSON type 3 data model.
 
-Objective
-=========
+
+[![Build Status](https://travis-ci.org/scieloorg/xylose.svg?branch=master)](https://travis-ci.org/scieloorg/xylose)
+[![PyPI version](https://badge.fury.io/py/xylose.svg)](https://badge.fury.io/py/xylose)
+
+
+## Objective
 
 This library intends to delivery a object interface that abstracts the ISIS2JSON documents to facilitate the access to the SciELO documents metadata. This library will be mainly used during the migration process for the new SciELO architecture.
 
-Install
-=======
+## Install
 
-How to use
-==========
+### Stable
+```
+$ pip install xylose
+```
+
+### Devel
+
+```
+$ pip install -e git+https://github.com/cesarbruschetta/xylose.git
+```
+
+## How to use
+
+### Exemple
 
 **Reading an Article**
 
     >>> import json
     >>> import urllib2
     >>> from xylose.scielodocument import Article
-    >>> article_json = json.loads(urllib2.urlopen('http://200.136.72.162:7000/api/v1/article?code=S2179-975X2011000300002&format=json').read())
+    >>> article_json = json.loads(urllib2.urlopen('http://articlemeta.scielo.org/api/v1/article/?code=S2179-975X2011000300002&format=json').read())
     >>> article = Article(article_json)
     >>> article.original_title()
     u'First adult record of Misgurnus anguillicaudatus, Cantor 1842 from Ribeira de Iguape River Basin, Brazil'
@@ -37,9 +47,32 @@ How to use
     >>> import json
     >>> import urllib2
     >>> from xylose.scielodocument import Journal
-    >>> journal_json = article_json = json.loads(urllib2.urlopen('http://200.136.72.162:7000/api/v1/journal?collection=scl&issn=0103-0663').read())
+    >>> journal_json = json.loads(urllib2.urlopen('http://articlemeta.scielo.org/api/v1/journal?collection=scl&issn=0103-0663').read())
     >>> journal = Journal(journal_json[0])
     >>> journal.title
     u'Revista de Odontologia da Universidade de S\xe3o Paulo'
     >>> journal.scielo_issn
     u'0103-0663'
+
+**Reading a Issue**
+
+    >>> import json
+    >>> import urllib2
+    >>> from xylose.scielodocument import Issue
+    >>> issue_json = json.loads(urllib2.urlopen('http://articlemeta.scielo.org/api/v1/issue/?collection=scl&code=0103-066319970002').read())
+    >>> issue = Issue(issue_json[0])
+    >>> issue.journal
+    u'Rev. Odontol. Univ. S\u00e3o Paulo'
+    >>> issue.volume
+    u'11'
+
+
+## Report issues, or request changes
+
+To report problems, bugs, or simply request some new functionality, you can [create a ticket](<https://github.com/scieloorg/xlose/issues>) with your requests.
+
+
+## Development and Maintenance Team
+
+- Desenvolvimento <dev@scielo.org>
+- Infraestrutura <infra@scielo.org>
