@@ -18,15 +18,15 @@ This library intends to delivery a object interface that abstracts the ISIS2JSON
 $ pip install xylose
 ```
 
-### Devel
+### Development
 
 ```
-$ pip install -e git+https://github.com/cesarbruschetta/xylose.git
+$ pip install -e git+https://github.com/scieloorg/xylose.git
 ```
 
 ## How to use
 
-### Exemple
+### Example
 
 **Reading an Article**
 
@@ -54,13 +54,13 @@ $ pip install -e git+https://github.com/cesarbruschetta/xylose.git
     >>> journal.scielo_issn
     u'0103-0663'
 
-**Reading a Issue**
+**Reading an Issue**
 
     >>> import json
     >>> import urllib2
     >>> from xylose.scielodocument import Issue
     >>> issue_json = json.loads(urllib2.urlopen('http://articlemeta.scielo.org/api/v1/issue/?collection=scl&code=0103-066319970002').read())
-    >>> issue = Issue(issue_json[0])
+    >>> issue = Issue(issue_json)
     >>> issue.journal
     u'Rev. Odontol. Univ. S\u00e3o Paulo'
     >>> issue.volume
@@ -69,7 +69,7 @@ $ pip install -e git+https://github.com/cesarbruschetta/xylose.git
 
 ## Report issues, or request changes
 
-To report problems, bugs, or simply request some new functionality, you can [create a ticket](<https://github.com/scieloorg/xlose/issues>) with your requests.
+To report bugs or request some new functionality, you can [create a ticket](<https://github.com/scieloorg/xlose/issues>) with your requests.
 
 
 ## Development and Maintenance Team
