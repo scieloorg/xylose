@@ -2316,6 +2316,10 @@ class Article(object):
                     authordict['xref'] = html_decode(author['1'].split(' '))
                 if 'k' in author:
                     authordict['orcid'] = html_decode(author['k'])
+                if 'p' in author:
+                    authordict['prefix'] = html_decode(author['p'])
+                if 'z' in author:
+                    authordict['suffix'] = html_decode(author['z'])
 
                 authors.append(authordict)
 

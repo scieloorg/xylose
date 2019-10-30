@@ -2893,6 +2893,32 @@ class ArticleTests(unittest.TestCase):
                    ]
         self.assertEqual(article.authors, authors)
 
+    def test_author_orcid_prefix_suffix(self):
+        self.article.data["article"]["v10"] = [
+            {
+                u"1": u"A01",
+                u"s": u"Diferente",
+                u"r": u"ND",
+                u"_": u"",
+                u"k": u"0000-1111-2222-3333",
+                u"p": u"Sr.",
+                u"z": u"Junior",
+                u"n": u"Fulano",
+            },
+        ]
+        expected = [
+            {
+                u"role": u"ND",
+                u"xref": [u"A01"],
+                u"orcid": u"0000-1111-2222-3333",
+                u"prefix": u"Sr.",
+                u"surname": u"Diferente",
+                u"given_names": u"Fulano",
+                u"suffix": u"Junior",
+            }
+        ]
+        self.assertEqual(self.article.authors, expected)
+
     def test_author_with_two_affiliations(self):
         article = self.article
 
