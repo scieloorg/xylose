@@ -3246,6 +3246,49 @@ class ArticleTests(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(article.affiliations, expected)
 
+    def test_affiliation_subfields(self):
+        self.article.data["article"]["v70"] = [
+            {
+                u"_": u"Universidade XYZ (BR)",
+                u"d": u"A",
+                u"1": u"Faculdade A",
+                u"2": u"Departamento W",
+                u"3": u"Grupo N",
+                u"4": u"Universidade XYZ",
+                u"8": u"s1",
+                u"9": u"Universidade XYZ do Brasil - Faculdade A - W/N",
+                u"e": u"awn@xyz.br",
+                u"c": u"Campinas",
+                u"p": u"BR",
+                u"q": u"Brasil",
+                u"s": u"SP",
+                u"z": u"01234-567",
+                u"i": u"A01",
+                u"l": u"x",
+            },
+        ]
+        expected = [
+            {
+                u"institution": u"Universidade XYZ (BR)",
+                u"division": u"A",
+                u"orgdiv1": u"Faculdade A",
+                u"orgdiv2": u"Departamento W",
+                u"orgdiv3": u"Grupo N",
+                u"normalized": u"Universidade XYZ",
+                u"c8": u"s1",
+                u"original": u"Universidade XYZ do Brasil - Faculdade A - W/N",
+                u"email": u"awn@xyz.br",
+                u"city": u"Campinas",
+                u"country_iso_3166": u"BR",
+                u"country": u"Brazil",
+                u"state": u"SP",
+                u"postal_code": u"01234-567",
+                u"index": u"A01",
+                u"label": u"x",
+            }
+        ]
+        self.assertEqual(self.article.affiliations, expected)
+
     def test_affiliation_without_affiliation_name(self):
         article = self.article
 

@@ -2461,6 +2461,14 @@ class Article(object):
                     affdict['orgdiv1'] = html_decode(aff['1'])
                 if '2' in aff:
                     affdict['orgdiv2'] = html_decode(aff['2'])
+                if '3' in aff:
+                    affdict['orgdiv3'] = html_decode(aff['3'])
+                if '4' in aff:
+                    affdict['normalized'] = html_decode(aff['4'])
+                if '8' in aff:
+                    affdict['c8'] = html_decode(aff['8'])  # Either1/c1/p/s/s1
+                if '9' in aff:
+                    affdict['original'] = html_decode(aff['9'])
                 if 'l' in aff:
                     affdict['label'] = html_decode(aff['l'])
 
