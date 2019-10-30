@@ -3208,6 +3208,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'caioisola@yahoo.com.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Biol\xf3gicas',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3217,6 +3218,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'alex_peressin@yahoo.com.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Programa de P\xf3s-Gradua\xe7\xe3o em Diversidade Biol\xf3gica e Conserva\xe7\xe3o',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3226,6 +3228,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'mcetra@ufscar.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3264,7 +3267,9 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
-                'email': u'mcetra@ufscar.br', 'state': u'SP',
+                'email': u'mcetra@ufscar.br',
+                'postal_code': u'18052-780',
+                'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
                 'institution': ''
             }
@@ -3306,6 +3311,7 @@ class ArticleTests(unittest.TestCase):
         expected = [
             {
                 'index': u'A01',
+                'label': u'a',
                 'city': u'México',
                 'state': u'D.F.',
                 'country': u'Mexico',

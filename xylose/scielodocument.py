@@ -2442,6 +2442,8 @@ class Article(object):
                     affdict['city'] = html_decode(aff['c'])
                 if 's' in aff:
                     affdict['state'] = html_decode(aff['s'])
+                if 'z' in aff:
+                    affdict['postal_code'] = html_decode(aff['z'])
                 if 'p' in aff:
                     affdict['country'] = html_decode(aff['p'])
                     if html_decode(aff['p']).lower() in iso3166.COUNTRY_CODES_ALPHA_2_FORMS:
@@ -2459,6 +2461,8 @@ class Article(object):
                     affdict['orgdiv1'] = html_decode(aff['1'])
                 if '2' in aff:
                     affdict['orgdiv2'] = html_decode(aff['2'])
+                if 'l' in aff:
+                    affdict['label'] = html_decode(aff['l'])
 
                 affiliations.append(affdict)
 
