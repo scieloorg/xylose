@@ -66,6 +66,11 @@ $ pip install -e git+https://github.com/scieloorg/xylose.git
     >>> issue.volume
     u'11'
 
+## Testes Automatizados
+
+No servidor local:
+`python setup.py test`
+
 
 ## Report issues, or request changes
 
