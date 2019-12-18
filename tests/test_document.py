@@ -4,7 +4,7 @@ import unittest
 import json
 import os
 import warnings
-from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException
+from xylose.scielodocument import Article, Citation, Journal, Issue, html_decode, UnavailableMetadataException, email_html_remove
 from xylose import tools
 
 warnings.simplefilter("always")
@@ -3269,7 +3269,41 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
-                'email': u'mcetra@ufscar.br', 'state': u'SP',
+                'email': u'<A HREF="mailto:mcetra@ufscar.br">mcetra@ufscar.br</A>',
+                'email_html_removed': u'mcetra@ufscar.br',
+                'state': u'SP',
+                'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
+                'institution': ''
+            }
+        ]
+
+        self.assertEqual(article.affiliations, expected)
+
+    def test_affiliation_with_invalid_html_tag_in_affiliation_email(self):
+        article = self.article
+
+        del(article.data['article']['v70'])
+
+        article.data['article']['v70'] = [
+            {
+                u"c": u"Sorocaba",
+                u"e": u'<A HREF="mailto:mcetra@ufscar.br',
+                u"i": u"A03",
+                u"1": u"Departamento de Ci\u00eancias Ambientais 1",
+                u"2": u"Departamento de Ci\u00eancias Ambientais 2",
+                u"p": u"BRAZIL",
+                u"s": u"SP",
+                u"z": u"18052-780"}]
+
+        expected = [
+            {
+                'index': u'A03',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
+                'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
+                'email': u'<A HREF="mailto:mcetra@ufscar.br',
+                'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
                 'institution': ''
             }
@@ -5637,3 +5671,68 @@ class CitationTest(unittest.TestCase):
         citation.data['mixed'] = u'<    p><  font face=\"verdana\" size=\"2\">ALCHIAN, A .A., <region >The< /region> < cite>basis< / CITE> of some <p>recent<p> advances <font face>in</font> the theory of   management <country-region >of< /COUNTRY-region > the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.</   FONT><  /P><font face="Verdana,"/>'
 
         self.assertEqual(citation.mixed_citation, u'ALCHIAN, A .A., The basis of some recent advances in the theory of   management of the firm, <i>Journal of Industrial Economics</i>, v. 14, n. 4, p. 30-44, 1965.')
+
+
+class EmailHtmlRemoveTests(unittest.TestCase):
+    def test_valid_email_content(self):
+        valid_email = "abc@institution.org"
+        result = email_html_remove(valid_email)
+        self.assertEqual(result, valid_email)
+
+    def test_invalid_email_content(self):
+        invalid_email = "@..@institution.org"
+        result = email_html_remove(invalid_email)
+        self.assertEqual(result, invalid_email)
+
+    def test_valid_a_tag_with_email(self):
+        valid_email_tags = (
+            (
+                '<a href="mailto:abcd@institution.edu.co">abcd@institution.edu.co</a>',
+                "abcd@institution.edu.co",
+            ),
+            (
+                '<A HREF="mailto:abcd@institution.com.ar ">abcd@institution.com.ar </A>',
+                "abcd@institution.com.ar ",
+            ),
+            (
+                '<A href="mailto:abcd@institution.edu.mx">abcd@institution.edu.mx</A>',
+                "abcd@institution.edu.mx",
+            ),
+            (
+                '<A HREF="mailto:abcd@institution.com">abcd&#64;institution.com</A>',
+                "abcd&#64;institution.com",
+            ),
+        )
+        for valid_tag, valid_email in valid_email_tags:
+            result = email_html_remove(valid_tag)
+            self.assertEqual(result, valid_email)
+
+    def test_invalid_a_tag_with_email(self):
+        valid_email_tags = (
+            '<a href="mailto:abcd@institution.edu.co',
+            '<A HREF="mailto:abcd@institution.com.ar ',
+            '<A href="maito:abcd@institution.edu.mx',
+            '<A HREF="mailto:abcd@institution.com"',
+        )
+        for invalid_tag in valid_email_tags:
+            result = email_html_remove(invalid_tag)
+            self.assertEqual(result, invalid_tag)
+
+    def test_valid_a_tag_with_invalid_attribs(self):
+        invalid_email_href = (
+            (
+                '<a href="malto:epzonta@ufpel.tche.br">epzonta@ufpel.tche.br</a>',
+                "epzonta@ufpel.tche.br",
+            ),
+            (
+                '<A HREF="http://www.fupacel.org.py/">www.fupacel.org.py</A>',
+                "www.fupacel.org.py",
+            ),
+            (
+                '<A HREF="mailton"> pier_cacciali@yahoo.com.</A>',
+                " pier_cacciali@yahoo.com.",
+            ),
+        )
+        for invalid_tag, content in invalid_email_href:
+            result = email_html_remove(invalid_tag)
+            self.assertEqual(result, content)

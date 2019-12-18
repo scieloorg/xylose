@@ -2463,7 +2463,10 @@ class Article(object):
                     affdict['country_iso_3166'] = aff['p']
 
                 if 'e' in aff:
-                    affdict['email'] = email_html_remove(html_decode(aff['e']))
+                    affdict['email'] = html_decode(aff['e'])
+                    email_html_removed = email_html_remove(html_decode(aff['e']))
+                    if email_html_removed != affdict['email']:
+                        affdict['email_html_removed'] = email_html_removed
                 if 'd' in aff:
                     affdict['division'] = html_decode(aff['d'])
                 if '1' in aff:
