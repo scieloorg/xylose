@@ -3246,6 +3246,37 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.affiliations, expected)
 
+    def test_affiliation_with_valid_html_tag_in_affiliation_email(self):
+        article = self.article
+
+        del(article.data['article']['v70'])
+
+        article.data['article']['v70'] = [
+            {
+                u"c": u"Sorocaba",
+                u"e": u'<A HREF="mailto:mcetra@ufscar.br">mcetra@ufscar.br</A>',
+                u"i": u"A03",
+                u"1": u"Departamento de Ci\u00eancias Ambientais 1",
+                u"2": u"Departamento de Ci\u00eancias Ambientais 2",
+                u"p": u"BRAZIL",
+                u"s": u"SP",
+                u"z": u"18052-780"}]
+
+        expected = [
+            {
+                'index': u'A03',
+                'city': u'Sorocaba',
+                'country': u'BRAZIL',
+                'country_iso_3166': 'BR',
+                'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
+                'email': u'mcetra@ufscar.br', 'state': u'SP',
+                'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
+                'institution': ''
+            }
+        ]
+
+        self.assertEqual(article.affiliations, expected)
+
     def test_affiliation_just_with_affiliation_name(self):
         article = self.article
 
