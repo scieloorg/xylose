@@ -2331,6 +2331,10 @@ class Article(object):
                     authordict['xref'] = html_decode(author['1'].split(' '))
                 if 'k' in author:
                     authordict['orcid'] = html_decode(author['k'])
+                if 'p' in author:
+                    authordict['prefix'] = html_decode(author['p'])
+                if 'z' in author:
+                    authordict['suffix'] = html_decode(author['z'])
 
                 authors.append(authordict)
 
@@ -2453,6 +2457,8 @@ class Article(object):
                     affdict['city'] = html_decode(aff['c'])
                 if 's' in aff:
                     affdict['state'] = html_decode(aff['s'])
+                if 'z' in aff:
+                    affdict['postal_code'] = html_decode(aff['z'])
                 if 'p' in aff:
                     affdict['country'] = html_decode(aff['p'])
                     if html_decode(aff['p']).lower() in iso3166.COUNTRY_CODES_ALPHA_2_FORMS:
@@ -2473,6 +2479,16 @@ class Article(object):
                     affdict['orgdiv1'] = html_decode(aff['1'])
                 if '2' in aff:
                     affdict['orgdiv2'] = html_decode(aff['2'])
+                if '3' in aff:
+                    affdict['orgdiv3'] = html_decode(aff['3'])
+                if '4' in aff:
+                    affdict['normalized'] = html_decode(aff['4'])
+                if '8' in aff:
+                    affdict['c8'] = html_decode(aff['8'])  # Either1/c1/p/s/s1
+                if '9' in aff:
+                    affdict['original'] = html_decode(aff['9'])
+                if 'l' in aff:
+                    affdict['label'] = html_decode(aff['l'])
 
                 affiliations.append(affdict)
 

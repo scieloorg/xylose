@@ -2893,6 +2893,32 @@ class ArticleTests(unittest.TestCase):
                    ]
         self.assertEqual(article.authors, authors)
 
+    def test_author_orcid_prefix_suffix(self):
+        self.article.data["article"]["v10"] = [
+            {
+                u"1": u"A01",
+                u"s": u"Diferente",
+                u"r": u"ND",
+                u"_": u"",
+                u"k": u"0000-1111-2222-3333",
+                u"p": u"Sr.",
+                u"z": u"Junior",
+                u"n": u"Fulano",
+            },
+        ]
+        expected = [
+            {
+                u"role": u"ND",
+                u"xref": [u"A01"],
+                u"orcid": u"0000-1111-2222-3333",
+                u"prefix": u"Sr.",
+                u"surname": u"Diferente",
+                u"given_names": u"Fulano",
+                u"suffix": u"Junior",
+            }
+        ]
+        self.assertEqual(self.article.authors, expected)
+
     def test_author_with_two_affiliations(self):
         article = self.article
 
@@ -3182,6 +3208,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'caioisola@yahoo.com.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Biol\xf3gicas',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3191,6 +3218,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'alex_peressin@yahoo.com.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Programa de P\xf3s-Gradua\xe7\xe3o em Diversidade Biol\xf3gica e Conserva\xe7\xe3o',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3200,6 +3228,7 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'email': u'mcetra@ufscar.br',
+                'postal_code': u'18052-780',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais',
                 'institution': u'UNIVERSIDADE FEDERAL DE SAO CARLOS'
@@ -3216,6 +3245,49 @@ class ArticleTests(unittest.TestCase):
         ]
         self.maxDiff = None
         self.assertEqual(article.affiliations, expected)
+
+    def test_affiliation_subfields(self):
+        self.article.data["article"]["v70"] = [
+            {
+                u"_": u"Universidade XYZ (BR)",
+                u"d": u"A",
+                u"1": u"Faculdade A",
+                u"2": u"Departamento W",
+                u"3": u"Grupo N",
+                u"4": u"Universidade XYZ",
+                u"8": u"s1",
+                u"9": u"Universidade XYZ do Brasil - Faculdade A - W/N",
+                u"e": u"awn@xyz.br",
+                u"c": u"Campinas",
+                u"p": u"BR",
+                u"q": u"Brasil",
+                u"s": u"SP",
+                u"z": u"01234-567",
+                u"i": u"A01",
+                u"l": u"x",
+            },
+        ]
+        expected = [
+            {
+                u"institution": u"Universidade XYZ (BR)",
+                u"division": u"A",
+                u"orgdiv1": u"Faculdade A",
+                u"orgdiv2": u"Departamento W",
+                u"orgdiv3": u"Grupo N",
+                u"normalized": u"Universidade XYZ",
+                u"c8": u"s1",
+                u"original": u"Universidade XYZ do Brasil - Faculdade A - W/N",
+                u"email": u"awn@xyz.br",
+                u"city": u"Campinas",
+                u"country_iso_3166": u"BR",
+                u"country": u"Brazil",
+                u"state": u"SP",
+                u"postal_code": u"01234-567",
+                u"index": u"A01",
+                u"label": u"x",
+            }
+        ]
+        self.assertEqual(self.article.affiliations, expected)
 
     def test_affiliation_without_affiliation_name(self):
         article = self.article
@@ -3238,7 +3310,9 @@ class ArticleTests(unittest.TestCase):
                 'country': u'BRAZIL',
                 'country_iso_3166': 'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
-                'email': u'mcetra@ufscar.br', 'state': u'SP',
+                'email': u'mcetra@ufscar.br',
+                'postal_code': u'18052-780',
+                'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
                 'institution': ''
             }
@@ -3345,6 +3419,7 @@ class ArticleTests(unittest.TestCase):
         expected = [
             {
                 'index': u'A01',
+                'label': u'a',
                 'city': u'México',
                 'state': u'D.F.',
                 'country': u'Mexico',
