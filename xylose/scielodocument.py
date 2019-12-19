@@ -48,6 +48,10 @@ REPLACE_TAGS_MIXED_CITATION = (
     (re.compile(r'< *?small.*?>', re.IGNORECASE), '<small>',),
     (re.compile(r'< *?/ *?small.*?>', re.IGNORECASE), '</small>',),
 )
+EMAIL_REGEX = re.compile(
+    r'(?P<open_anchor>a href)=(?P<href>\".*\")>(?P<email>.*)<(?P<close_anchor>\/a|\/A)',
+    re.IGNORECASE
+)
 
 
 def warn_future_deprecation(old, new, details=''):
@@ -101,6 +105,17 @@ def html_decode(string):
 
     try:
         return remove_control_characters(string)
+    except:
+        return string
+
+
+def email_html_remove(string):
+    result = EMAIL_REGEX.search(string)
+    if result is None:
+        return string
+
+    try:
+        return result.group("email")
     except:
         return string
 
@@ -2449,6 +2464,9 @@ class Article(object):
 
                 if 'e' in aff:
                     affdict['email'] = html_decode(aff['e'])
+                    email_html_removed = email_html_remove(html_decode(aff['e']))
+                    if email_html_removed != affdict['email']:
+                        affdict['email_html_removed'] = email_html_removed
                 if 'd' in aff:
                     affdict['division'] = html_decode(aff['d'])
                 if '1' in aff:
