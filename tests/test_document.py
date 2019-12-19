@@ -3341,12 +3341,13 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A03',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
-                'country_iso_3166': 'BR',
+                'country_iso_3166': u'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
                 'email': u'<A HREF="mailto:mcetra@ufscar.br">mcetra@ufscar.br</A>',
                 'email_html_removed': u'mcetra@ufscar.br',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
+                'postal_code': u'18052-780',
                 'institution': ''
             }
         ]
@@ -3374,11 +3375,12 @@ class ArticleTests(unittest.TestCase):
                 'index': u'A03',
                 'city': u'Sorocaba',
                 'country': u'BRAZIL',
-                'country_iso_3166': 'BR',
+                'country_iso_3166': u'BR',
                 'orgdiv2': u'Departamento de Ci\xeancias Ambientais 2',
                 'email': u'<A HREF="mailto:mcetra@ufscar.br',
                 'state': u'SP',
                 'orgdiv1': u'Departamento de Ci\xeancias Ambientais 1',
+                'postal_code': u'18052-780',
                 'institution': ''
             }
         ]
