@@ -13,6 +13,9 @@ class TestIsAMatch(unittest.TestCase):
     def test_return_false_if_strings_are_different(self):
         self.assertFalse(is_a_match("MG", "SP"))
 
+    def test_return_true_for_strings_that_are_different_because_of_the_diacritics(self):
+        self.assertTrue(is_a_match("São Paulo", "Sao Paulo"))
+
 
 class TestHasConflicts(unittest.TestCase):
     def test_return_conflicts_if_aff_data_do_not_match(self):

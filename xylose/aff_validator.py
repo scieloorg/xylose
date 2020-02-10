@@ -1,4 +1,12 @@
+from unicodedata import normalize
+
+
+def remove_diacritics(s):
+    return normalize('NFKD', s).encode('ASCII', 'ignore').decode('ASCII')
+
+
 def normalize_value(s):
+    s = remove_diacritics(s)
     return s.upper()
 
 
