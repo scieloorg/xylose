@@ -16,6 +16,12 @@ class TestIsAMatch(unittest.TestCase):
     def test_return_true_for_strings_that_are_different_because_of_the_diacritics(self):
         self.assertTrue(is_a_match("São Paulo", "Sao Paulo"))
 
+    def test_return_true_for_state_which_has_prefixes(self):
+        self.assertTrue(is_a_match("State of Rio de Janeiro", "Rio de Janeiro"))
+
+    def test_return_true_for_state_which_has_suffixes(self):
+        self.assertTrue(is_a_match("Guangdong Province", "Guangdong"))
+
 
 class TestHasConflicts(unittest.TestCase):
     def test_return_conflicts_if_aff_data_do_not_match(self):
