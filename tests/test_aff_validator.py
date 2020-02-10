@@ -33,6 +33,9 @@ class TestIsAMatch(unittest.TestCase):
     def test_return_true_as_comparing_states_abbrev_and_non_abbrev(self):
         self.assertTrue(is_a_match("Sao Paulo", "SP", self.states))
 
+    def test_return_true_as_comparing_similar_strings(self):
+        self.assertTrue(is_a_match("Sao Paulo", "S Paulo", self.states))
+
 
 class TestHasConflicts(unittest.TestCase):
     def test_return_conflicts_if_aff_data_do_not_match(self):

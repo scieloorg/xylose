@@ -1,3 +1,4 @@
+from difflib import SequenceMatcher
 from unicodedata import normalize
 
 
@@ -14,6 +15,11 @@ def remove_suffixes_and_prefixes(state):
 def remove_non_alpha_characters(s):
     # Remove caracteres como vírgulas, pontos, parênteses etc
     return "".join([c for c in s if c.isalpha() or c in [" ", "-"]])
+
+
+def similarity_ratio(value1, value2):
+    s = SequenceMatcher(None, value1, value2)
+    return s.ratio()
 
 
 def normalize_value(s):
@@ -49,6 +55,9 @@ def is_a_match(original, normalized, states=None):
     original = normalize_value(original)
     normalized = normalize_value(normalized)
     if original == normalized:
+        return True
+
+    if similarity_ratio(original, normalized) > 0.8:
         return True
 
     if states and hasattr(states, 'get_state_abbrev'):
