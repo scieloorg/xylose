@@ -3051,6 +3051,37 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(result_status, u'TrueTrueFalseFalse')
         self.assertEqual(result_state, u'São PauloSão PauloYucatán')
 
+    def test_mixed_affiliations_does_not_mix_because_of_conflicts(self):
+        article = self.article
+
+        article.data['article']['v240'] = [
+            {
+                u"i": u"A01",
+                u"p": u"BR",
+                u"s": u"São Paulo",
+                u"_": u"UNIVERSIDADE FEDERAL DE SAO CARLOS"
+            },
+        ]
+
+        article.data['article']['v70'] = [
+           {
+                u"i": u"A01",
+                u"q": u"Mexico",
+                u"p": u"MX",
+                u"s": u"Yucatán",
+                u"_": u"Secretaría de Salud de Yucatán"
+            }
+        ]
+
+        amc = article.mixed_affiliations
+
+        art = article.data['article']['v70'][0]
+        self.assertEqual(art["_"], amc[0]["institution"])
+        self.assertEqual(art["s"], amc[0]["state"])
+        self.assertEqual(art["p"], amc[0]["country_iso_3166"])
+        self.assertEqual(art["q"], amc[0]["country"])
+        self.assertEqual(art["i"], amc[0]["index"])
+
     def test_without_normalized_affiliations(self):
         article = self.article
 
