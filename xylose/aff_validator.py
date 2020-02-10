@@ -46,9 +46,25 @@ class States:
                     self._states[name] = abbrev
 
     def get_state_abbrev(self, state):
-        state = normalize_value(state)
+        return self._states.get(state)
+
+    def get_state_abbrev_by_similarity(self, state):
+        similar = [
+            (similarity_ratio(name, state), abbrev)
+            for name, abbrev in self._states.items()
+        ]
+        similar = sorted(similar)
+        if similar[-1][0] > 0.8:
+            return similar[-1][1]
+
+    def normalize(self, state):
         state = remove_suffixes_and_prefixes(state)
-        return self._states.get(state, state)
+        state_abbrev = (
+            self.get_state_abbrev(state) or
+            self.get_state_abbrev_by_similarity(state) or
+            state
+        )
+        return state_abbrev
 
 
 def is_a_match(original, normalized, states=None):
@@ -60,12 +76,11 @@ def is_a_match(original, normalized, states=None):
     if similarity_ratio(original, normalized) > 0.8:
         return True
 
-    if states and hasattr(states, 'get_state_abbrev'):
-        original_abbrev = states.get_state_abbrev(original)
-        normalized_abbrev = states.get_state_abbrev(normalized)
-        if original_abbrev == normalized_abbrev:
+    if states and hasattr(states, 'normalize'):
+        original = states.normalize(original)
+        normalized = states.normalize(normalized)
+        if original == normalized:
             return True
-
     return False
 
 
