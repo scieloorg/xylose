@@ -11,10 +11,16 @@ def remove_suffixes_and_prefixes(state):
     return state
 
 
+def remove_non_alpha_characters(s):
+    # Remove caracteres como vírgulas, pontos, parênteses etc
+    return "".join([c for c in s if c.isalpha() or c in [" ", "-"]])
+
+
 def normalize_value(s):
     s = remove_diacritics(s)
     s = s.upper()
     s = remove_suffixes_and_prefixes(s)
+    s = remove_non_alpha_characters(s)
     return s
 
 

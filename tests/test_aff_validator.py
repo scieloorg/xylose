@@ -22,6 +22,9 @@ class TestIsAMatch(unittest.TestCase):
     def test_return_true_for_state_which_has_suffixes(self):
         self.assertTrue(is_a_match("Guangdong Province", "Guangdong"))
 
+    def test_return_true_for_string_which_are_different_because_of_separator_characters(self):
+        self.assertTrue(is_a_match("SP", "(SP)"))
+
 
 class TestHasConflicts(unittest.TestCase):
     def test_return_conflicts_if_aff_data_do_not_match(self):
