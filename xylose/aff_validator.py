@@ -5,7 +5,12 @@ from unicodedata import normalize
 
 
 def remove_diacritics(s):
-    return normalize('NFKD', s).encode('ASCII', 'ignore').decode('ASCII')
+    try:
+        s = normalize('NFKD', s)
+    except TypeError:
+        s = normalize('NFKD', unicode(s, "utf-8"))
+    finally:
+        return s.encode('ASCII', 'ignore').decode('ASCII')
 
 
 def remove_suffixes_and_prefixes(state):
