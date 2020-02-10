@@ -3,10 +3,15 @@ import unittest
 from xylose.aff_validator import (
     is_a_match,
     has_conflicts,
+    States,
 )
 
 
 class TestIsAMatch(unittest.TestCase):
+
+    def setUp(self):
+        self.states = States()
+
     def test_return_true_if_strings_are_equal(self):
         self.assertTrue(is_a_match("a", "a"))
 
@@ -17,13 +22,16 @@ class TestIsAMatch(unittest.TestCase):
         self.assertTrue(is_a_match("São Paulo", "Sao Paulo"))
 
     def test_return_true_for_state_which_has_prefixes(self):
-        self.assertTrue(is_a_match("State of Rio de Janeiro", "Rio de Janeiro"))
+        self.assertTrue(is_a_match("State of Rio de Janeiro", "Rio de Janeiro", self.states))
 
     def test_return_true_for_state_which_has_suffixes(self):
-        self.assertTrue(is_a_match("Guangdong Province", "Guangdong"))
+        self.assertTrue(is_a_match("Guangdong Province", "Guangdong", self.states))
 
     def test_return_true_for_string_which_are_different_because_of_separator_characters(self):
         self.assertTrue(is_a_match("SP", "(SP)"))
+
+    def test_return_true_as_comparing_states_abbrev_and_non_abbrev(self):
+        self.assertTrue(is_a_match("Sao Paulo", "SP", self.states))
 
 
 class TestHasConflicts(unittest.TestCase):
