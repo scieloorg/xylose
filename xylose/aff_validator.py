@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import os
 from difflib import SequenceMatcher
 from unicodedata import normalize
 
@@ -43,7 +43,7 @@ class States:
         self.load()
 
     def load(self):
-        with open("xylose/assets/states_abbrev.csv") as fp:
+        with open(os.path.dirname(os.path.realpath(__file__)) + "/assets/states_abbrev.csv") as fp:
             for row in fp.readlines():
                 row = row.strip()
                 if "," in row:
