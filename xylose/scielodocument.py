@@ -14,6 +14,7 @@ except ImportError:
 from . import choices
 from . import tools
 from . import iso3166
+from xylose.aff_validator import has_conflicts
 
 from legendarium import formatter
 
@@ -2389,9 +2390,9 @@ class Article(object):
 
         if self.affiliations:
             for aff in self.affiliations:
-                    normalized[aff['index']] = aff.copy()
-                    normalized[aff['index']]['normalized'] = False
-                    normalized[aff['index']]['country_iso_3166'] = aff.get('country_iso_3166', '')
+                normalized[aff['index']] = aff.copy()
+                normalized[aff['index']]['normalized'] = False
+                normalized[aff['index']]['country_iso_3166'] = aff.get('country_iso_3166', '')
 
         if self.normalized_affiliations:
             for aff in self.normalized_affiliations:
@@ -2407,6 +2408,30 @@ class Article(object):
 
     @property
     def normalized_affiliations(self):
+        """
+        Verifica o conteúdo de 
+        `self._normalized_affiliations` e `self.affiliations`
+        não tem conflitos, por exemplo, cidade, estado ou país diferentes.
+        Retorna somente as afiliações normalizadas que não possuem conflitos.
+        """
+        _normalized_affiliations = self._normalized_affiliations
+        if _normalized_affiliations:
+            _affiliations = {
+                aff['index']: aff
+                for aff in self.affiliations
+            }
+            normalized = []
+            for normaff in _normalized_affiliations:
+                index = normaff.get("index")
+                if index:
+                    conflicts = has_conflicts(
+                        _affiliations.get(index), normaff)
+                    if not conflicts:
+                        normalized.append(normaff)
+            return normalized
+
+    @property
+    def _normalized_affiliations(self):
         """
         This method retrieves the affiliations of the given article, if it exists.
         This method deals with the legacy fields (240).
