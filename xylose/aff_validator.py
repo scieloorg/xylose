@@ -43,7 +43,7 @@ class States:
         self.load()
 
     def load(self):
-        with open("xylose/states_abbrev.csv") as fp:
+        with open("xylose/assets/states_abbrev.csv") as fp:
             for row in fp.readlines():
                 row = row.strip()
                 if "," in row:
