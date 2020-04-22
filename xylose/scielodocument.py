@@ -29,6 +29,30 @@ if PY2:
     html_parser = HTMLParser().unescape
 else:
     html_parser = unescape
+
+_charref = re.compile(r'&(#[0-9]+;?'
+                    r'|#[xX][0-9a-fA-F]+;?'
+                    r'|[^\t\n\f <&#;]{1,32};?)')
+
+def html_safe_decode(
+    string, forbidden=["&lt;", "&gt;", "&amp;", "&#60;", "&#62;", "&#38;"]
+):
+    """
+    >>> html_safe_decode("26. Cohen J. The Earth is Round (p.05&gt;Am Psychol 1994; 49: 997-1003")
+    >>> "26. Cohen J. The Earth is Round (p.05&gt;Am Psychol 1994; 49: 997-1003"
+    """
+    if "&" not in string:
+        return string
+
+    def replace_charref(s):
+        s = "&" + s.group(1)
+        if s in forbidden:
+            return s
+        return html_parser(s)
+
+    return _charref.sub(replace_charref, string)
+
+
 # --------------
 
 LICENSE_REGEX = re.compile(r'a.+?href="(.+?)"')
@@ -3102,14 +3126,14 @@ class Citation(object):
     def mixed_citation(self):
 
         if 'mixed' in self.data:
-            data = html_decode(self.data['mixed']).strip()
+            data = html_safe_decode(self.data['mixed']).strip()
             cleaned = CLEANUP_MIXED_CITATION.sub('', data)
             for pattern, value in REPLACE_TAGS_MIXED_CITATION:
                 cleaned = pattern.sub(value, cleaned)
             return cleaned
 
         if 'v704' in self.data:
-            data = html_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
+            data = html_safe_decode(self.data['v704'][0]['_'].replace('<mixed-citation>', '').replace('</mixed-citation>', ''))
             cleaned = CLEANUP_MIXED_CITATION.sub('', data)
             for pattern, value in REPLACE_TAGS_MIXED_CITATION:
                 cleaned = pattern.sub(value, cleaned)
