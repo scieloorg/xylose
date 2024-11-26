@@ -2023,7 +2023,7 @@ class Article(object):
         This method deals with the legacy fields (60).
         """
         if 'v60' in self.data['article']:
-            return html_decode(self.data['article']['v60'][0]['_'])
+            return [html_decode(contract["_"] for contract in self.data["article"]["v60"] if "_" in contract)]
 
     @property
     def project_name(self):
