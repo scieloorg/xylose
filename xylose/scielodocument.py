@@ -2026,7 +2026,7 @@ class Article(object):
             return html_decode(self.data['article']['v60'][0]['_'])
 
     @property
-    def contracts(self):
+    def funding_sources(self):
         """
         This method retrieves the contracts of the given article, if it exists.
         This method deals with the legacy fields (60).
