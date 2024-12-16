@@ -2026,6 +2026,17 @@ class Article(object):
             return html_decode(self.data['article']['v60'][0]['_'])
 
     @property
+    def award_ids(self):
+        """
+        This method retrieves the contracts of the given article, if it exists.
+        This method deals with the legacy fields (60).
+        This method will return: [u'2009/53056-8', u'3209/56786-3']
+        """
+        if 'v60' in self.data['article']:
+            return [html_decode(contract["_"] for contract in self.data["article"]["v60"] if "_" in contract)]
+        return []
+
+    @property
     def project_name(self):
         """
         This method retrieves the project name of the given article, if it exists.
