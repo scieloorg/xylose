@@ -2033,7 +2033,7 @@ class Article(object):
         This method will return: [u'2009/53056-8', u'3209/56786-3']
         """
         if 'v60' in self.data['article']:
-            return [html_decode(contract["_"] for contract in self.data["article"]["v60"] if "_" in contract)]
+            return [contract["_"] for contract in self.data["article"]["v60"] if "_" in contract]
         return []
 
     @property
