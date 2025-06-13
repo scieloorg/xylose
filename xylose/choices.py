@@ -248,3 +248,17 @@ def get_collection_name_and_url(metadata):
         return [name, url]
     except KeyError:
         return []
+
+
+def get_collection_summary(collection_code):
+    """
+    Retrieve a summarized list with the collection's name and display URL.
+
+    Args:
+        collection_code (str): SciELO collection code (e.g., 'ven', 'scl').
+
+    Returns:
+        list[str]: [original_name, formatted_url] or an empty list if retrieval fails.
+    """
+    metadata = fetch_collection_metadata(collection_code)
+    return get_collection_name_and_url(metadata) if metadata else []
