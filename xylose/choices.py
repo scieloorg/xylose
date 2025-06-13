@@ -226,3 +226,25 @@ def fetch_collection_metadata(collection_code):
         return response.json()
     except (requests.RequestException, ValueError):
         return None
+
+
+def get_collection_name_and_url(metadata):
+    """
+    Extract the collection's original name and display URL from metadata.
+
+    Args:
+        metadata (dict): Metadata dictionary returned by the API.
+
+    Returns:
+        list[str]: [original_name, formatted_url] or an empty list on failure.
+    """
+    if not isinstance(metadata, dict):
+        return []
+
+    try:
+        name = metadata["original_name"]
+        acron2 = metadata["acron2"]
+        url = f"www.scielo.org.{acron2}"
+        return [name, url]
+    except KeyError:
+        return []
