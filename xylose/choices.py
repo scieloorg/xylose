@@ -191,3 +191,38 @@ month_bad_prediction = {
     u'diciembre': 12,
     u'december': 12
 }
+
+
+def fetch_collection_metadata(collection_code):
+    """
+    Fetch metadata for a given SciELO collection code from the ArticleMeta API.
+
+    Args:
+        collection_code (str): SciELO collection code (e.g., 'ven', 'scl').
+
+    Returns:
+        dict or None: JSON metadata if successful, None otherwise.
+    """
+    if not isinstance(collection_code, str) or not collection_code.strip():
+        return None
+
+    base_url = "https://articlemeta.scielo.org"
+    endpoint = f"/api/v1/collection/?code={collection_code}"
+    full_url = f"{base_url}{endpoint}"
+
+    session = requests.Session()
+    retry_policy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[500, 502, 503, 504],
+        allowed_methods=["GET"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_policy)
+    session.mount(base_url, adapter)
+
+    try:
+        response = session.get(full_url, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except (requests.RequestException, ValueError):
+        return None
