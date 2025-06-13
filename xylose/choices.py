@@ -1,5 +1,10 @@
 # encoding: utf-8
 
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+
 CREATIVE_COMMONS_TEXTS = {
     "BY": "Attribution",
     "BY-ND": "Attribution-NoDerivatives",
@@ -97,36 +102,6 @@ periodicity_in_months = {
     u'Z': u'undefined'
 }
 
-collections = {
-    'scl': ['Brazil', 'www.scielo.br'],
-    'arg': ['Argentina', 'www.scielo.org.ar'],
-    'cub': ['Cuba', 'scielo.sld.cu'],
-    'esp': ['Spain', 'scielo.isciii.es'],
-    'col': ['Colombia', 'www.scielo.org.co'],
-    'sss': ['Social Sciences', 'socialsciences.scielo.org'],
-    'spa': ['Public Health', 'www.scielosp.org'],
-    'mex': ['Mexico', 'www.scielo.org.mx'],
-    'prt': ['Portugal', 'www.scielo.mec.pt'],
-    'cri': ['Costa Rica', 'www.scielo.sa.cr'],
-    'ven': ['Venezuela', 'www.scielo.org.ve'],
-    'ury': ['Uruguay', 'www.scielo.edu.uy'],
-    'per': ['Peru', 'www.scielo.org.pe'],
-    'chl': ['Chile', 'www.scielo.cl'],
-    'sza': ['South Africa', 'www.scielo.org.za'],
-    'bol': ['Bolivia', 'www.scielo.org.bo'],
-    'pry': ['Paraguay', 'scielo.iics.una.py'],
-    'psi': ['PEPSIC', 'pepsic.bvsalud.org'],
-    'ppg': ['PPEGEO', 'ppegeo.igc.usp.br'],
-    'rve': ['RevOdonto', 'revodonto.bvsalud.org'],
-    'edc': ['Educa', 'educa.fcc.org.br'],
-    'inv': [u'Inovação', 'inovacao.scielo.br'],
-    'cic': [u'Ciência e Cultura', 'cienciaecultura.bvs.br'],
-    'cci': [u'ComCiência', 'comciencia.scielo.br'],
-    'wid': ['West Indians', 'caribbean.scielo.org'],
-    'pro': ['Proceedings', 'www.proceedings.scielo.br'],
-    'ecu': ['Ecuador', 'scielo.senescyt.gob.ec'],
-}
-
 journal_status = {
     'c': u'current',
     'd': u'deceased',
@@ -216,3 +191,74 @@ month_bad_prediction = {
     u'diciembre': 12,
     u'december': 12
 }
+
+
+def fetch_collection_metadata(collection_code):
+    """
+    Fetch metadata for a given SciELO collection code from the ArticleMeta API.
+
+    Args:
+        collection_code (str): SciELO collection code (e.g., 'ven', 'scl').
+
+    Returns:
+        dict or None: JSON metadata if successful, None otherwise.
+    """
+    if not isinstance(collection_code, str) or not collection_code.strip():
+        return None
+
+    base_url = "https://articlemeta.scielo.org"
+    endpoint = f"/api/v1/collection/?code={collection_code}"
+    full_url = f"{base_url}{endpoint}"
+
+    session = requests.Session()
+    retry_policy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[500, 502, 503, 504],
+        allowed_methods=["GET"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_policy)
+    session.mount(base_url, adapter)
+
+    try:
+        response = session.get(full_url, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except (requests.RequestException, ValueError):
+        return None
+
+
+def get_collection_name_and_url(metadata):
+    """
+    Extract the collection's original name and display URL from metadata.
+
+    Args:
+        metadata (dict): Metadata dictionary returned by the API.
+
+    Returns:
+        list[str]: [original_name, formatted_url] or an empty list on failure.
+    """
+    if not isinstance(metadata, dict):
+        return []
+
+    try:
+        name = metadata["original_name"]
+        acron2 = metadata["acron2"]
+        url = f"www.scielo.org.{acron2}"
+        return [name, url]
+    except KeyError:
+        return []
+
+
+def get_collection_summary(collection_code):
+    """
+    Retrieve a summarized list with the collection's name and display URL.
+
+    Args:
+        collection_code (str): SciELO collection code (e.g., 'ven', 'scl').
+
+    Returns:
+        list[str]: [original_name, formatted_url] or an empty list if retrieval fails.
+    """
+    metadata = fetch_collection_metadata(collection_code)
+    return get_collection_name_and_url(metadata) if metadata else []

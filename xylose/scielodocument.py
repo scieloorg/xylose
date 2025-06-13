@@ -252,10 +252,8 @@ class Issue(object):
         """
 
         if self.collection_acronym:
-            return choices.collections.get(
-                self.collection_acronym,
-                [u'Undefined: %s' % self.collection_acronym, None]
-            )[1] or None
+            summary = choices.get_collection_summary(self.collection_acronym)
+            return summary[1] if len(summary) > 1 and summary[1] else None
 
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
@@ -1072,10 +1070,8 @@ class Journal(object):
         """
 
         if self.collection_acronym:
-            return choices.collections.get(
-                self.collection_acronym,
-                [u'Undefined: %s' % self.collection_acronym, None]
-            )[1] or None
+            summary = choices.get_collection_summary(self.collection_acronym)
+            return summary[1] if len(summary) > 1 and summary[1] else None
 
         if 'v690' in self.data:
             return self.data['v690'][0]['_'].replace('http://', '')
@@ -1803,10 +1799,9 @@ class Article(object):
         This method retrieves the collection name of the given article,
         if it exists.
         """
-        return choices.collections.get(
-            self.collection_acronym,
-            [u'Undefined: %s' % self.collection_acronym, '']
-        )[0]
+        if self.collection_acronym:
+            summary = choices.get_collection_summary(self.collection_acronym)
+            return summary[0] if len(summary) > 0 and summary[0] else f'Undefined: {self.collection_acronym}'
 
     @property
     def collection_acronym(self):
@@ -2565,10 +2560,8 @@ class Article(object):
         """
 
         if self.collection_acronym:
-            return choices.collections.get(
-                self.collection_acronym,
-                [u'Undefined: %s' % self.collection_acronym, None]
-            )[1] or None
+            summary = choices.get_collection_summary(self.collection_acronym)
+            return summary[0] if len(summary) > 0 and summary[0] else f'Undefined: {self.collection_acronym}'
 
         if 'v690' in self.data['title']:
             return self.data['title']['v690'][0]['_'].replace('http://', '')
