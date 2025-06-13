@@ -102,36 +102,6 @@ periodicity_in_months = {
     u'Z': u'undefined'
 }
 
-collections = {
-    'scl': ['Brazil', 'www.scielo.br'],
-    'arg': ['Argentina', 'www.scielo.org.ar'],
-    'cub': ['Cuba', 'scielo.sld.cu'],
-    'esp': ['Spain', 'scielo.isciii.es'],
-    'col': ['Colombia', 'www.scielo.org.co'],
-    'sss': ['Social Sciences', 'socialsciences.scielo.org'],
-    'spa': ['Public Health', 'www.scielosp.org'],
-    'mex': ['Mexico', 'www.scielo.org.mx'],
-    'prt': ['Portugal', 'www.scielo.mec.pt'],
-    'cri': ['Costa Rica', 'www.scielo.sa.cr'],
-    'ven': ['Venezuela', 'www.scielo.org.ve'],
-    'ury': ['Uruguay', 'www.scielo.edu.uy'],
-    'per': ['Peru', 'www.scielo.org.pe'],
-    'chl': ['Chile', 'www.scielo.cl'],
-    'sza': ['South Africa', 'www.scielo.org.za'],
-    'bol': ['Bolivia', 'www.scielo.org.bo'],
-    'pry': ['Paraguay', 'scielo.iics.una.py'],
-    'psi': ['PEPSIC', 'pepsic.bvsalud.org'],
-    'ppg': ['PPEGEO', 'ppegeo.igc.usp.br'],
-    'rve': ['RevOdonto', 'revodonto.bvsalud.org'],
-    'edc': ['Educa', 'educa.fcc.org.br'],
-    'inv': [u'Inovação', 'inovacao.scielo.br'],
-    'cic': [u'Ciência e Cultura', 'cienciaecultura.bvs.br'],
-    'cci': [u'ComCiência', 'comciencia.scielo.br'],
-    'wid': ['West Indians', 'caribbean.scielo.org'],
-    'pro': ['Proceedings', 'www.proceedings.scielo.br'],
-    'ecu': ['Ecuador', 'scielo.senescyt.gob.ec'],
-}
-
 journal_status = {
     'c': u'current',
     'd': u'deceased',
