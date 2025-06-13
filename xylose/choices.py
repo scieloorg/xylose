@@ -1,5 +1,10 @@
 # encoding: utf-8
 
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+
 CREATIVE_COMMONS_TEXTS = {
     "BY": "Attribution",
     "BY-ND": "Attribution-NoDerivatives",
