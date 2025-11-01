@@ -106,7 +106,7 @@ collections = {
     'sss': ['Social Sciences', 'socialsciences.scielo.org'],
     'spa': ['Public Health', 'www.scielosp.org'],
     'mex': ['Mexico', 'www.scielo.org.mx'],
-    'prt': ['Portugal', 'www.scielo.mec.pt'],
+    'prt': ['Portugal', 'www.scielo.pt'],
     'cri': ['Costa Rica', 'www.scielo.sa.cr'],
     'ven': ['Venezuela', 'www.scielo.org.ve'],
     'ury': ['Uruguay', 'www.scielo.edu.uy'],
@@ -125,6 +125,7 @@ collections = {
     'wid': ['West Indians', 'caribbean.scielo.org'],
     'pro': ['Proceedings', 'www.proceedings.scielo.br'],
     'ecu': ['Ecuador', 'scielo.senescyt.gob.ec'],
+    'dom': ['República Dominicana', 'scielo.do'],
 }
 
 journal_status = {
