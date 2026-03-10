@@ -72,7 +72,25 @@ article_types = {
     'ra': 'review-article',
     'sc': 'rapid-communication',
     'tr': 'research-article',
-    'up': 'undefined'
+    'up': 'undefined',
+    'addendum': 'addendum',
+    'article-commentary': 'article-commentary',
+    'book-review': 'book-review',
+    'brief-report': 'brief-report',
+    'case-report': 'case-report',
+    'correction': 'correction',
+    'data-article': 'data-article',
+    'editorial': 'editorial',
+    'in-brief': 'in-brief',
+    'letter': 'letter',
+    'other': 'other',
+    'partial-retraction': 'partial-retraction',
+    'rapid-communication': 'rapid-communication',
+    'referee-report': 'referee-report',
+    'reply': 'reply',
+    'research-article': 'research-article',
+    'retraction': 'retraction',
+    'review-article': 'review-article',
 }
 
 periodicity = {

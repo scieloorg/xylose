@@ -2743,6 +2743,19 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v71'] = [{u'_': u'invalid'}]
         self.assertEqual(article.document_type, u'undefined')
 
+    def test_document_type_from_article_type_attribute(self):
+        article = self.article
+
+        for article_type in [
+            'addendum', 'article-commentary', 'book-review', 'brief-report',
+            'case-report', 'correction', 'data-article', 'editorial',
+            'in-brief', 'letter', 'other', 'partial-retraction',
+            'rapid-communication', 'referee-report', 'reply',
+            'research-article', 'retraction', 'review-article',
+        ]:
+            article.data['article']['v71'] = [{u'_': article_type}]
+            self.assertEqual(article.document_type, article_type)
+
     def test_without_original_title(self):
         article = self.article
 
