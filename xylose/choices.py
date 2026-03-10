@@ -72,7 +72,7 @@ article_types = {
     'ra': 'review-article',
     'sc': 'brief-report',
     'tr': 'research-article',
-    'up': 'undefined',
+    'up': 'rapid-communication',
     'addendum': 'addendum',
     'article-commentary': 'article-commentary',
     'book-review': 'book-review',
