@@ -2748,10 +2748,12 @@ class ArticleTests(unittest.TestCase):
 
         for article_type in [
             'addendum', 'article-commentary', 'book-review', 'brief-report',
-            'case-report', 'correction', 'data-article', 'editorial',
-            'in-brief', 'letter', 'other', 'partial-retraction',
-            'rapid-communication', 'referee-report', 'reply',
-            'research-article', 'retraction', 'review-article',
+            'case-report', 'clinical-instruction', 'correction',
+            'data-article', 'discussion', 'editorial',
+            'expression-of-concern', 'in-brief', 'letter', 'obituary',
+            'oration', 'other', 'partial-retraction', 'rapid-communication',
+            'referee-report', 'reply', 'research-article', 'retraction',
+            'review-article', 'reviewer-report',
         ]:
             article.data['article']['v71'] = [{u'_': article_type}]
             self.assertEqual(article.document_type, article_type)
