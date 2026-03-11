@@ -2257,12 +2257,11 @@ class Article(object):
         """
         if 'v71' in self.data['article']:
             article_type_code = self.data['article']['v71'][0]['_']
-            # If the v71 value is already a legacy code, return it directly
-            if len(article_type_code) == 2:
-                return article_type_code
             # If the v71 value is an @article-type, look up the legacy code
             if article_type_code in choices.DOCTOPIC:
                 return choices.DOCTOPIC[article_type_code]
+            # Otherwise return the value as-is (it may be a legacy code)
+            return article_type_code
 
         return None
 
