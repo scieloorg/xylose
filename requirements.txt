@@ -1,1 +1,1 @@
-legendarium @ https://github.com/scieloorg/legendarium/archive/refs/tags/2.0.6.zip
+https://github.com/scieloorg/legendarium/archive/refs/tags/2.0.6.zip
