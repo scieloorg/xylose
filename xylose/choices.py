@@ -123,7 +123,7 @@ collections = {
     'inv': [u'Inovação', 'inovacao.scielo.br'],
     'cic': [u'Ciência e Cultura', 'cienciaecultura.bvs.br'],
     'cci': [u'ComCiência', 'comciencia.scielo.br'],
-    'wid': ['West Indians', 'caribbean.scielo.org'],
+    'wid': ['West Indians', 'westindies.scielo.org'],
     'pro': ['Proceedings', 'www.proceedings.scielo.br'],
     'ecu': ['Ecuador', 'scielo.senescyt.gob.ec'],
     'dom': ['República Dominicana', 'scielo.do'],
