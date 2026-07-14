@@ -2669,6 +2669,31 @@ class Article(object):
             return organizations
 
     @property
+    def related_documents(self):
+        """
+        This method retrieves documents related to the given article, such as
+        reviewer reports, retractions, corrections, commentaries, and preprints.
+        This method deals with the legacy fields (241).
+        """
+        if 'v241' in self.data['article']:
+            related_documents = []
+            for related_document in self.data['article'].get('v241'):
+                item = {}
+                if 'i' in related_document:
+                    item['identifier'] = related_document['i']
+                if 't' in related_document:
+                    item['document_type'] = related_document['t']
+                if 'n' in related_document:
+                    item['identifier_type'] = related_document['n']
+                if '_' in related_document:
+                    item['label'] = html_decode(related_document['_'])
+
+                related_documents.append(item)
+
+            if len(related_documents) > 0:
+                return related_documents
+
+    @property
     def citations(self):
         """
         This method retrieves a list with all the citation objects of the given article.
