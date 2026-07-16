@@ -2680,13 +2680,11 @@ class Article(object):
             for related_document in self.data['article'].get('v241'):
                 item = {}
                 if 'i' in related_document:
-                    item['identifier'] = related_document['i']
+                    item['id'] = related_document['i']
                 if 't' in related_document:
-                    item['document_type'] = related_document['t']
+                    item['related_article_type'] = related_document['t']
                 if 'n' in related_document:
-                    item['identifier_type'] = related_document['n']
-                if '_' in related_document:
-                    item['label'] = html_decode(related_document['_'])
+                    item['ext_link_type'] = related_document['n']
 
                 related_documents.append(item)
 

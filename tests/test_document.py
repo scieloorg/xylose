@@ -3828,16 +3828,14 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.related_documents, [
             {
-                u'identifier': u'10.1590/S2237-96222025v34e20240180.a',
-                u'document_type': u'reviewer-report',
-                u'label': u'',
-                u'identifier_type': u'doi'
+                u'id': u'10.1590/S2237-96222025v34e20240180.a',
+                u'related_article_type': u'reviewer-report',
+                u'ext_link_type': u'doi'
             },
             {
-                u'identifier': u'10.1590/S2237-96222025v34e20240180.b',
-                u'document_type': u'corrected-article',
-                u'label': u'',
-                u'identifier_type': u'doi'
+                u'id': u'10.1590/S2237-96222025v34e20240180.b',
+                u'related_article_type': u'corrected-article',
+                u'ext_link_type': u'doi'
             }
         ])
 
