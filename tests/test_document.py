@@ -3808,6 +3808,42 @@ class ArticleTests(unittest.TestCase):
 
         self.assertEqual(article.thesis_organization, None)
 
+    def test_related_documents(self):
+        self.fulldoc['article']['v241'] = [
+            {
+                u'i': u'10.1590/S2237-96222025v34e20240180.a',
+                u't': u'reviewer-report',
+                u'_': u'',
+                u'n': u'doi'
+            },
+            {
+                u'i': u'10.1590/S2237-96222025v34e20240180.b',
+                u't': u'corrected-article',
+                u'_': u'',
+                u'n': u'doi'
+            }
+        ]
+
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.related_documents, [
+            {
+                u'id': u'10.1590/S2237-96222025v34e20240180.a',
+                u'related_article_type': u'reviewer-report',
+                u'ext_link_type': u'doi'
+            },
+            {
+                u'id': u'10.1590/S2237-96222025v34e20240180.b',
+                u'related_article_type': u'corrected-article',
+                u'ext_link_type': u'doi'
+            }
+        ])
+
+    def test_without_related_documents(self):
+        article = Article(self.fulldoc)
+
+        self.assertEqual(article.related_documents, None)
+
     @unittest.skip('skip test_citations')
     def test_citations(self):
         article = self.article
