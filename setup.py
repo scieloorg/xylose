@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 requires = [
-    "legendarium>=1.2.0"
+    "legendarium>=2.0.6"
 ]
 
 setup(
