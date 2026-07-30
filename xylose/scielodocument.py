@@ -2234,6 +2234,37 @@ class Article(object):
 
         return choices.article_types['nd']
 
+    @property
+    def sps_doctype(self):
+        """
+        This method retrieves the SPS @article-type of the given article.
+        Maps the v71 field value (legacy code or @article-type) to the
+        corresponding SPS @article-type value.
+        """
+        if 'v71' in self.data['article']:
+            article_type_code = self.data['article']['v71'][0]['_']
+            if article_type_code in choices.article_types:
+                return choices.article_types[article_type_code]
+
+        return None
+
+    @property
+    def legacy_doctype(self):
+        """
+        This method retrieves the legacy document type code of the given article.
+        Maps the v71 field value (legacy code or @article-type) to the
+        corresponding legacy code using the DOCTOPIC reverse mapping.
+        """
+        if 'v71' in self.data['article']:
+            article_type_code = self.data['article']['v71'][0]['_']
+            # If the v71 value is an @article-type, look up the legacy code
+            if article_type_code in choices.DOCTOPIC:
+                return choices.DOCTOPIC[article_type_code]
+            # Otherwise return the value as-is (it may be a legacy code)
+            return article_type_code
+
+        return None
+
     def original_title(self, iso_format=None):
         """
         This method retrieves just the title related with the original language

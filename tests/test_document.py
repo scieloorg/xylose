@@ -2743,6 +2743,88 @@ class ArticleTests(unittest.TestCase):
         article.data['article']['v71'] = [{u'_': u'invalid'}]
         self.assertEqual(article.document_type, u'undefined')
 
+    def test_document_type_from_article_type_attribute(self):
+        article = self.article
+
+        for article_type in [
+            'abstract', 'addendum', 'announcement', 'article-commentary',
+            'book-review', 'books-received', 'brief-report', 'calendar',
+            'case-report', 'clinical-instruction', 'clinical-trial',
+            'collection', 'correction', 'data-article', 'discussion',
+            'dissertation', 'editorial', 'editorial-material',
+            'expression-of-concern', 'guideline', 'in-brief', 'interview',
+            'introduction', 'letter', 'meeting-report', 'news', 'obituary',
+            'oration', 'other', 'partial-retraction', 'product-review',
+            'rapid-communication', 'referee-report', 'reply', 'reprint',
+            'research-article', 'retraction', 'review-article',
+            'reviewer-report', 'technical-report', 'translation',
+        ]:
+            article.data['article']['v71'] = [{u'_': article_type}]
+            self.assertEqual(article.document_type, article_type)
+
+    def test_document_type_from_legacy_v71_values(self):
+        article = self.article
+
+        legacy_mappings = {
+            u'an': u'announcement',
+            u'in': u'interview',
+            u'pr': u'in-brief',
+            u'sc': u'rapid-communication',
+            u're': u'retraction',
+        }
+
+        for legacy_value, expected_type in legacy_mappings.items():
+            article.data['article']['v71'] = [{u'_': legacy_value}]
+            self.assertEqual(article.document_type, expected_type)
+
+    def test_sps_doctype(self):
+        article = self.article
+        self.assertEqual(article.sps_doctype, u'research-article')
+
+    def test_sps_doctype_from_legacy_code(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'er'}]
+        self.assertEqual(article.sps_doctype, u'correction')
+
+    def test_sps_doctype_from_article_type(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'retraction'}]
+        self.assertEqual(article.sps_doctype, u'retraction')
+
+    def test_sps_doctype_without_v71(self):
+        article = self.article
+        del(article.data['article']['v71'])
+        self.assertIsNone(article.sps_doctype)
+
+    def test_sps_doctype_invalid(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'invalid'}]
+        self.assertIsNone(article.sps_doctype)
+
+    def test_legacy_doctype(self):
+        article = self.article
+        self.assertEqual(article.legacy_doctype, u'oa')
+
+    def test_legacy_doctype_from_article_type(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'retraction'}]
+        self.assertEqual(article.legacy_doctype, u're')
+
+    def test_legacy_doctype_from_legacy_code(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'er'}]
+        self.assertEqual(article.legacy_doctype, u'er')
+
+    def test_legacy_doctype_without_v71(self):
+        article = self.article
+        del(article.data['article']['v71'])
+        self.assertIsNone(article.legacy_doctype)
+
+    def test_legacy_doctype_article_type_self_mapped(self):
+        article = self.article
+        article.data['article']['v71'] = [{u'_': u'data-article'}]
+        self.assertEqual(article.legacy_doctype, u'data-article')
+
     def test_without_original_title(self):
         article = self.article
 
